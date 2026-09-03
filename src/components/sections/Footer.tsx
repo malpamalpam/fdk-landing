@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Facebook, Instagram, Send } from 'lucide-react';
 import type { Dictionary } from '@/dictionaries/types';
 
@@ -10,7 +11,13 @@ export default function Footer({ dict }: { dict: Dictionary }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
           {/* Logo + tagline */}
           <div>
-            <div className="text-2xl font-bold text-brand mb-3">FDK</div>
+            <Image
+              src="/logo-white.png"
+              alt="Firma Dla Każdego"
+              width={144}
+              height={48}
+              className="h-12 w-auto mb-3"
+            />
             <p className="text-white/60 text-sm leading-relaxed">
               {dict.footer.tagline}
             </p>

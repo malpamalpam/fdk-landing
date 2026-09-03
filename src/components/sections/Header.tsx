@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone } from 'lucide-react';
 import type { Dictionary } from '@/dictionaries/types';
 
@@ -46,9 +47,15 @@ export default function Header({ dict, locale }: { dict: Dictionary; locale: str
         }`}
       >
         <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-16 md:h-20">
-          {/* Logo — Replace with next/image logo: <Image src="/logo-white.png" alt="FDK" width={120} height={40} /> */}
-          <Link href={`/${locale}`} className="text-2xl font-bold text-brand">
-            FDK
+          <Link href={`/${locale}`}>
+            <Image
+              src="/logo-white.png"
+              alt="Firma Dla Każdego"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
 
           <div className="flex items-center gap-3 md:gap-4">

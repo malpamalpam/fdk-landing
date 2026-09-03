@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import type { Dictionary } from '@/dictionaries/types';
 
 const hookMap: Record<string, number> = { a: 0, b: 1, c: 2, d: 3, e: 4 };
@@ -33,12 +34,16 @@ export default function Hero({ dict }: { dict: Dictionary }) {
       id="hero"
     >
       {/* Background image with overlay */}
-      {/* TODO: Add hero.jpg to /public and use next/image:
-          <Image src="/hero.jpg" alt="" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-[rgba(26,30,35,0.75)]" />
-      */}
+      <Image
+        src="/hero.jpg"
+        alt=""
+        fill
+        className="object-cover"
+        priority
+        sizes="100vw"
+      />
       <div
-        className="absolute inset-0 bg-gradient-to-br from-ink via-ink/90 to-ink/70"
+        className="absolute inset-0 bg-[rgba(26,30,35,0.75)]"
         aria-hidden="true"
       />
 

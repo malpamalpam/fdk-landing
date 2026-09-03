@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:fdk-landing-malpamalpams-projects.vercel.app)",
+      "WebFetch(domain:fdk-site.vercel.app)"
+    ]
+  }
+}
