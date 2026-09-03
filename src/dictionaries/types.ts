@@ -60,10 +60,15 @@ export interface Dictionary {
     name: string;
     phone: string;
     email: string;
+    situation: string;
+    situationOptions: { value: string; label: string }[];
     industry: string;
-    industryOptions: string[];
+    industryOptions: { value: string; label: string }[];
+    startDate: string;
+    startDateOptions: { value: string; label: string }[];
     message: string;
     consent: string;
+    consentMarketing: string;
     submit: string;
     sending: string;
     note: string;
@@ -96,8 +101,28 @@ export interface Dictionary {
     text: string;
     accept: string;
     essential: string;
+    settings: string;
+    analytics: string;
+    advertising: string;
+    save: string;
   };
   sticky: {
     cta: string;
   };
+  email: {
+    autoresponder: {
+      subject: string;
+      body: string;
+    };
+  };
 }
+
+export interface SegmentHero {
+  badge: string;
+  title: string;
+  subtitle: string;
+}
+
+export type Segment = 'kontrakt-b2b' | 'faktura-bez-firmy' | 'wspolpraca-b2b' | 'ogolny';
+
+export const SEGMENTS: Segment[] = ['kontrakt-b2b', 'faktura-bez-firmy', 'wspolpraca-b2b'];

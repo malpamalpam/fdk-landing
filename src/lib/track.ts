@@ -1,19 +1,15 @@
-type TrackParams = Record<string, string | number | boolean>;
+type TrackParams = Record<string, string | number | boolean | undefined>;
 
-declare global {
-  interface Window {
-    fbq?: (...args: unknown[]) => void;
-    gtag?: (...args: unknown[]) => void;
-    ttq?: {
-      track: (event: string, params?: TrackParams) => void;
-      page: () => void;
-    };
-  }
-}
-
+/** Push event to dataLayer (for GTM) and fire pixel events directly */
 export function track(event: string, params: TrackParams = {}) {
-  // Meta Pixel
-  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+  if (typeof window === 'undefined') return;
+
+  // Always push to dataLayer
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, ...params });
+
+  // Meta Pixel (direct, for event_id dedup with CAPI)
+  if (typeof window.fbq === 'function') {
     const metaEvents: Record<string, string> = {
       cta_click: 'CTAClick',
       phone_click: 'Contact',
@@ -21,27 +17,31 @@ export function track(event: string, params: TrackParams = {}) {
     };
     const metaEvent = metaEvents[event];
     if (metaEvent) {
+      const eventId = params.event_id as string | undefined;
       if (metaEvent === 'CTAClick') {
         window.fbq('trackCustom', metaEvent, params);
+      } else if (eventId) {
+        window.fbq('track', metaEvent, params, { eventID: eventId });
       } else {
         window.fbq('track', metaEvent, params);
       }
     }
   }
 
-  // GA4 / Google Ads
-  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+  // GA4 fallback (when no GTM)
+  if (typeof window.gtag === 'function' && !process.env.NEXT_PUBLIC_GTM_ID) {
     const ga4Events: Record<string, string> = {
       cta_click: 'cta_click',
       phone_click: 'phone_click',
       lead: 'generate_lead',
+      form_start: 'form_start',
+      form_error: 'form_error',
     };
     const ga4Event = ga4Events[event];
     if (ga4Event) {
       window.gtag('event', ga4Event, params);
     }
 
-    // Google Ads conversion
     if (event === 'lead') {
       const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
       const label = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
@@ -54,8 +54,8 @@ export function track(event: string, params: TrackParams = {}) {
     }
   }
 
-  // TikTok Pixel
-  if (typeof window !== 'undefined' && window.ttq) {
+  // TikTok Pixel (direct, for event_id dedup)
+  if (window.ttq) {
     const ttEvents: Record<string, string> = {
       cta_click: 'ClickButton',
       phone_click: 'Contact',
@@ -63,28 +63,14 @@ export function track(event: string, params: TrackParams = {}) {
     };
     const ttEvent = ttEvents[event];
     if (ttEvent) {
-      window.ttq.track(ttEvent, params);
+      const eventId = params.event_id as string | undefined;
+      window.ttq.track(ttEvent, {
+        content_name: (params.content_name as string) || 'lead_form',
+      }, eventId ? { event_id: eventId } : undefined);
     }
   }
 }
 
-export function initUTMCapture() {
-  if (typeof window === 'undefined') return;
-
-  const params = new URLSearchParams(window.location.search);
-  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid', 'ttclid'];
-
-  for (const key of keys) {
-    const value = params.get(key);
-    if (value) {
-      sessionStorage.setItem(`fdk_${key}`, value);
-    }
-  }
-
-  if (!sessionStorage.getItem('fdk_landing_url')) {
-    sessionStorage.setItem('fdk_landing_url', window.location.href);
-  }
-  if (!sessionStorage.getItem('fdk_referrer')) {
-    sessionStorage.setItem('fdk_referrer', document.referrer);
-  }
+export function trackPageView(params: TrackParams = {}) {
+  track('page_view_lp', params);
 }

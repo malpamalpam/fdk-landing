@@ -25,13 +25,13 @@ export default async function LandingPage({
       </Suspense>
       <main id="main">
         <Suspense>
-          <Hero dict={dict} />
+          <Hero dict={dict} segment="ogolny" locale={locale} />
         </Suspense>
         <ForWho dict={dict} />
         <Benefits dict={dict} />
         <HowItWorks dict={dict} />
         <FAQ dict={dict} />
-        <ContactForm dict={dict} locale={locale} />
+        <ContactForm dict={dict} locale={locale} segment="ogolny" />
       </main>
       <Footer dict={dict} />
       <StickyCTA dict={dict} />

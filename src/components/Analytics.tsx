@@ -2,50 +2,95 @@
 
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
+import { isAdConsentGranted } from '@/lib/consent';
 
 export default function Analytics() {
-  const [consent, setConsent] = useState(false);
+  const [adConsent, setAdConsent] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem('fdk_consent');
-    if (stored === 'all') {
-      setConsent(true);
-    }
+    // Check initial consent
+    setAdConsent(isAdConsentGranted());
 
-    const handler = () => setConsent(true);
-    window.addEventListener('fdk_consent_granted', handler);
-    return () => window.removeEventListener('fdk_consent_granted', handler);
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setAdConsent(detail?.ad_storage === 'granted');
+    };
+    window.addEventListener('fdk_consent_change', handler);
+    return () => window.removeEventListener('fdk_consent_change', handler);
   }, []);
 
-  if (!consent) return null;
-
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const ga4Id = process.env.NEXT_PUBLIC_GA4_ID;
   const tiktokPixelId = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
   return (
     <>
-      {/* Meta Pixel */}
-      {metaPixelId && (
-        <Script
-          id="meta-pixel"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-              n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-              document,'script','https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init','${metaPixelId}');
-              fbq('track','PageView');
-            `,
-          }}
-        />
+      {/* Consent Mode v2 defaults — MUST be before GTM */}
+      <Script
+        id="consent-mode-defaults"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'analytics_storage': 'denied',
+              'functionality_storage': 'granted',
+              'security_storage': 'granted',
+              'wait_for_update': 500
+            });
+          `,
+        }}
+      />
+
+      {/* Restore saved consent on client */}
+      <Script
+        id="consent-restore"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function(){
+              try {
+                var c = JSON.parse(localStorage.getItem('fdk_consent'));
+                if (c && c.analytics_storage) {
+                  gtag('consent', 'update', {
+                    analytics_storage: c.analytics_storage,
+                    ad_storage: c.ad_storage,
+                    ad_user_data: c.ad_user_data,
+                    ad_personalization: c.ad_personalization
+                  });
+                }
+              } catch(e){}
+            })();
+          `,
+        }}
+      />
+
+      {/* GTM — loads always, Consent Mode handles permissions */}
+      {gtmId && (
+        <>
+          <Script
+            id="gtm-script"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${gtmId}');
+              `,
+            }}
+          />
+        </>
       )}
 
-      {/* GA4 */}
-      {ga4Id && (
+      {/* GA4 fallback when no GTM */}
+      {!gtmId && ga4Id && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
@@ -67,8 +112,27 @@ export default function Analytics() {
         </>
       )}
 
-      {/* TikTok Pixel */}
-      {tiktokPixelId && (
+      {/* Meta Pixel — only with ad consent */}
+      {adConsent && metaPixelId && (
+        <Script
+          id="meta-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+              n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+              document,'script','https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init','${metaPixelId}');
+              fbq('track','PageView');
+            `,
+          }}
+        />
+      )}
+
+      {/* TikTok Pixel — only with ad consent */}
+      {adConsent && tiktokPixelId && (
         <Script
           id="tiktok-pixel"
           strategy="afterInteractive"

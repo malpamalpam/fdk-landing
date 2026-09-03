@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import type { Dictionary } from '@/dictionaries/types';
+import { getSegmentHero } from '@/dictionaries/segments';
 
 const hookMap: Record<string, number> = { a: 0, b: 1, c: 2, d: 3, e: 4 };
 
-export default function Hero({ dict }: { dict: Dictionary }) {
+export default function Hero({ dict, segment = 'ogolny', locale = 'pl' }: { dict: Dictionary; segment?: string; locale?: string }) {
   const searchParams = useSearchParams();
   const [hookIndex, setHookIndex] = useState(0);
 
@@ -27,6 +28,14 @@ export default function Hero({ dict }: { dict: Dictionary }) {
   }, [searchParams]);
 
   const hookVariantLetter = Object.entries(hookMap).find(([, v]) => v === hookIndex)?.[0] || 'a';
+
+  // Check for segment-specific hero content
+  // We need locale but it's not passed as prop — detect from dict
+  const segmentHero = getSegmentHero(locale, segment);
+
+  const badge = segmentHero?.badge || dict.hero.badge;
+  const title = segmentHero?.title || dict.hero.hooks[hookIndex];
+  const subtitle = segmentHero?.subtitle || dict.hero.subtitle;
 
   return (
     <section
@@ -50,12 +59,12 @@ export default function Hero({ dict }: { dict: Dictionary }) {
       <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-24 md:py-32">
         {/* Badge */}
         <div className="inline-block bg-white/10 backdrop-blur-sm text-white/90 text-sm px-4 py-2 rounded-full mb-6">
-          {dict.hero.badge}
+          {badge}
         </div>
 
         {/* H1 */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-tight max-w-4xl leading-tight">
-          {dict.hero.hooks[hookIndex]}
+          {title}
         </h1>
 
         {/* Separator */}
@@ -63,7 +72,7 @@ export default function Hero({ dict }: { dict: Dictionary }) {
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-white/80 max-w-2xl mb-8">
-          {dict.hero.subtitle}
+          {subtitle}
         </p>
 
         {/* CTAs */}
@@ -97,7 +106,7 @@ export default function Hero({ dict }: { dict: Dictionary }) {
         </div>
       </div>
 
-      {/* Hidden input for hook variant — read by contact form */}
+      {/* Hidden input for hook variant */}
       <input type="hidden" id="hook-variant" value={hookVariantLetter} />
     </section>
   );

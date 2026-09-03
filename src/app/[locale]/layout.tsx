@@ -67,7 +67,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={montserrat.variable}>
       <body className="font-sans antialiased text-ink bg-white">
         <DictionaryProvider dict={dict}>
-          <UTMCapture />
+          <UTMCapture locale={locale} />
           {children}
           <CookieBanner dict={dict} />
           <Analytics />

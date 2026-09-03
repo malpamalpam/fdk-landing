@@ -17,10 +17,26 @@ export default function ThankYouPage() {
     if (firedRef.current) return;
     firedRef.current = true;
 
-    track('lead', {
-      content_name: 'lead_form',
-      locale,
-    });
+    const eventId = sessionStorage.getItem('fdk_event_id') || '';
+    const segment = sessionStorage.getItem('fdk_segment') || 'ogolny';
+    const situation = sessionStorage.getItem('fdk_situation') || '';
+    const industry = sessionStorage.getItem('fdk_industry') || '';
+
+    if (eventId) {
+      track('lead', {
+        segment,
+        situation,
+        industry,
+        locale,
+        event_id: eventId,
+        content_name: 'lead_form',
+        value: 0,
+        currency: 'PLN',
+      });
+
+      // Clean up to prevent re-firing
+      sessionStorage.removeItem('fdk_event_id');
+    }
   }, [locale]);
 
   return (
