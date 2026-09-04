@@ -14,7 +14,7 @@ const en: Dictionary = {
     langLabel: 'Language',
   },
   hero: {
-    badge: '493 freelancers already invoice through FDK · 4.7/5 on Google',
+    badge: '>8,000 freelancers already invoice through FDK · 4.7/5 on Google',
     hooks: [
       'EARN ON B2B WITHOUT YOUR OWN COMPANY. NO ZUS, 6% INCOME TAX.',
       'INVOICE YOUR CLIENTS FROM TOMORROW. LET ZUS WAIT — FOREVER.',
@@ -27,7 +27,7 @@ const en: Dictionary = {
     ctaSecondary: 'See the benefits',
     stats: [
       { value: 'since 2015', label: 'on the market' },
-      { value: '493', label: 'active clients' },
+      { value: '>8,000', label: 'active clients' },
       { value: '4.7/5', label: 'Google rating' },
     ],
   },

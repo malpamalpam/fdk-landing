@@ -14,7 +14,7 @@ const pl: Dictionary = {
     langLabel: 'Język',
   },
   hero: {
-    badge: '493 freelancerów już wystawia faktury przez FDK · 4.7/5 w Google',
+    badge: '>8 000 freelancerów już wystawia faktury przez FDK · 4.7/5 w Google',
     hooks: [
       'ZARABIAJ NA B2B BEZ WŁASNEJ FIRMY. BEZ ZUS, Z PIT 6%.',
       'WYSTAWIAJ FAKTURY OD JUTRA. ZUS NIECH POCZEKA — NA ZAWSZE.',
@@ -27,7 +27,7 @@ const pl: Dictionary = {
     ctaSecondary: 'Zobacz korzyści',
     stats: [
       { value: 'od 2015', label: 'roku na rynku' },
-      { value: '493', label: 'aktywnych klientów' },
+      { value: '>8 000', label: 'aktywnych klientów' },
       { value: '4.7/5', label: 'ocena w Google' },
     ],
   },
