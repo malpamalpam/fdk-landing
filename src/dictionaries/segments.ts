@@ -8,7 +8,7 @@ const segments: Record<string, Record<Segment, SegmentHero>> = {
       subtitle: 'Masz ofertę albo podpisany kontrakt B2B i nie chcesz otwierać działalności? Fakturujesz kontrahenta pod naszą osobowością prawną — start w 15 minut, jeden abonament 400 zł/mies., pełna księgowość w cenie.',
     },
     'faktura-bez-firmy': {
-      badge: '>8 000 freelancerów już wystawia faktury przez FDK · 4.7/5 w Google',
+      badge: '>8 000 freelancerów już wystawiło faktury przez FDK · 4.7/5 w Google',
       title: 'WYSTAWIAJ FAKTURY BEZ WŁASNEJ FIRMY. BEZ ZUS, Z PIT 6%.',
       subtitle: 'Uczysz, tłumaczysz, programujesz albo projektujesz? Fakturuj wszystkich swoich klientów przez Fundację — bez JDG, bez ZUS, z jednym abonamentem 400 zł/mies.',
     },
@@ -30,7 +30,7 @@ const segments: Record<string, Record<Segment, SegmentHero>> = {
       subtitle: 'TODO_You have a B2B offer or signed contract and don\'t want to register a business? Invoice your client under our legal entity — start in 15 minutes, one fee of 400 PLN/month, full accounting included.',
     },
     'faktura-bez-firmy': {
-      badge: 'TODO_>8 000 freelancers already invoice through FDK · 4.7/5 on Google',
+      badge: 'TODO_>8,000 freelancers have already invoiced through FDK · 4.7/5 on Google',
       title: 'TODO_ISSUE INVOICES WITHOUT YOUR OWN COMPANY. NO ZUS, 6% INCOME TAX.',
       subtitle: 'TODO_Teaching, translating, coding or designing? Invoice all your clients through the Foundation — no sole tradership, no ZUS, one fee of 400 PLN/month.',
     },
@@ -48,7 +48,7 @@ const segments: Record<string, Record<Segment, SegmentHero>> = {
       subtitle: 'TODO_Маєш пропозицію або підписаний контракт B2B і не хочеш відкривати ФОП? Виставляй рахунки контрагенту під нашою юридичною особою — старт за 15 хвилин, один абонемент 400 zł/міс.',
     },
     'faktura-bez-firmy': {
-      badge: 'TODO_>8 000 фрилансери вже виставляють рахунки через FDK · 4.7/5 у Google',
+      badge: 'TODO_>8 000 фрилансерів вже виставили рахунки через FDK · 4.7/5 у Google',
       title: 'TODO_ВИСТАВЛЯЙ РАХУНКИ БЕЗ ВЛАСНОЇ ФІРМИ. БЕЗ ZUS, З ПОДАТКОМ 6%.',
       subtitle: 'TODO_Викладаєш, перекладаєш, програмуєш або проєктуєш? Виставляй рахунки всім своїм клієнтам через Фундацію — без ФОП, без ZUS, з одним абонементом 400 zł/міс.',
     },
@@ -66,7 +66,7 @@ const segments: Record<string, Record<Segment, SegmentHero>> = {
       subtitle: 'TODO_Есть предложение или подписанный контракт B2B и не хочешь открывать ИП? Выставляй счета заказчику под нашим юридическим лицом — старт за 15 минут, один абонемент 400 zł/мес.',
     },
     'faktura-bez-firmy': {
-      badge: 'TODO_>8 000 фрилансера уже выставляют счета через FDK · 4.7/5 в Google',
+      badge: 'TODO_>8 000 фрилансеров уже выставили счета через FDK · 4.7/5 в Google',
       title: 'TODO_ВЫСТАВЛЯЙ СЧЕТА БЕЗ СОБСТВЕННОЙ ФИРМЫ. БЕЗ ZUS, С НАЛОГОМ 6%.',
       subtitle: 'TODO_Преподаёшь, переводишь, программируешь или проектируешь? Выставляй счета всем своим клиентам через Фонд — без ИП, без ZUS, с одним абонементом 400 zł/мес.',
     },
