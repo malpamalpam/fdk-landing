@@ -69,6 +69,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Landing pages — pass through
+  if (pathname.startsWith("/lp/")) {
+    return NextResponse.next();
+  }
+
   // No locale prefix - redirect to /pl/[rest]
   const url = request.nextUrl.clone();
   url.pathname = `/${DEFAULT_LOCALE}${pathname}`;

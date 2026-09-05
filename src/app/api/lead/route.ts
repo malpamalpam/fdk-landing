@@ -9,11 +9,18 @@ const schema = z.object({
   name: z.string().min(1),
   phone: z.string().min(6).regex(/^[+]?[\d\s()-]{6,20}$/),
   email: z.string().email(),
+  // Old i18n landing fields
   situation: z.string().optional(),
   industry: z.string().optional(),
+  // New landing page fields
+  sytuacja: z.string().optional(),
+  branza: z.string().optional(),
+  consent_rodo: z.boolean().optional(),
+  landing_slug: z.string().optional(),
+  // Common fields
   start_date: z.string().optional(),
   message: z.string().optional(),
-  consent_privacy: z.literal(true),
+  consent_privacy: z.boolean().optional(),
   consent_marketing: z.boolean().optional(),
   consent_state: z.any().optional(),
   website: z.string().max(0).optional(),
@@ -37,6 +44,8 @@ const schema = z.object({
   fbc: z.string().optional(),
   landing_url: z.string().optional(),
   referrer: z.string().optional(),
+  user_agent: z.string().optional(),
+  // Attribution — old format (flat fields)
   first_touch_source: z.string().optional(),
   first_touch_medium: z.string().optional(),
   first_touch_campaign: z.string().optional(),
@@ -46,20 +55,23 @@ const schema = z.object({
   last_touch_medium: z.string().optional(),
   last_touch_campaign: z.string().optional(),
   last_touch_at: z.string().optional(),
+  // Attribution — new format (JSON)
+  first_touch: z.any().optional(),
+  last_touch: z.any().optional(),
   _t: z.number().optional(),
 });
 
 // Rate limiter
 const rateMap = new Map<string, { count: number; resetAt: number }>();
-function isRateLimited(ip: string): boolean {
+function isRateLimited(ip: string, maxCount = 5, windowMs = 10 * 60 * 1000): boolean {
   const now = Date.now();
   const entry = rateMap.get(ip);
   if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + 10 * 60 * 1000 });
+    rateMap.set(ip, { count: 1, resetAt: now + windowMs });
     return false;
   }
   entry.count++;
-  return entry.count > 5;
+  return entry.count > maxCount;
 }
 
 function sha256(value: string): string {
@@ -185,11 +197,13 @@ export async function POST(request: NextRequest) {
       request.headers.get('x-real-ip') ||
       '0.0.0.0';
 
-    if (isRateLimited(ip)) {
+    const body = await request.json();
+    const isNewLp = !!body.landing_slug;
+    // New landings: 3/hour; old landing: 5/10min
+    if (isRateLimited(ip, isNewLp ? 3 : 5, isNewLp ? 60 * 60 * 1000 : 10 * 60 * 1000)) {
       return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
     }
 
-    const body = await request.json();
     const result = schema.safeParse(body);
 
     if (!result.success) {
@@ -222,15 +236,18 @@ export async function POST(request: NextRequest) {
     const or = (v: string | undefined) => v || null;
     const orTs = (v: string | undefined) => (v && v.length > 0 ? v : null);
 
-    const { error } = await supabase.from('leads').insert({
+    // Build insert row — supports both old i18n landing and new slug landings
+    const isNewLanding = !!data.landing_slug;
+    const ft = data.first_touch;
+    const lt = data.last_touch;
+
+    const insertRow: Record<string, unknown> = {
       name: data.name,
       phone: data.phone,
       email: data.email,
-      situation: or(data.situation),
-      industry: or(data.industry),
       start_date: or(data.start_date),
       message: or(data.message),
-      consent: data.consent_privacy,
+      consent: data.consent_privacy ?? data.consent_rodo ?? false,
       consent_marketing: data.consent_marketing || false,
       consent_state: data.consent_state || null,
       segment: or(data.segment),
@@ -252,18 +269,46 @@ export async function POST(request: NextRequest) {
       fbc: or(data.fbc),
       landing_url: or(data.landing_url),
       referrer: or(data.referrer),
-      first_touch_source: or(data.first_touch_source),
-      first_touch_medium: or(data.first_touch_medium),
-      first_touch_campaign: or(data.first_touch_campaign),
-      first_touch_at: orTs(data.first_touch_at),
-      first_touch_url: or(data.first_touch_url),
-      last_touch_source: or(data.last_touch_source),
-      last_touch_medium: or(data.last_touch_medium),
-      last_touch_campaign: or(data.last_touch_campaign),
-      last_touch_at: orTs(data.last_touch_at),
-      user_agent: userAgent,
+      user_agent: data.user_agent || userAgent,
       ip: ip,
-    });
+    };
+
+    if (isNewLanding) {
+      // New landing page format
+      insertRow.landing_slug = data.landing_slug;
+      insertRow.sytuacja = or(data.sytuacja);
+      insertRow.branza = or(data.branza);
+      insertRow.consent_rodo = data.consent_rodo || false;
+      // JSON attribution
+      if (ft) {
+        insertRow.first_touch_source = ft.source || null;
+        insertRow.first_touch_medium = ft.medium || null;
+        insertRow.first_touch_campaign = ft.campaign || null;
+        insertRow.first_touch_at = ft.at || null;
+        insertRow.first_touch_url = ft.url || null;
+      }
+      if (lt) {
+        insertRow.last_touch_source = lt.source || null;
+        insertRow.last_touch_medium = lt.medium || null;
+        insertRow.last_touch_campaign = lt.campaign || null;
+        insertRow.last_touch_at = lt.at || null;
+      }
+    } else {
+      // Old i18n landing format
+      insertRow.situation = or(data.situation);
+      insertRow.industry = or(data.industry);
+      insertRow.first_touch_source = or(data.first_touch_source);
+      insertRow.first_touch_medium = or(data.first_touch_medium);
+      insertRow.first_touch_campaign = or(data.first_touch_campaign);
+      insertRow.first_touch_at = orTs(data.first_touch_at);
+      insertRow.first_touch_url = or(data.first_touch_url);
+      insertRow.last_touch_source = or(data.last_touch_source);
+      insertRow.last_touch_medium = or(data.last_touch_medium);
+      insertRow.last_touch_campaign = or(data.last_touch_campaign);
+      insertRow.last_touch_at = orTs(data.last_touch_at);
+    }
+
+    const { error } = await supabase.from('leads').insert(insertRow);
 
     if (error) {
       console.error('Supabase insert error:', error);
