@@ -26,6 +26,26 @@ function useFadeIn(ref: React.RefObject<HTMLElement | null>) {
   }, [ref]);
 }
 
+function ScrollToFormLink({ label, className }: { label: string; className?: string }) {
+  return (
+    <a
+      href="#formularz"
+      onClick={(e) => {
+        e.preventDefault();
+        const el = document.getElementById('formularz');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          const firstInput = el.querySelector<HTMLInputElement>('input:not([type=hidden]):not([tabindex="-1"])');
+          firstInput?.focus({ preventScroll: true });
+        }
+      }}
+      className={className}
+    >
+      {label}
+    </a>
+  );
+}
+
 export default function LandingTemplate({ landing }: { landing: LandingContent }) {
   const pageRef = useRef<HTMLDivElement>(null);
   useFadeIn(pageRef);
@@ -35,26 +55,28 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
     pushEvent(EVENTS.pageView, { landing_slug: landing.slug, segment: landing.segment });
   }, [landing.slug, landing.segment]);
 
+  const ctaClass = 'inline-flex items-center justify-center bg-brand hover:bg-brandDark text-white font-semibold px-8 py-4 rounded-[4px] transition-colors text-lg';
+
   return (
     <div ref={pageRef}>
-      {/* ── Hero ── */}
-      <section className="relative bg-ink text-white" id="hero">
+      {/* ── Hero with form ── */}
+      <section className="relative bg-ink text-white min-h-screen lg:min-h-[700px]" id="hero">
         <Image src="/hero.jpg" alt="" fill className="object-cover" priority sizes="100vw" />
-        <div className="absolute inset-0 bg-[rgba(26,30,35,0.85)]" aria-hidden="true" />
-        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-16 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <div>
-              <p className="text-brand text-sm font-semibold uppercase tracking-wide mb-4">{landing.hero.eyebrow}</p>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-6">{landing.hero.h1}</h1>
-              <p className="text-lg text-white/80 mb-6">{landing.hero.lead}</p>
-              <p className="text-white/50 text-sm mb-2">{landing.hero.trustLine}</p>
-              <a href="#formularz" className="inline-flex lg:hidden items-center bg-brand hover:bg-brandDark text-white font-semibold text-lg px-8 py-4 rounded-[4px] transition-colors mt-4">
-                {landing.hero.submitLabel}
-              </a>
+        <div className="absolute inset-0 bg-[rgba(26,30,35,0.87)]" aria-hidden="true" />
+        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-12 lg:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-8 lg:gap-12 items-start">
+            {/* Left — copy */}
+            <div className="lg:py-8">
+              <p className="text-brand text-sm font-semibold uppercase tracking-wide mb-3">{landing.hero.eyebrow}</p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-5">{landing.hero.h1}</h1>
+              <p className="text-base lg:text-lg text-white/80 mb-4 lg:mb-6">{landing.hero.lead}</p>
+              <p className="text-white/50 text-sm hidden lg:block">{landing.hero.trustLine}</p>
             </div>
-            <div className="hidden lg:block bg-white rounded-[12px] p-6 text-ink">
-              <h2 className="text-xl font-bold mb-1">{landing.hero.formHeading}</h2>
-              <p className="text-body text-sm mb-4">{landing.hero.formIntro}</p>
+
+            {/* Right — form card */}
+            <div className="bg-white rounded-[12px] p-5 lg:p-6 text-ink shadow-2xl" id="formularz">
+              <h2 className="text-lg lg:text-xl font-bold mb-1">{landing.hero.formHeading}</h2>
+              <p className="text-body text-sm mb-3">{landing.hero.formIntro}</p>
               <LeadForm landing={landing} variant="hero" />
             </div>
           </div>
@@ -199,14 +221,12 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </div>
       </section>
 
-      {/* ── Final CTA + formularz ── */}
-      <section className="py-16 md:py-24 bg-white" id="formularz">
-        <div className="max-w-[600px] mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-3 fade-in-up">{landing.finalCta.title}</h2>
-          <p className="text-body mb-8 fade-in-up">{landing.finalCta.text}</p>
-          <div className="fade-in-up">
-            <LeadForm landing={landing} variant="full" />
-          </div>
+      {/* ── Final CTA — scroll to hero form ── */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-[600px] mx-auto px-4 md:px-6 text-center fade-in-up">
+          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-3">{landing.finalCta.title}</h2>
+          <p className="text-body mb-8">{landing.finalCta.text}</p>
+          <ScrollToFormLink label={landing.finalCta.submitLabel} className={ctaClass} />
         </div>
       </section>
 
