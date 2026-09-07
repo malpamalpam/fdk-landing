@@ -137,13 +137,12 @@ export default function LeadForm({
     );
   }
 
-  const inp = 'w-full px-3 py-2.5 border border-gray-200 rounded-[4px] text-ink text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-shadow';
-  const lbl = 'block text-xs font-medium text-ink mb-1';
-  const err = 'text-red-500 text-xs mt-0.5';
+  const inp = 'w-full px-3 py-2 border border-gray-200 rounded-[4px] text-ink text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-shadow';
+  const lbl = 'block text-[11px] font-medium text-ink mb-0.5';
+  const errCls = 'text-red-500 text-[11px] mt-0.5';
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3" onFocus={handleFormFocus}>
-      <p className="text-[11px] text-body">* pole wymagane</p>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-2" onFocus={handleFormFocus}>
 
       {/* Honeypot */}
       <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }} aria-hidden="true">
@@ -156,26 +155,26 @@ export default function LeadForm({
         <div>
           <label htmlFor={`fn-${variant}`} className={lbl}>Imię *</label>
           <input id={`fn-${variant}`} type="text" autoComplete="given-name" className={inp} {...register('firstName')} aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? `fn-e-${variant}` : undefined} />
-          {errors.firstName && <p id={`fn-e-${variant}`} className={err} role="alert">{errors.firstName.message}</p>}
+          {errors.firstName && <p id={`fn-e-${variant}`} className={errCls} role="alert">{errors.firstName.message}</p>}
         </div>
         <div>
           <label htmlFor={`ln-${variant}`} className={lbl}>Nazwisko *</label>
           <input id={`ln-${variant}`} type="text" autoComplete="family-name" className={inp} {...register('lastName')} aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? `ln-e-${variant}` : undefined} />
-          {errors.lastName && <p id={`ln-e-${variant}`} className={err} role="alert">{errors.lastName.message}</p>}
+          {errors.lastName && <p id={`ln-e-${variant}`} className={errCls} role="alert">{errors.lastName.message}</p>}
         </div>
       </div>
 
-      {/* E-mail */}
-      <div>
-        <label htmlFor={`em-${variant}`} className={lbl}>E-mail *</label>
-        <input id={`em-${variant}`} type="email" autoComplete="email" className={inp} {...register('email')} aria-invalid={!!errors.email} aria-describedby={errors.email ? `em-e-${variant}` : undefined} />
-        {errors.email && <p id={`em-e-${variant}`} className={err} role="alert">{errors.email.message}</p>}
-      </div>
-
-      {/* Telefon */}
-      <div>
-        <label htmlFor={`ph-${variant}`} className={lbl}>Telefon (opcjonalnie)</label>
-        <input id={`ph-${variant}`} type="tel" autoComplete="tel" className={inp} {...register('phone')} />
+      {/* E-mail + Telefon — one row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div>
+          <label htmlFor={`em-${variant}`} className={lbl}>E-mail *</label>
+          <input id={`em-${variant}`} type="email" autoComplete="email" className={inp} {...register('email')} aria-invalid={!!errors.email} aria-describedby={errors.email ? `em-e-${variant}` : undefined} />
+          {errors.email && <p id={`em-e-${variant}`} className={errCls} role="alert">{errors.email.message}</p>}
+        </div>
+        <div>
+          <label htmlFor={`ph-${variant}`} className={lbl}>Telefon (opcj.)</label>
+          <input id={`ph-${variant}`} type="tel" autoComplete="tel" className={inp} {...register('phone')} />
+        </div>
       </div>
 
       {/* Opis */}
@@ -183,7 +182,7 @@ export default function LeadForm({
         <label htmlFor={`desc-${variant}`} className={lbl}>Krótki opis Twojej działalności *</label>
         <textarea
           id={`desc-${variant}`}
-          rows={3}
+          rows={2}
           className={`${inp} resize-y`}
           placeholder={landing.form.descriptionPlaceholder}
           {...register('description')}
@@ -191,7 +190,7 @@ export default function LeadForm({
           aria-describedby={errors.description ? `desc-e-${variant}` : `desc-c-${variant}`}
         />
         <div className="flex justify-between mt-0.5">
-          {errors.description ? <p id={`desc-e-${variant}`} className={err} role="alert">{errors.description.message}</p> : <span />}
+          {errors.description ? <p id={`desc-e-${variant}`} className={errCls} role="alert">{errors.description.message}</p> : <span />}
           <span id={`desc-c-${variant}`} className={`text-[11px] ${descVal.length > DESC_MAX ? 'text-red-500' : 'text-body'}`}>{descVal.length}/{DESC_MAX}</span>
         </div>
       </div>
@@ -205,7 +204,7 @@ export default function LeadForm({
             <a href="https://firmadlakazdego.pl/polityka-prywatnosci/" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">Polityką prywatności</a>. *
           </span>
         </label>
-        {errors.consent_rodo && <p id={`rodo-e-${variant}`} className={err} role="alert">{errors.consent_rodo.message}</p>}
+        {errors.consent_rodo && <p id={`rodo-e-${variant}`} className={errCls} role="alert">{errors.consent_rodo.message}</p>}
 
         <label className="flex items-start gap-2 text-[11px] text-body leading-snug cursor-pointer">
           <input type="checkbox" className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-brand focus:ring-brand flex-shrink-0" {...register('consent_marketing')} />
@@ -220,7 +219,7 @@ export default function LeadForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-brand hover:bg-brandDark disabled:opacity-60 text-white font-semibold py-3.5 rounded-[4px] transition-colors flex items-center justify-center gap-2 text-base"
+        className="w-full bg-brand hover:bg-brandDark disabled:opacity-60 text-white font-semibold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 text-sm"
       >
         {isSubmitting ? (
           <>
@@ -231,11 +230,9 @@ export default function LeadForm({
             Wysyłanie…
           </>
         ) : (
-          landing.hero.submitLabel
+          'Wyślij'
         )}
       </button>
-
-      <p className="text-[11px] text-body text-center">Odpowiemy tak szybko, jak to możliwe.</p>
 
       {/* Klauzula informacyjna — collapsible */}
       <details className="text-[10px] text-body/50 leading-relaxed">

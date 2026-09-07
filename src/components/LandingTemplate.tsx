@@ -60,23 +60,23 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
   return (
     <div ref={pageRef}>
       {/* ── Hero with form ── */}
-      <section className="relative bg-ink text-white min-h-screen lg:min-h-[700px]" id="hero">
+      <section className="relative bg-ink text-white" id="hero">
         <Image src="/hero.jpg" alt="" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-[rgba(26,30,35,0.87)]" aria-hidden="true" />
-        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-12 lg:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-8 lg:gap-12 items-start">
+        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-8 lg:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-6 lg:gap-10 items-start">
             {/* Left — copy */}
-            <div className="lg:py-8">
-              <p className="text-brand text-sm font-semibold uppercase tracking-wide mb-3">{landing.hero.eyebrow}</p>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-5">{landing.hero.h1}</h1>
-              <p className="text-base lg:text-lg text-white/80 mb-4 lg:mb-6">{landing.hero.lead}</p>
-              <p className="text-white/50 text-sm hidden lg:block">{landing.hero.trustLine}</p>
+            <div className="lg:py-4">
+              <p className="text-brand text-xs font-semibold uppercase tracking-wide mb-2">{landing.hero.eyebrow}</p>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-3">{landing.hero.h1}</h1>
+              <p className="text-sm lg:text-base text-white/80 mb-3">{landing.hero.lead}</p>
+              <p className="text-white/50 text-xs hidden lg:block">{landing.hero.trustLine}</p>
             </div>
 
             {/* Right — form card */}
-            <div className="bg-white rounded-[12px] p-5 lg:p-6 text-ink shadow-2xl" id="formularz">
-              <h2 className="text-lg lg:text-xl font-bold mb-1">{landing.hero.formHeading}</h2>
-              <p className="text-body text-sm mb-3">{landing.hero.formIntro}</p>
+            <div className="bg-white rounded-[12px] p-4 lg:p-5 text-ink shadow-2xl" id="formularz">
+              <h2 className="text-base lg:text-lg font-bold mb-0.5">{landing.hero.formHeading}</h2>
+              <p className="text-body text-xs mb-2">{landing.hero.formIntro}</p>
               <LeadForm landing={landing} variant="hero" />
             </div>
           </div>
