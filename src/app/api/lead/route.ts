@@ -159,7 +159,7 @@ async function sendTikTokEvent(data: z.infer<typeof schema>, ip: string, userAge
   const accessToken = process.env.TIKTOK_ACCESS_TOKEN;
   if (!pixelId || !accessToken) return;
 
-  const normalizedPhone = normalizePhone(data.phone);
+  const normalizedPhone = normalizePhone(data.phone || '');
 
   const eventData = {
     event: 'SubmitForm',
