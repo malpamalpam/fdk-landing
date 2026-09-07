@@ -20,12 +20,7 @@ export type LandingContent = {
   testimonials: { title: string; placeholders: string[] };
   finalCta: { title: string; text: string; submitLabel: string };
   form: {
-    sytuacjaLabel: string;
-    sytuacjaOptions: string[];
-    branzaLabel: string;
-    branzaOptions: string[];
-    startLabel: string;
-    startOptions: string[];
+    descriptionPlaceholder: string;
   };
   thankYou: { h1: string; lead: string; next: string[] };
 };
@@ -44,7 +39,7 @@ export const landings: LandingContent[] = [
       h1: 'Masz kontrakt B2B. Nie musisz zakładać firmy.',
       lead: 'Wystawiaj faktury przez inkubator przedsiębiorczości — bez składek ZUS przedsiębiorcy, bez księgowej, bez wizyty w urzędzie. Sprawdzimy, czy w Twoim przypadku to ma sens, i powiemy wprost, jeśli nie ma.',
       formHeading: 'Powiedz nam, co podpisujesz',
-      formIntro: 'Napisz, czym się zajmujesz i kiedy startuje kontrakt. Odpowiemy w [FDK: X] dzień roboczy.',
+      formIntro: 'Napisz, czym się zajmujesz i kiedy startuje kontrakt. Odpowiemy tak szybko, jak to możliwe.',
       submitLabel: 'Sprawdźcie moją sytuację',
       trustLine: 'Bez zobowiązań. Nie wysyłamy ofert masowych.',
     },
@@ -75,7 +70,7 @@ export const landings: LandingContent[] = [
       title: 'Jak to wygląda w praktyce',
       steps: [
         { title: 'Piszesz, co i kiedy', text: 'Czym się zajmujesz i kiedy startuje kontrakt. Dwa zdania wystarczą.' },
-        { title: 'Sprawdzamy Twój przypadek', text: 'Odpowiadamy w [FDK: X] dzień roboczy. Jeśli lepszym rozwiązaniem jest własna działalność, mówimy to wprost.' },
+        { title: 'Sprawdzamy Twój przypadek', text: 'Odpowiemy tak szybko, jak to możliwe. Jeśli lepszym rozwiązaniem jest własna działalność, mówimy to wprost.' },
         { title: 'Podpisujesz i fakturujesz', text: 'Formalności zajmują [FDK: termin]. Pierwszą fakturę wystawiasz od razu po podpisaniu.' },
       ],
     },
@@ -118,16 +113,11 @@ export const landings: LandingContent[] = [
       submitLabel: 'Sprawdźcie moją sytuację',
     },
     form: {
-      sytuacjaLabel: 'Na jakim jesteś etapie?',
-      sytuacjaOptions: ['Mam podpisany kontrakt', 'Mam ofertę, jeszcze nie podpisałem', 'Rozmawiam z klientem', 'Dopiero się rozglądam'],
-      branzaLabel: 'Czym się zajmujesz?',
-      branzaOptions: ['Programowanie', 'Testowanie i QA', 'Analiza i dane', 'Marketing', 'Grafika i projektowanie', 'Zarządzanie projektami', 'Konsulting i szkolenia', 'Inne'],
-      startLabel: 'Kiedy startuje kontrakt?',
-      startOptions: ['Już trwa', 'W ciągu 30 dni', 'Za 1–3 miesiące', 'Jeszcze nie wiem'],
+      descriptionPlaceholder: 'Czym się zajmujesz, kiedy startuje kontrakt, dla kogo będziesz pracować?',
     },
     thankYou: {
       h1: 'Dziękujemy — mamy Twoje zgłoszenie.',
-      lead: 'Odpowiemy w [FDK: X] dzień roboczy, na adres, który podałeś.',
+      lead: 'Odpowiemy tak szybko, jak to możliwe, na adres, który podałeś.',
       next: [
         'Sprawdzimy, czy inkubator pasuje do Twojego kontraktu',
         'Jeśli lepszym rozwiązaniem będzie własna działalność — napiszemy to wprost',
@@ -149,7 +139,7 @@ export const landings: LandingContent[] = [
       h1: 'Wystawiaj faktury bez zakładania firmy.',
       lead: 'Kilku klientów, regularne zlecenia i zero ochoty na administrację wokół tego. Wystawiasz fakturę, my zajmujemy się resztą.',
       formHeading: 'Policzmy Twój przypadek',
-      formIntro: 'Napisz, czym się zajmujesz i ile faktur miesięcznie planujesz. Odpowiemy w [FDK: X] dzień roboczy.',
+      formIntro: 'Napisz, czym się zajmujesz i ile faktur miesięcznie planujesz. Odpowiemy tak szybko, jak to możliwe.',
       submitLabel: 'Policzcie, czy mi się opłaca',
       trustLine: 'Jeśli przy Twojej skali taniej wyjdzie coś innego — powiemy to wprost.',
     },
@@ -222,16 +212,11 @@ export const landings: LandingContent[] = [
       submitLabel: 'Policzcie, czy mi się opłaca',
     },
     form: {
-      sytuacjaLabel: 'Jak wygląda Twoja sytuacja?',
-      sytuacjaOptions: ['Mam stałych klientów', 'Mam pierwszego klienta', 'Zaczynam i zbieram zlecenia', 'Rozważam odejście z etatu'],
-      branzaLabel: 'Czym się zajmujesz?',
-      branzaOptions: ['Tłumaczenia', 'Lektorat i korepetycje', 'Grafika i ilustracja', 'Architektura i projektowanie', 'Fotografia i wideo', 'Muzyka i twórczość', 'Programowanie', 'E-commerce', 'Inne wolne zawody'],
-      startLabel: 'Ile faktur miesięcznie planujesz?',
-      startOptions: ['1–2', '3–5', '6–10', 'Więcej niż 10', 'Jeszcze nie wiem'],
+      descriptionPlaceholder: 'Czym się zajmujesz, dla kogo pracujesz, jak często wystawiasz faktury?',
     },
     thankYou: {
       h1: 'Dziękujemy — policzymy Twój przypadek.',
-      lead: 'Odpowiemy w [FDK: X] dzień roboczy, na podany adres.',
+      lead: 'Odpowiemy tak szybko, jak to możliwe, na podany adres.',
       next: [
         'Porównamy trzy ścieżki przy Twojej liczbie faktur',
         'Jeśli taniej wyjdzie coś innego — napiszemy to wprost',
@@ -253,7 +238,7 @@ export const landings: LandingContent[] = [
       h1: 'Wasz współpracownik wystawi Wam fakturę VAT. Bez zakładania działalności.',
       lead: 'Rozwiązanie dla firm, które chcą rozliczać się z podwykonawcami na fakturę — bez umowy o pracę i bez zlecenia z pełnymi obowiązkami płatnika.',
       formHeading: 'Napiszcie, kogo to dotyczy',
-      formIntro: 'Ilu współpracowników i w jakich rolach. Odezwiemy się w [FDK: X] dzień roboczy.',
+      formIntro: 'Ilu współpracowników i w jakich rolach. Odpowiemy tak szybko, jak to możliwe.',
       submitLabel: 'Chcemy poznać szczegóły',
       trustLine: 'Bez zobowiązań. Rozmawiamy najpierw o Waszej sytuacji, nie o cenniku.',
     },
@@ -327,16 +312,11 @@ export const landings: LandingContent[] = [
       submitLabel: 'Chcemy poznać szczegóły',
     },
     form: {
-      sytuacjaLabel: 'Czego dotyczy zapytanie?',
-      sytuacjaOptions: ['Mamy konkretnego współpracownika bez działalności', 'Mamy kilku takich współpracowników', 'Planujemy współpracę i chcemy to ustawić od początku', 'Chcemy tylko poznać zasady'],
-      branzaLabel: 'Branża Waszej firmy',
-      branzaOptions: ['Marketing i reklama', 'IT i software', 'Produkcja wideo i foto', 'E-commerce', 'Wydawnictwo i media', 'Szkolenia i edukacja', 'Inna'],
-      startLabel: 'Ilu współpracowników to dotyczy?',
-      startOptions: ['1 osoba', '2–5 osób', '6–15 osób', 'Więcej niż 15', 'Jeszcze nie wiem'],
+      descriptionPlaceholder: 'Ilu współpracowników to dotyczy, w jakich rolach pracują, jak rozliczacie się z nimi teraz?',
     },
     thankYou: {
       h1: 'Dziękujemy — mamy Wasze zgłoszenie.',
-      lead: 'Odezwiemy się w [FDK: X] dzień roboczy na podany adres.',
+      lead: 'Odpowiemy tak szybko, jak to możliwe, na podany adres.',
       next: [
         'Zapytamy o szczegóły ról i skali współpracy',
         'Pokażemy, jak to wygląda od strony Waszej księgowości',

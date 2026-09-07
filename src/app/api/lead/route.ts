@@ -6,15 +6,19 @@ import { createHash } from 'crypto';
 export const runtime = 'nodejs';
 
 const schema = z.object({
-  name: z.string().min(1),
-  phone: z.string().min(6).regex(/^[+]?[\d\s()-]{6,20}$/),
+  // Accepts both old (name) and new (firstName+lastName) format
+  name: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  phone: z.string().optional(),
   email: z.string().email(),
   // Old i18n landing fields
   situation: z.string().optional(),
   industry: z.string().optional(),
-  // New landing page fields
+  // Landing page fields
   sytuacja: z.string().optional(),
   branza: z.string().optional(),
+  description: z.string().optional(),
   consent_rodo: z.boolean().optional(),
   landing_slug: z.string().optional(),
   // Common fields
@@ -98,8 +102,9 @@ async function sendMetaCAPI(data: z.infer<typeof schema>, ip: string, userAgent:
   const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
   if (!pixelId || !accessToken) return;
 
-  const { fn, ln } = splitName(data.name);
-  const normalizedPhone = normalizePhone(data.phone);
+  const fn = data.firstName || splitName(data.name || '').fn;
+  const ln = data.lastName || splitName(data.name || '').ln;
+  const normalizedPhone = normalizePhone(data.phone || '');
 
   const eventData: Record<string, unknown> = {
     event_name: 'Lead',
@@ -241,9 +246,14 @@ export async function POST(request: NextRequest) {
     const ft = data.first_touch;
     const lt = data.last_touch;
 
+    // Build name from firstName+lastName or use name field
+    const fullName = data.firstName && data.lastName
+      ? `${data.firstName} ${data.lastName}`
+      : data.name || '';
+
     const insertRow: Record<string, unknown> = {
-      name: data.name,
-      phone: data.phone,
+      name: fullName,
+      phone: data.phone || '',
       email: data.email,
       start_date: or(data.start_date),
       message: or(data.message),
@@ -278,6 +288,8 @@ export async function POST(request: NextRequest) {
       insertRow.landing_slug = data.landing_slug;
       insertRow.sytuacja = or(data.sytuacja);
       insertRow.branza = or(data.branza);
+      // description goes into message column
+      if (data.description) insertRow.message = data.description;
       insertRow.consent_rodo = data.consent_rodo || false;
       // JSON attribution
       if (ft) {
@@ -356,26 +368,27 @@ export async function POST(request: NextRequest) {
         const { Resend } = await import('resend');
         const resend = new Resend(resendKey);
 
+        const landingName = data.landing_slug || data.segment || 'ogolny';
+        const firstName = data.firstName || fullName.split(' ')[0] || '';
+
         // Team notification
         await resend.emails.send({
           from: 'FDK Landing <noreply@firmadlakazdego.pl>',
           to: notifyEmail,
-          subject: `Nowy lead: ${data.name} (${data.situation || 'brak sytuacji'}) [${data.segment || 'ogolny'}]`,
+          subject: `Nowe zgłoszenie z ${landingName} — ${fullName}`,
           text: [
-            `Imię i nazwisko: ${data.name}`,
-            `Telefon: ${data.phone}`,
+            `Imię i nazwisko: ${fullName}`,
+            `Telefon: ${data.phone || '—'}`,
             `E-mail: ${data.email}`,
-            `Sytuacja: ${data.situation || '—'}`,
-            `Branża: ${data.industry || '—'}`,
+            `Opis: ${data.description || data.message || '—'}`,
+            `Sytuacja: ${data.sytuacja || data.situation || '—'}`,
+            `Branża: ${data.branza || data.industry || '—'}`,
             `Planowany start: ${data.start_date || '—'}`,
             `Segment: ${data.segment || 'ogolny'}`,
-            `Wiadomość: ${data.message || '—'}`,
+            `Landing: ${data.landing_slug || '—'}`,
             `Locale: ${data.locale || '—'}`,
-            `Hook: ${data.hook_variant || '—'}`,
             `Zgoda marketing: ${data.consent_marketing ? 'TAK' : 'NIE'}`,
             `UTM: ${data.utm_source || '—'} / ${data.utm_medium || '—'} / ${data.utm_campaign || '—'}`,
-            `First touch: ${data.first_touch_source || '—'} / ${data.first_touch_medium || '—'}`,
-            `Last touch: ${data.last_touch_source || '—'} / ${data.last_touch_medium || '—'}`,
             `Event ID: ${data.event_id || '—'}`,
             `Landing URL: ${data.landing_url || '—'}`,
             `CAPI: ${capiResponse || 'nie wysłano'}`,
@@ -385,26 +398,12 @@ export async function POST(request: NextRequest) {
         });
 
         // Autoresponder to lead
-        const locale = data.locale || 'pl';
-        const subjects: Record<string, string> = {
-          pl: 'Dziękujemy za kontakt — Firma Dla Każdego',
-          en: 'Thank you for contacting us — Firma Dla Każdego',
-          uk: 'Дякуємо за звернення — Firma Dla Każdego',
-          ru: 'Спасибо за обращение — Firma Dla Każdego',
-        };
-        const bodies: Record<string, string> = {
-          pl: `Cześć!\n\nDziękujemy za zgłoszenie. Skontaktujemy się z Tobą w ciągu 24 godzin roboczych.\n\nJeśli chcesz porozmawiać od razu, zadzwoń: +48 575 594 500\n\nZespół Firma Dla Każdego\nhttps://firmadlakazdego.pl`,
-          en: `Hi!\n\nThank you for your enquiry. We'll get back to you within 24 business hours.\n\nWant to talk right away? Call us: +48 794 731 000\n\nTeam Firma Dla Każdego\nhttps://firmadlakazdego.pl`,
-          uk: `Привіт!\n\nДякуємо за заявку. Зв'яжемося з тобою протягом 24 робочих годин.\n\nХочеш поговорити одразу? Телефонуй: +48 794 731 000\n\nКоманда Firma Dla Każdego\nhttps://firmadlakazdego.pl`,
-          ru: `Привет!\n\nСпасибо за заявку. Свяжемся с тобой в течение 24 рабочих часов.\n\nХочешь поговорить сразу? Звони: +48 794 731 000\n\nКоманда Firma Dla Każdego\nhttps://firmadlakazdego.pl`,
-        };
-
         await resend.emails.send({
           from: 'Firma Dla Każdego <kontakt@firmadlakazdego.pl>',
           replyTo: 'kontakt@firmadlakazdego.pl',
           to: data.email,
-          subject: subjects[locale] || subjects.pl,
-          text: bodies[locale] || bodies.pl,
+          subject: 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego',
+          text: `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`,
         });
       } catch (emailError) {
         console.error('Resend error:', emailError);

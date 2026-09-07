@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Check, X, ChevronRight, Quote, MessageCircle } from 'lucide-react';
+import { Check, X, ChevronRight, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import type { LandingContent } from '@/content/landings';
 import LeadForm from '@/components/LeadForm';
