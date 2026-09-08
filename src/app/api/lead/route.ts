@@ -280,7 +280,7 @@ export async function POST(request: NextRequest) {
       landing_url: or(data.landing_url),
       referrer: or(data.referrer),
       user_agent: data.user_agent || userAgent,
-      ip: ip,
+      ip: ip && ip !== '0.0.0.0' ? ip : null,
     };
 
     if (isNewLanding) {
@@ -323,8 +323,8 @@ export async function POST(request: NextRequest) {
     const { error } = await supabase.from('leads').insert(insertRow);
 
     if (error) {
-      console.error('Supabase insert error:', error);
-      return NextResponse.json({ ok: false, error: 'db' }, { status: 500 });
+      console.error('Supabase insert error:', JSON.stringify(error), 'Row:', JSON.stringify(insertRow));
+      return NextResponse.json({ ok: false, error: 'db', detail: error.message || error.code }, { status: 500 });
     }
 
     // Meta CAPI — send if consent allows
