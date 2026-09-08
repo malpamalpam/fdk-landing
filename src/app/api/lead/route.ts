@@ -323,8 +323,9 @@ export async function POST(request: NextRequest) {
     const { error } = await supabase.from('leads').insert(insertRow);
 
     if (error) {
-      console.error('Supabase insert error:', JSON.stringify(error), 'Row:', JSON.stringify(insertRow));
-      return NextResponse.json({ ok: false, error: 'db', detail: error.message || error.code }, { status: 500 });
+      console.error('Supabase insert error:', JSON.stringify(error));
+      // TODO: remove debug detail before production
+      return NextResponse.json({ ok: false, error: 'db', debug: { message: error.message, code: error.code, details: error.details, hint: error.hint } }, { status: 500 });
     }
 
     // Meta CAPI — send if consent allows

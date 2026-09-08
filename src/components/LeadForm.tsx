@@ -108,6 +108,10 @@ export default function LeadForm({
         body: JSON.stringify(payload),
       });
       const result = await res.json();
+      if (result.debug) {
+        setServerError(`Błąd DB: ${result.debug.message || ''} ${result.debug.hint || ''} ${result.debug.details || ''}`);
+        return;
+      }
       if (result.ok) {
         sessionStorage.setItem('fdk_lp_event_id', eventId);
         sessionStorage.setItem('fdk_lp_slug', landing.slug);
