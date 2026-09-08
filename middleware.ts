@@ -70,7 +70,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Landing pages — pass through
-  if (pathname.startsWith("/lp/")) {
+  if (pathname.startsWith("/lp/") || pathname.startsWith("/lp-")) {
     return NextResponse.next();
   }
 

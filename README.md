@@ -77,7 +77,32 @@ Strony segmentowe mają `noindex` i nie są w sitemap. Segment trafia do leadów
 
 Kolumny widoku są zgodne z szablonem Google Ads „Conversions from clicks".
 
-## Eksport leadów do Google Sheets
+## Zbieranie leadów — Google Sheets (automatyczny zapis)
+
+Leady z formularzy `/lp/landing1`, `/lp/landing2`, `/lp/landing3` zapisują się automatycznie do Google Sheets.
+
+### Konfiguracja krok po kroku
+
+1. **Google Cloud Console** → utwórz nowy projekt (lub użyj istniejącego)
+2. Włącz **Google Sheets API** (APIs & Services → Library → szukaj "Google Sheets API" → Enable)
+3. **IAM & Admin → Service Accounts** → utwórz konto serwisowe → Keys → Add Key → JSON
+4. Skopiuj z pobranego JSON:
+   - `client_email` → zmienna `GOOGLE_CLIENT_EMAIL`
+   - `private_key` → zmienna `GOOGLE_PRIVATE_KEY` (cały klucz z `-----BEGIN...`)
+5. Utwórz arkusz Google Sheets z zakładką `Wszystkie` i nagłówkami w wierszu 1:
+   `Data i godzina | Imię i nazwisko | E-mail | Telefon | Źródło | Opis działalności | URL strony | UTM source | UTM medium | UTM campaign | Zgoda marketing`
+6. Zakładki `landing1`, `landing2`, `landing3` powstają automatycznie przy pierwszym leadzie
+7. **Udostępnij arkusz** (Share → Editor) na adres `client_email` z pkt 4
+8. `SHEET_ID` to fragment URL arkusza między `/d/` a `/edit`
+9. W Vercel → Settings → Environment Variables dodaj: `GOOGLE_CLIENT_EMAIL`, `GOOGLE_PRIVATE_KEY`, `SHEET_ID`, `SHEET_TAB_ALL`
+
+### Zakładka Podsumowanie
+
+Utwórz zakładkę `Podsumowanie` i wstaw formuły:
+- Leady per landing: `=COUNTIF(Wszystkie!E:E,"landing1")`
+- Leady per dzień: `=COUNTIFS(Wszystkie!E:E,"landing1",Wszystkie!A:A,">="&A2,Wszystkie!A:A,"<"&A2+1)`
+
+### Eksport CSV z Supabase
 
 ```bash
 npm run export:leads > leads.csv
@@ -106,3 +131,4 @@ W Google Sheets: File → Import → Replace current sheet → wklej CSV.
 - React Hook Form + Zod (formularz)
 - Google Consent Mode v2 + GTM
 - Meta Conversions API (server-side)
+- Google Sheets (automatyczny zapis leadów)

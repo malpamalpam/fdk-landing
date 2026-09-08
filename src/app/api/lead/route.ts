@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
+import { appendLeadToSheets } from '@/lib/googleSheets';
+import { isValidSource } from '@/lib/leadSources';
 
 export const runtime = 'nodejs';
 
@@ -205,7 +207,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const isNewLp = !!body.landing_slug;
     // New landings: 3/hour; old landing: 5/10min
-    if (isRateLimited(ip, 20, 10 * 60 * 1000)) {
+    if (isRateLimited(ip, 5, 60 * 60 * 1000)) {
       return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
     }
 
@@ -290,6 +292,31 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Supabase insert error:', error);
       return NextResponse.json({ ok: false, error: 'db', detail: error.message }, { status: 500 });
+    }
+
+    // Google Sheets — write to "Wszystkie" + per-landing tab
+    const sheetsSource = data.landing_slug || data.segment || '';
+    if (sheetsSource && isValidSource(sheetsSource)) {
+      const now = new Date();
+      const datetime = now.toLocaleString('pl-PL', { timeZone: 'Europe/Warsaw' });
+      try {
+        await appendLeadToSheets({
+          datetime,
+          name: fullName,
+          email: data.email,
+          phone: data.phone || '',
+          source: sheetsSource,
+          description: data.description || data.message || '',
+          pageUrl: data.landing_url || '',
+          utmSource: data.utm_source || '',
+          utmMedium: data.utm_medium || '',
+          utmCampaign: data.utm_campaign || '',
+          consentMarketing: data.consent_marketing || false,
+        });
+      } catch (e) {
+        // Google Sheets error should not block the lead submission
+        console.error('Google Sheets error:', e);
+      }
     }
 
     // Meta CAPI — send if consent allows
