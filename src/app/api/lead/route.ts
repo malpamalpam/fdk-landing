@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const isNewLp = !!body.landing_slug;
     // New landings: 3/hour; old landing: 5/10min
-    if (isRateLimited(ip, isNewLp ? 3 : 5, isNewLp ? 60 * 60 * 1000 : 10 * 60 * 1000)) {
+    if (isRateLimited(ip, 20, 10 * 60 * 1000)) {
       return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
     }
 
