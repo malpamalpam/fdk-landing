@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
       message: or(data.message),
       consent: data.consent_privacy ?? data.consent_rodo ?? false,
       consent_marketing: data.consent_marketing || false,
-      consent_state: data.consent_state || null,
+      ...(data.consent_state ? { consent_state: data.consent_state } : {}),
       segment: or(data.segment),
       locale: or(data.locale),
       hook_variant: or(data.hook_variant),
@@ -286,11 +286,10 @@ export async function POST(request: NextRequest) {
     if (isNewLanding) {
       // New landing page format
       insertRow.landing_slug = data.landing_slug;
-      insertRow.sytuacja = or(data.sytuacja);
-      insertRow.branza = or(data.branza);
-      // description goes into message column
+      if (data.sytuacja) insertRow.sytuacja = data.sytuacja;
+      if (data.branza) insertRow.branza = data.branza;
       if (data.description) insertRow.message = data.description;
-      insertRow.consent_rodo = data.consent_rodo || false;
+      if (data.consent_rodo !== undefined) insertRow.consent_rodo = data.consent_rodo;
       // JSON attribution
       if (ft) {
         insertRow.first_touch_source = ft.source || null;
