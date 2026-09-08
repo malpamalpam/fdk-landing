@@ -324,7 +324,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Supabase insert error:', error);
-      return NextResponse.json({ ok: false, error: 'db' }, { status: 500 });
+      return NextResponse.json({ ok: false, error: 'db', detail: error.message }, { status: 500 });
     }
 
     // Meta CAPI — send if consent allows

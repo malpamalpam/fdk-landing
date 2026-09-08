@@ -117,7 +117,8 @@ export default function LeadForm({
       } else if (result.error === 'rate_limited') {
         setServerError('Zbyt wiele zgłoszeń. Spróbuj ponownie za chwilę.');
       } else {
-        setServerError('Nie udało się wysłać formularza. Spróbuj ponownie lub napisz na kontakt@firmadlakazdego.pl');
+        const detail = result.detail || result.error || '';
+        setServerError(`Nie udało się wysłać formularza (${detail}). Spróbuj ponownie lub napisz na kontakt@firmadlakazdego.pl`);
       }
     } catch {
       setServerError('Nie udało się wysłać formularza. Spróbuj ponownie lub napisz na kontakt@firmadlakazdego.pl');
