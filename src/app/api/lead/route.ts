@@ -251,73 +251,39 @@ export async function POST(request: NextRequest) {
       ? `${data.firstName} ${data.lastName}`
       : data.name || '';
 
+    // Use only columns from the original schema.sql to avoid PostgREST cache issues.
+    // Extra data goes into the 'message' field as structured text.
+    const extraInfo = isNewLanding
+      ? [
+          data.description || '',
+          data.landing_slug ? `[landing: ${data.landing_slug}]` : '',
+          ft ? `[ft: ${ft.source}/${ft.medium}/${ft.campaign}]` : '',
+          lt ? `[lt: ${lt.source}/${lt.medium}/${lt.campaign}]` : '',
+        ].filter(Boolean).join('\n')
+      : data.message || '';
+
     const insertRow: Record<string, unknown> = {
       name: fullName,
       phone: data.phone || '',
       email: data.email,
-      start_date: or(data.start_date),
-      message: or(data.message),
+      industry: or(isNewLanding ? data.landing_slug : data.industry),
+      message: extraInfo || null,
       consent: data.consent_privacy ?? data.consent_rodo ?? false,
-      consent_marketing: data.consent_marketing || false,
-      ...(data.consent_state ? { consent_state: data.consent_state } : {}),
-      segment: or(data.segment),
-      locale: or(data.locale),
-      hook_variant: or(data.hook_variant),
-      event_id: or(data.event_id),
+      locale: or(isNewLanding ? data.landing_slug : data.locale),
       utm_source: or(data.utm_source),
       utm_medium: or(data.utm_medium),
       utm_campaign: or(data.utm_campaign),
       utm_content: or(data.utm_content),
       utm_term: or(data.utm_term),
       gclid: or(data.gclid),
-      gbraid: or(data.gbraid),
-      wbraid: or(data.wbraid),
       fbclid: or(data.fbclid),
       ttclid: or(data.ttclid),
-      msclkid: or(data.msclkid),
-      fbp: or(data.fbp),
-      fbc: or(data.fbc),
       landing_url: or(data.landing_url),
       referrer: or(data.referrer),
+      hook_variant: or(data.segment),
       user_agent: data.user_agent || userAgent,
       ip: ip && ip !== '0.0.0.0' ? ip : null,
     };
-
-    if (isNewLanding) {
-      // New landing page format
-      insertRow.landing_slug = data.landing_slug;
-      if (data.sytuacja) insertRow.sytuacja = data.sytuacja;
-      if (data.branza) insertRow.branza = data.branza;
-      if (data.description) insertRow.message = data.description;
-      if (data.consent_rodo !== undefined) insertRow.consent_rodo = data.consent_rodo;
-      // JSON attribution
-      if (ft) {
-        insertRow.first_touch_source = ft.source || null;
-        insertRow.first_touch_medium = ft.medium || null;
-        insertRow.first_touch_campaign = ft.campaign || null;
-        insertRow.first_touch_at = ft.at || null;
-        insertRow.first_touch_url = ft.url || null;
-      }
-      if (lt) {
-        insertRow.last_touch_source = lt.source || null;
-        insertRow.last_touch_medium = lt.medium || null;
-        insertRow.last_touch_campaign = lt.campaign || null;
-        insertRow.last_touch_at = lt.at || null;
-      }
-    } else {
-      // Old i18n landing format
-      insertRow.situation = or(data.situation);
-      insertRow.industry = or(data.industry);
-      insertRow.first_touch_source = or(data.first_touch_source);
-      insertRow.first_touch_medium = or(data.first_touch_medium);
-      insertRow.first_touch_campaign = or(data.first_touch_campaign);
-      insertRow.first_touch_at = orTs(data.first_touch_at);
-      insertRow.first_touch_url = or(data.first_touch_url);
-      insertRow.last_touch_source = or(data.last_touch_source);
-      insertRow.last_touch_medium = or(data.last_touch_medium);
-      insertRow.last_touch_campaign = or(data.last_touch_campaign);
-      insertRow.last_touch_at = orTs(data.last_touch_at);
-    }
 
     const { error } = await supabase.from('leads').insert(insertRow);
 
