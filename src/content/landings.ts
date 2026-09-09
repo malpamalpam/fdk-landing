@@ -1,3 +1,8 @@
+import { facts } from './facts';
+
+export type RoleSplitItem = { label: string; items: string[] };
+export type SocialProofItem = { value: string; label: string };
+
 export type LandingContent = {
   slug: string;
   segment: string;
@@ -12,17 +17,27 @@ export type LandingContent = {
     trustLine: string;
   };
   highlight: { title: string; intro?: string; items: { label: string; text: string }[] };
+  roleSplit?: { title: string; columns: [RoleSplitItem, RoleSplitItem] };
+  foreignWorkers?: { title: string; items: string[]; disclaimer: string };
+  socialProof?: { items: SocialProofItem[] };
   forWhom: { title: string; items: string[] };
   notForWhom: { title: string; intro?: string; items: string[] };
   howItWorks: { title: string; steps: { title: string; text: string }[] };
   comparison: { title: string; note?: string; columns: string[]; rows: { label: string; cells: string[] }[] };
   faq: { title: string; items: { q: string; a: string }[] };
-  testimonials: { title: string; placeholders: string[] };
+  testimonials: { title: string; items: { name: string; role: string; text: string }[] };
   finalCta: { title: string; text: string; submitLabel: string };
   form: {
+    descriptionLabel: string;
     descriptionPlaceholder: string;
+    extraFields?: {
+      company?: boolean;
+      specialistsCount?: boolean;
+      invoicesPerMonth?: boolean;
+    };
   };
   thankYou: { h1: string; lead: string; next: string[] };
+  nav: { anchors: { label: string; href: string }[] };
 };
 
 export const landings: LandingContent[] = [
@@ -32,7 +47,7 @@ export const landings: LandingContent[] = [
     segment: 'kontrakt-b2b',
     meta: {
       title: 'Kontrakt B2B bez zakładania firmy — Firma dla Każdego',
-      description: 'Dostałeś kontrakt B2B i nie chcesz zakładać działalności? Wystawiaj faktury przez inkubator. Sprawdzimy Twoją sytuację i powiemy wprost, czy to ma sens.',
+      description: 'Dostałeś kontrakt B2B? Wystawiaj faktury przez inkubator — bez ZUS, bez księgowej, start w kilka dni. Sprawdzimy Twoją sytuację.',
     },
     hero: {
       eyebrow: 'Dla przechodzących z etatu na kontrakt',
@@ -40,7 +55,7 @@ export const landings: LandingContent[] = [
       lead: 'Wystawiaj faktury przez inkubator przedsiębiorczości — bez składek ZUS przedsiębiorcy, bez księgowej, bez wizyty w urzędzie. Sprawdzimy, czy w Twoim przypadku to ma sens, i powiemy wprost, jeśli nie ma.',
       formHeading: 'Powiedz nam, co podpisujesz',
       formIntro: 'Napisz, czym się zajmujesz i kiedy startuje kontrakt. Odpowiemy tak szybko, jak to możliwe.',
-      submitLabel: 'Sprawdźcie moją sytuację',
+      submitLabel: 'Wyślij',
       trustLine: 'Bez zobowiązań. Nie wysyłamy ofert masowych.',
     },
     highlight: {
@@ -71,7 +86,7 @@ export const landings: LandingContent[] = [
       steps: [
         { title: 'Piszesz, co i kiedy', text: 'Czym się zajmujesz i kiedy startuje kontrakt. Dwa zdania wystarczą.' },
         { title: 'Sprawdzamy Twój przypadek', text: 'Odpowiemy tak szybko, jak to możliwe. Jeśli lepszym rozwiązaniem jest własna działalność, mówimy to wprost.' },
-        { title: 'Podpisujesz i fakturujesz', text: 'Formalności zajmują [FDK: termin]. Pierwszą fakturę wystawiasz od razu po podpisaniu.' },
+        { title: 'Podpisujesz i fakturujesz', text: `Formalności zajmują ${facts.onboardingTime}. Pierwszą fakturę wystawiasz od razu po podpisaniu.` },
       ],
     },
     comparison: {
@@ -79,12 +94,12 @@ export const landings: LandingContent[] = [
       note: 'Porównanie dotyczy sytuacji osoby rozpoczynającej kontrakt B2B. Konkretne kwoty zależą od formy rozliczenia — policzymy je dla Twojego przypadku.',
       columns: ['Etat', 'Własna działalność', 'Inkubator'],
       rows: [
-        { label: 'Składki ZUS przedsiębiorcy', cells: ['po stronie pracodawcy', 'tak', '[FDK]'] },
+        { label: 'Składki ZUS przedsiębiorcy', cells: ['po stronie pracodawcy', 'tak', facts.zusStatus] },
         { label: 'Księgowość', cells: ['pracodawca', 'po Twojej stronie', 'po naszej stronie'] },
-        { label: 'Formalności na start', cells: ['umowa o pracę', 'rejestracja, konto firmowe, wybór formy opodatkowania', '[FDK]'] },
-        { label: 'Czas do pierwszej faktury', cells: ['nie dotyczy', '[FDK]', '[FDK]'] },
-        { label: 'Koszt w miesiącu bez zleceń', cells: ['nie dotyczy', '[FDK]', '[FDK]'] },
-        { label: 'Zakończenie', cells: ['okres wypowiedzenia', 'zamknięcie działalności', '[FDK: okres wypowiedzenia]'] },
+        { label: 'Formalności na start', cells: ['umowa o pracę', 'rejestracja, konto firmowe, wybór formy opodatkowania', facts.onboardingTime] },
+        { label: 'Czas do pierwszej faktury', cells: ['nie dotyczy', facts.onboardingTime, facts.onboardingTime] },
+        { label: 'Koszt w miesiącu bez zleceń', cells: ['nie dotyczy', facts.idleMonthCost, facts.idleMonthCost] },
+        { label: 'Zakończenie', cells: ['okres wypowiedzenia', 'zamknięcie działalności', facts.noticePeriod] },
       ],
     },
     faq: {
@@ -97,22 +112,21 @@ export const landings: LandingContent[] = [
         { q: 'Zdążę przed startem kontraktu?', a: '[FDK]' },
         { q: 'Co, jeśli w którymś miesiącu nie będę miał zleceń?', a: '[FDK]' },
         { q: 'Czy mogę później przejść na własną działalność?', a: '[FDK]' },
-        { q: 'Co ze składką zdrowotną i ubezpieczeniem?', a: '[FDK]' },
+        { q: 'Co ze składką zdrowotną i ubezpieczeniem?', a: 'Działając w inkubatorze, nie masz obowiązku opłacania składek ZUS przedsiębiorcy. Możesz ubezpieczyć się w NFZ dobrowolnie — pomożemy to ustawić. Na wniosek wystawiamy zaświadczenie o dochodach potrzebne do ubezpieczenia.' },
+        { q: 'Czy inkubator obsługuje Ulgę dla Młodych i studentów?', a: 'Tak. Osoby do 26. roku życia korzystają z ulgi dla młodych, a studenci nie płacą składek ZUS — zgodnie z obowiązującymi przepisami. Uwzględniamy to w rozliczeniu.' },
       ],
     },
     testimonials: {
       title: 'Osoby, które przez to przeszły',
-      placeholders: [
-        'Opinia osoby, która przeszła z etatu na kontrakt B2B — imię, zawód, jedno zdanie o tym, co było najtrudniejsze',
-        'Opinia kontraktora IT — imię, staż, jedno zdanie o formalnościach',
-      ],
+      items: [], // TODO: uzupełnić prawdziwymi opiniami
     },
     finalCta: {
       title: 'Kontrakt już czeka?',
       text: 'Napisz nam datę startu — sprawdzimy, co zdążysz.',
-      submitLabel: 'Sprawdźcie moją sytuację',
+      submitLabel: 'Wyślij',
     },
     form: {
+      descriptionLabel: 'Krótki opis Twojej działalności',
       descriptionPlaceholder: 'Czym się zajmujesz, kiedy startuje kontrakt, dla kogo będziesz pracować?',
     },
     thankYou: {
@@ -124,6 +138,14 @@ export const landings: LandingContent[] = [
         'Jeśli tak, dostaniesz listę tego, co potrzebne do startu',
       ],
     },
+    nav: {
+      anchors: [
+        { label: 'Opcje', href: '#opcje' },
+        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'FAQ', href: '#faq' },
+        { label: 'Kontakt', href: '#formularz' },
+      ],
+    },
   },
 
   // ─── LANDING 2 — Faktura bez własnej firmy ───
@@ -132,7 +154,7 @@ export const landings: LandingContent[] = [
     segment: 'faktura-bez-firmy',
     meta: {
       title: 'Faktura bez własnej firmy — dla wolnych zawodów | Firma dla Każdego',
-      description: 'Wystawiaj faktury bez zakładania działalności. Dla tłumaczy, lektorów, grafików, architektów i programistów. Sprawdź, czy przy Twojej liczbie faktur to się opłaca.',
+      description: 'Wystawiaj faktury bez zakładania działalności. Dla tłumaczy, lektorów, grafików i programistów. Sprawdź, czy to się opłaca.',
     },
     hero: {
       eyebrow: 'Dla wolnych zawodów i freelancerów',
@@ -140,7 +162,7 @@ export const landings: LandingContent[] = [
       lead: 'Kilku klientów, regularne zlecenia i zero ochoty na administrację wokół tego. Wystawiasz fakturę, my zajmujemy się resztą.',
       formHeading: 'Policzmy Twój przypadek',
       formIntro: 'Napisz, czym się zajmujesz i ile faktur miesięcznie planujesz. Odpowiemy tak szybko, jak to możliwe.',
-      submitLabel: 'Policzcie, czy mi się opłaca',
+      submitLabel: 'Wyślij',
       trustLine: 'Jeśli przy Twojej skali taniej wyjdzie coś innego — powiemy to wprost.',
     },
     highlight: {
@@ -170,7 +192,7 @@ export const landings: LandingContent[] = [
       steps: [
         { title: 'Mówisz, ile i za co', text: 'Czym się zajmujesz i ile faktur miesięcznie planujesz.' },
         { title: 'Liczymy Twój przypadek', text: 'Porównujemy trzy ścieżki i pokazujemy różnicę. Bez naciągania w naszą stronę.' },
-        { title: 'Wystawiasz pierwszą fakturę', text: 'Formalności zajmują [FDK: termin]. Fakturę wystawiasz w panelu.' },
+        { title: 'Wystawiasz pierwszą fakturę', text: `Formalności zajmują ${facts.onboardingTime}. Fakturę wystawiasz w panelu.` },
       ],
     },
     comparison: {
@@ -178,11 +200,11 @@ export const landings: LandingContent[] = [
       note: 'Porównanie przy [FDK: N] fakturach miesięcznie. Dla Twojej liczby policzymy indywidualnie.',
       columns: ['Serwis prowizyjny', 'Własna działalność', 'Inkubator'],
       rows: [
-        { label: 'Model opłaty', cells: ['prowizja od każdej faktury', 'koszty stałe niezależne od przychodu', '[FDK]'] },
+        { label: 'Model opłaty', cells: ['prowizja od każdej faktury', 'koszty stałe niezależne od przychodu', facts.monthlyFee] },
         { label: 'Koszt przy [FDK: N] fakturach', cells: ['[FDK]', '[FDK]', '[FDK]'] },
-        { label: 'Rozliczanie kosztów firmowych', cells: ['nie', 'tak', '[FDK]'] },
-        { label: 'Składki ZUS przedsiębiorcy', cells: ['nie', 'tak', '[FDK]'] },
-        { label: 'Faktury dla klientów zagranicznych', cells: ['[FDK]', 'tak', '[FDK]'] },
+        { label: 'Rozliczanie kosztów firmowych', cells: ['nie', 'tak', `tak — do ${facts.packageLimits.costDocs} dokumentów kosztowych miesięcznie w pakiecie`] },
+        { label: 'Składki ZUS przedsiębiorcy', cells: ['nie', 'tak', facts.zusStatus] },
+        { label: 'Faktury dla klientów zagranicznych', cells: ['[FDK]', 'tak', `tak — ${facts.payments.join(', ')}`] },
         { label: 'Wsparcie księgowe', cells: ['brak', 'po Twojej stronie', 'po naszej stronie'] },
       ],
     },
@@ -197,22 +219,22 @@ export const landings: LandingContent[] = [
         { q: 'Czy mogę fakturować klientów z zagranicy?', a: '[FDK]' },
         { q: 'Co, jeśli w którymś miesiącu nic nie zarobię?', a: '[FDK]' },
         { q: 'Czy mogę zrezygnować i przejść na własną działalność?', a: '[FDK]' },
+        { q: 'Czy inkubator obsługuje Ulgę dla Młodych i studentów?', a: 'Tak. Osoby do 26. roku życia korzystają z ulgi dla młodych, a studenci nie płacą składek ZUS — zgodnie z obowiązującymi przepisami. Uwzględniamy to w rozliczeniu.' },
       ],
     },
     testimonials: {
       title: 'Osoby, które tak pracują',
-      placeholders: [
-        'Opinia tłumaczki lub lektorki — imię, zawód, liczba klientów, jedno zdanie',
-        'Opinia grafika lub architekta — imię, zawód, jedno zdanie o formalnościach',
-      ],
+      items: [], // TODO: uzupełnić prawdziwymi opiniami
     },
     finalCta: {
       title: 'Nie wiesz, czy Ci się opłaca?',
       text: 'Napisz, ile faktur miesięcznie planujesz — policzymy i odpiszemy.',
-      submitLabel: 'Policzcie, czy mi się opłaca',
+      submitLabel: 'Wyślij',
     },
     form: {
+      descriptionLabel: 'Krótki opis Twojej działalności',
       descriptionPlaceholder: 'Czym się zajmujesz, dla kogo pracujesz, jak często wystawiasz faktury?',
+      extraFields: { invoicesPerMonth: true },
     },
     thankYou: {
       h1: 'Dziękujemy — policzymy Twój przypadek.',
@@ -223,6 +245,14 @@ export const landings: LandingContent[] = [
         'Jeśli inkubator ma sens, dostaniesz listę tego, co potrzebne',
       ],
     },
+    nav: {
+      anchors: [
+        { label: 'Ile faktur', href: '#opcje' },
+        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'FAQ', href: '#faq' },
+        { label: 'Kontakt', href: '#formularz' },
+      ],
+    },
   },
 
   // ─── LANDING 3 — Współpraca B2B ───
@@ -230,8 +260,8 @@ export const landings: LandingContent[] = [
     slug: 'landing3',
     segment: 'wspolpraca-b2b',
     meta: {
-      title: 'Faktura od podwykonawcy bez zakładania działalności | Firma dla Każdego',
-      description: 'Wasz współpracownik nie ma firmy, a Wy potrzebujecie faktury VAT. Pokażemy, jak to poukładać legalnie — bez umowy o pracę i bez zmian w Waszej księgowości.',
+      title: 'Faktura VAT od podwykonawcy bez działalności | Firma dla Każdego',
+      description: 'Wasz współpracownik nie ma firmy? Wystawimy fakturę VAT za jego usługi. Bez umowy o pracę, bez ZUS po Waszej stronie.',
     },
     hero: {
       eyebrow: 'Dla firm współpracujących z freelancerami',
@@ -239,7 +269,7 @@ export const landings: LandingContent[] = [
       lead: 'Rozwiązanie dla firm, które chcą rozliczać się z podwykonawcami na fakturę — bez umowy o pracę i bez zlecenia z pełnymi obowiązkami płatnika.',
       formHeading: 'Napiszcie, kogo to dotyczy',
       formIntro: 'Ilu współpracowników i w jakich rolach. Odpowiemy tak szybko, jak to możliwe.',
-      submitLabel: 'Chcemy poznać szczegóły',
+      submitLabel: 'Wyślij',
       trustLine: 'Bez zobowiązań. Rozmawiamy najpierw o Waszej sytuacji, nie o cenniku.',
     },
     highlight: {
@@ -250,6 +280,50 @@ export const landings: LandingContent[] = [
         { label: 'Płatność', text: 'Przelew na fakturę, w Waszym zwykłym terminie. Bez list płac i bez terminów składkowych.' },
         { label: 'Obowiązki płatnika', text: 'Nie powstają. Rozliczenie jest po stronie współpracownika i po naszej.' },
         { label: 'Kadry', text: 'Bez akt osobowych, badań i szkoleń BHP, bo nie ma stosunku pracy.' },
+      ],
+    },
+    roleSplit: {
+      title: 'Ty wybierasz specjalistę. My obsługujemy zaplecze.',
+      columns: [
+        {
+          label: 'Firma',
+          items: [
+            'Wybiera specjalistę',
+            'Ustala zakres usług',
+            'Ustala warunki współpracy',
+            'Przekazuje zadania',
+            'Opłaca fakturę',
+          ],
+        },
+        {
+          label: 'Inkubator',
+          items: [
+            'Przygotowuje dokumentację',
+            'Zapewnia obsługę formalną',
+            'Rozlicza i prowadzi księgowość',
+            'Wspiera kwestie podatkowe',
+            'Pomaga w formalnościach związanych z cudzoziemcami',
+            'Zapewnia formalną podstawę współpracy',
+          ],
+        },
+      ],
+    },
+    foreignWorkers: {
+      title: 'Współpracownicy spoza Polski',
+      items: [
+        'Oświadczenia o powierzeniu pracy i zezwolenia na pracę typu A',
+        'Zezwolenia na pobyt czasowy i pracę, karta pobytu, Blue Card',
+        'Powiadomienia dotyczące obywateli Ukrainy',
+        `Wnioski składane w ${facts.legalizationFilingDays}`,
+      ],
+      disclaimer: 'Możliwość legalizacji pobytu zależy od sytuacji danej osoby i obowiązujących przepisów — sprawdzamy to indywidualnie.',
+    },
+    socialProof: {
+      items: [
+        { value: `Od ${facts.sinceYear}`, label: 'roku na rynku' },
+        { value: `${facts.countries}`, label: 'krajów pochodzenia specjalistów' },
+        { value: facts.languages.join(' · '), label: 'języki obsługi' },
+        { value: 'Administracja · Księgowość · HR · Legalizacja', label: 'w jednym miejscu' },
       ],
     },
     forWhom: {
@@ -281,9 +355,9 @@ export const landings: LandingContent[] = [
         { label: 'Obowiązki płatnika po Waszej stronie', cells: ['pełne', '[FDK]', 'brak'] },
         { label: 'Dokument w księgowości', cells: ['lista płac', 'rachunek', 'faktura VAT'] },
         { label: 'Obsługa kadrowa', cells: ['pełna', 'częściowa', 'brak'] },
-        { label: 'Elastyczność zakończenia współpracy', cells: ['okres wypowiedzenia', '[FDK]', '[FDK]'] },
-        { label: 'Czas uruchomienia dla jednej osoby', cells: ['[FDK]', '[FDK]', '[FDK]'] },
-        { label: 'Kto ponosi koszt uczestnictwa', cells: ['nie dotyczy', 'nie dotyczy', '[FDK]'] },
+        { label: 'Elastyczność zakończenia współpracy', cells: ['okres wypowiedzenia', '[FDK]', facts.noticePeriod] },
+        { label: 'Czas uruchomienia dla jednej osoby', cells: ['[FDK]', '[FDK]', facts.onboardingTime] },
+        { label: 'Kto ponosi koszt uczestnictwa', cells: ['nie dotyczy', 'nie dotyczy', facts.feeSource] },
       ],
     },
     faq: {
@@ -291,28 +365,28 @@ export const landings: LandingContent[] = [
       items: [
         { q: 'Czy to jest bezpieczne od strony formalnej dla naszej firmy?', a: '[FDK]' },
         { q: 'Jak księgujemy taką fakturę?', a: '[FDK]' },
-        { q: 'Kto z kim podpisuje umowę — my z Wami czy ze współpracownikiem?', a: '[FDK]' },
-        { q: 'Kto ponosi koszt uczestnictwa w inkubatorze?', a: '[FDK]' },
+        { q: 'Z kim podpisujemy umowę?', a: 'Umowę o świadczenie usług podpisujecie z Fundacją. Fundacja jest stroną umowy, a współpracownik jest wskazany jako wykonawca. Możemy przygotować umowę albo zweryfikować Waszą.' },
+        { q: 'Kto ponosi koszt uczestnictwa w inkubatorze?', a: facts.feeSource },
         { q: 'Ile trwa uruchomienie dla jednej osoby?', a: '[FDK]' },
         { q: 'Co, jeśli współpracownik zakończy współpracę z nami?', a: '[FDK]' },
         { q: 'Czy możecie obsłużyć współpracowników spoza Polski?', a: '[FDK]' },
         { q: 'Czy da się to uruchomić dla większej grupy naraz?', a: '[FDK]' },
+        { q: 'Czy dokumenty możemy podpisać online?', a: 'Tak. Cały proces, łącznie z podpisaniem dokumentów, może odbyć się zdalnie.' },
       ],
     },
     testimonials: {
       title: 'Firmy, które tak pracują',
-      placeholders: [
-        'Opinia osoby decyzyjnej w agencji lub software housie — imię, rola, wielkość zespołu podwykonawców',
-        'Opinia z działu księgowego lub kadr — jedno zdanie o tym, co się zmieniło w obiegu dokumentów',
-      ],
+      items: [], // TODO: uzupełnić prawdziwymi opiniami
     },
     finalCta: {
       title: 'Macie konkretną sytuację do poukładania?',
       text: 'Napiszcie, ilu osób to dotyczy — odezwiemy się z konkretami.',
-      submitLabel: 'Chcemy poznać szczegóły',
+      submitLabel: 'Wyślij',
     },
     form: {
+      descriptionLabel: 'Kim są współpracownicy i czym się zajmują',
       descriptionPlaceholder: 'Ilu współpracowników to dotyczy, w jakich rolach pracują, jak rozliczacie się z nimi teraz?',
+      extraFields: { company: true, specialistsCount: true },
     },
     thankYou: {
       h1: 'Dziękujemy — mamy Wasze zgłoszenie.',
@@ -321,6 +395,14 @@ export const landings: LandingContent[] = [
         'Zapytamy o szczegóły ról i skali współpracy',
         'Pokażemy, jak to wygląda od strony Waszej księgowości',
         'Jeśli to rozwiązanie nie pasuje do Waszej sytuacji, powiemy to wprost',
+      ],
+    },
+    nav: {
+      anchors: [
+        { label: 'Dla kogo', href: '#dla-kogo' },
+        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'FAQ', href: '#faq' },
+        { label: 'Kontakt', href: '#formularz' },
       ],
     },
   },

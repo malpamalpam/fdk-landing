@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Check, X, ChevronRight, MessageCircle } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Check, X, ChevronRight, MessageCircle, Shield } from 'lucide-react';
 import Image from 'next/image';
 import type { LandingContent } from '@/content/landings';
 import LeadForm from '@/components/LeadForm';
@@ -13,78 +13,80 @@ function useFadeIn(ref: React.RefObject<HTMLElement | null>) {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (mq.matches) return;
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-      },
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
       { threshold: 0.1 }
     );
-    const elements = ref.current?.querySelectorAll('.fade-in-up');
-    elements?.forEach((el) => observer.observe(el));
+    ref.current?.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [ref]);
 }
 
-function ScrollToFormLink({ label, className }: { label: string; className?: string }) {
-  return (
-    <a
-      href="#formularz"
-      onClick={(e) => {
-        e.preventDefault();
-        const el = document.getElementById('formularz');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-          const firstInput = el.querySelector<HTMLInputElement>('input:not([type=hidden]):not([tabindex="-1"])');
-          firstInput?.focus({ preventScroll: true });
-        }
-      }}
-      className={className}
-    >
-      {label}
-    </a>
-  );
+function scrollToForm(e: React.MouseEvent) {
+  e.preventDefault();
+  const el = document.getElementById('formularz');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+    el.querySelector<HTMLInputElement>('input:not([type=hidden]):not([tabindex="-1"])')?.focus({ preventScroll: true });
+  }
 }
 
 export default function LandingTemplate({ landing }: { landing: LandingContent }) {
   const pageRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
   useFadeIn(pageRef);
 
   useEffect(() => {
     captureAttribution();
     pushEvent(EVENTS.pageView, { landing_slug: landing.slug, segment: landing.segment });
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, [landing.slug, landing.segment]);
-
-  const ctaClass = 'inline-flex items-center justify-center bg-brand hover:bg-brandDark text-white font-semibold px-8 py-4 rounded-[4px] transition-colors text-lg';
 
   return (
     <div ref={pageRef}>
+      {/* ── Sticky header ── */}
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'}`}>
+        <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-14">
+          <span className="text-white font-bold text-sm">Fundacja Firma Dla Każdego</span>
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-4">
+              {landing.nav.anchors.map((a) => (
+                <a key={a.href} href={a.href} className="text-white/70 hover:text-white text-xs font-medium transition-colors" style={{ scrollMarginTop: '4rem' }}>
+                  {a.label}
+                </a>
+              ))}
+            </nav>
+            <a href="#formularz" onClick={scrollToForm} className="bg-brand hover:bg-brandDark text-white text-xs font-semibold px-4 py-2 rounded-[4px] transition-colors">
+              {landing.hero.submitLabel}
+            </a>
+          </div>
+        </div>
+      </header>
+
       {/* ── Hero with form ── */}
-      <section className="relative bg-ink text-white" id="hero">
+      <section className="relative bg-ink text-white pt-14" id="hero">
         <Image src="/hero.jpg" alt="" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-[rgba(26,30,35,0.87)]" aria-hidden="true" />
         <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-8 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-6 lg:gap-10 items-start">
-            {/* Left — copy */}
             <div className="lg:py-4">
               <p className="text-brand text-xs font-semibold uppercase tracking-wide mb-2">{landing.hero.eyebrow}</p>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-3">{landing.hero.h1}</h1>
               <p className="text-sm lg:text-base text-white/80 mb-3">{landing.hero.lead}</p>
               <p className="text-white/50 text-xs hidden lg:block">{landing.hero.trustLine}</p>
             </div>
-
-            {/* Right — form card */}
             <div className="bg-white rounded-[12px] p-4 lg:p-5 text-ink shadow-2xl" id="formularz">
               <h2 className="text-base lg:text-lg font-bold mb-0.5">{landing.hero.formHeading}</h2>
               <p className="text-body text-xs mb-2">{landing.hero.formIntro}</p>
-              <LeadForm landing={landing} variant="hero" />
+              <LeadForm landing={landing} />
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Highlight ── */}
-      <section className="py-16 md:py-24 bg-surface">
+      <section className="py-16 md:py-24 bg-surface scroll-mt-16" id="opcje">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.highlight.title}</h2>
           {landing.highlight.intro && <p className="text-body text-lg mb-10 fade-in-up">{landing.highlight.intro}</p>}
@@ -99,8 +101,66 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </div>
       </section>
 
+      {/* ── Role Split (landing3 only) ── */}
+      {landing.roleSplit && (
+        <section className="py-16 md:py-24 bg-white">
+          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.roleSplit.title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {landing.roleSplit.columns.map((col, i) => (
+                <div key={i} className="fade-in-up" style={{ transitionDelay: `${i * 150}ms` }}>
+                  <h3 className={`text-xl font-bold mb-4 ${i === 1 ? 'text-brand' : 'text-ink'}`}>{col.label}</h3>
+                  <ul className="space-y-2">
+                    {col.items.map((item, j) => (
+                      <li key={j} className="flex items-start gap-2">
+                        <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${i === 1 ? 'text-brand' : 'text-ink/40'}`} aria-hidden="true" />
+                        <span className="text-body">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Foreign workers (landing3 only) ── */}
+      {landing.foreignWorkers && (
+        <section className="py-16 md:py-24 bg-surface">
+          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-ink mb-8 fade-in-up">{landing.foreignWorkers.title}</h2>
+            <div className="space-y-3 max-w-3xl mb-6">
+              {landing.foreignWorkers.items.map((item, i) => (
+                <div key={i} className="flex items-start gap-3 fade-in-up" style={{ transitionDelay: `${i * 75}ms` }}>
+                  <Shield className="w-5 h-5 text-brand mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <p className="text-body">{item}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-body/70 italic fade-in-up">{landing.foreignWorkers.disclaimer}</p>
+          </div>
+        </section>
+      )}
+
+      {/* ── Social Proof (landing3 only) ── */}
+      {landing.socialProof && (
+        <section className="py-10 bg-ink text-white">
+          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {landing.socialProof.items.map((item, i) => (
+                <div key={i}>
+                  <div className="text-xl md:text-2xl font-extrabold text-brand">{item.value}</div>
+                  <div className="text-xs text-white/60 mt-1">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── Dla kogo ── */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="dla-kogo">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.forWhom.title}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -131,7 +191,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Jak to działa ── */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="kroki">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-12 fade-in-up">{landing.howItWorks.title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -180,7 +240,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="faq">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.faq.title}</h2>
           <div className="max-w-3xl space-y-3">
@@ -206,27 +266,33 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </div>
       </section>
 
-      {/* ── Opinie ── */}
-      <section className="py-16 md:py-24 bg-surface">
-        <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.testimonials.title}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {landing.testimonials.placeholders.map((text, i) => (
-              <div key={i} className="bg-white rounded-[12px] p-6 border border-dashed border-gray-200 fade-in-up" style={{ transitionDelay: `${i * 100}ms` }}>
-                <MessageCircle className="w-8 h-8 text-brand/20 mb-3" aria-hidden="true" />
-                <p className="text-body italic">{text}</p>
-              </div>
-            ))}
+      {/* ── Opinie — only if non-empty ── */}
+      {landing.testimonials.items.length > 0 && (
+        <section className="py-16 md:py-24 bg-surface">
+          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.testimonials.title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {landing.testimonials.items.map((t, i) => (
+                <div key={i} className="bg-white rounded-[12px] p-6 fade-in-up" style={{ transitionDelay: `${i * 100}ms` }}>
+                  <MessageCircle className="w-8 h-8 text-brand/20 mb-3" aria-hidden="true" />
+                  <p className="text-body italic mb-4">{t.text}</p>
+                  <p className="font-semibold text-ink">{t.name}</p>
+                  <p className="text-sm text-body">{t.role}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Final CTA — scroll to hero form ── */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-[600px] mx-auto px-4 md:px-6 text-center fade-in-up">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-3">{landing.finalCta.title}</h2>
           <p className="text-body mb-8">{landing.finalCta.text}</p>
-          <ScrollToFormLink label={landing.finalCta.submitLabel} className={ctaClass} />
+          <a href="#formularz" onClick={scrollToForm} className="inline-flex items-center justify-center bg-brand hover:bg-brandDark text-white font-semibold px-8 py-4 rounded-[4px] transition-colors text-lg">
+            {landing.finalCta.submitLabel}
+          </a>
         </div>
       </section>
 

@@ -31,7 +31,11 @@ export async function generateMetadata({
   return {
     title: landing.meta.title,
     description: landing.meta.description,
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
+    openGraph: {
+      title: landing.meta.title,
+      description: landing.meta.description,
+    },
   };
 }
 

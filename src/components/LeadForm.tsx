@@ -70,12 +70,22 @@ export default function LeadForm({
     const ft = getFirstTouch();
     const lt = getLastTouch();
 
+    // Collect extra field values and prepend to description
+    const extras: string[] = [];
+    const companyEl = document.getElementById(`co-${variant}`) as HTMLInputElement;
+    if (companyEl?.value) extras.push(`Firma: ${companyEl.value}`);
+    const scEl = document.getElementById(`sc-val-${variant}`) as HTMLInputElement;
+    if (scEl?.value) extras.push(`Specjalistów: ${scEl.value}`);
+    const invEl = document.getElementById(`inv-val-${variant}`) as HTMLInputElement;
+    if (invEl?.value) extras.push(`Faktur/mies.: ${invEl.value}`);
+    const fullDescription = [...extras, data.description].filter(Boolean).join(' | ');
+
     const payload = {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       phone: data.phone || '',
-      description: data.description,
+      description: fullDescription,
       consent_rodo: data.consent_rodo,
       consent_marketing: data.consent_marketing || false,
       website: data.website,
@@ -178,9 +188,51 @@ export default function LeadForm({
         </div>
       </div>
 
+      {/* Extra fields — per landing */}
+      {landing.form.extraFields?.company && (
+        <div>
+          <label htmlFor={`co-${variant}`} className={lbl}>Firma *</label>
+          <input id={`co-${variant}`} type="text" autoComplete="organization" className={inp} />
+        </div>
+      )}
+
+      {landing.form.extraFields?.specialistsCount && (
+        <div>
+          <label htmlFor={`sc-${variant}`} className={lbl}>Liczba specjalistów</label>
+          <select id={`sc-${variant}`} className={inp} onChange={(e) => {
+            const el = document.getElementById(`sc-val-${variant}`) as HTMLInputElement;
+            if (el) el.value = e.target.value;
+          }}>
+            <option value="">—</option>
+            <option value="1">1</option>
+            <option value="2-5">2–5</option>
+            <option value="6-15">6–15</option>
+            <option value="16+">16+</option>
+          </select>
+          <input type="hidden" id={`sc-val-${variant}`} />
+        </div>
+      )}
+
+      {landing.form.extraFields?.invoicesPerMonth && (
+        <div>
+          <label htmlFor={`inv-${variant}`} className={lbl}>Ile faktur miesięcznie planujesz? *</label>
+          <select id={`inv-${variant}`} className={inp} onChange={(e) => {
+            const el = document.getElementById(`inv-val-${variant}`) as HTMLInputElement;
+            if (el) el.value = e.target.value;
+          }}>
+            <option value="">—</option>
+            <option value="1-2 w roku">1–2 w roku</option>
+            <option value="1-3 miesiecznie">1–3 miesięcznie</option>
+            <option value="4-10 miesiecznie">4–10 miesięcznie</option>
+            <option value="wiecej">więcej</option>
+          </select>
+          <input type="hidden" id={`inv-val-${variant}`} />
+        </div>
+      )}
+
       {/* Opis */}
       <div>
-        <label htmlFor={`desc-${variant}`} className={lbl}>Krótki opis Twojej działalności *</label>
+        <label htmlFor={`desc-${variant}`} className={lbl}>{landing.form.descriptionLabel} *</label>
         <textarea
           id={`desc-${variant}`}
           rows={2}
