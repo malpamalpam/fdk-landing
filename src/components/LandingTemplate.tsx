@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Check, X, ChevronRight, MessageCircle, Shield } from 'lucide-react';
 import Image from 'next/image';
 import type { LandingContent } from '@/content/landings';
+import { isKnown } from '@/lib/fdk';
 import LeadForm from '@/components/LeadForm';
 import { pushEvent, EVENTS } from '@/lib/analytics';
 import { captureAttribution } from '@/lib/attribution';
@@ -209,62 +210,74 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </div>
       </section>
 
-      {/* ── Tabela porównawcza ── */}
-      <section className="py-16 md:py-24 bg-surface">
-        <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.comparison.title}</h2>
-          {landing.comparison.note && <p className="text-body mb-8 fade-in-up">{landing.comparison.note}</p>}
-          <div className="overflow-x-auto fade-in-up">
-            <table className="w-full text-left border-collapse min-w-[600px]">
-              <thead>
-                <tr className="border-b-2 border-brand/20">
-                  <th className="py-3 pr-4 text-body font-medium text-sm w-1/4"></th>
-                  {landing.comparison.columns.map((col, i) => (
-                    <th key={i} className={`py-3 px-4 text-sm font-bold ${i === landing.comparison.columns.length - 1 ? 'text-brand' : 'text-ink'}`}>{col}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {landing.comparison.rows.map((row, i) => (
-                  <tr key={i} className="border-b border-gray-100">
-                    <td className="py-3 pr-4 text-sm font-medium text-ink">{row.label}</td>
-                    {row.cells.map((cell, j) => (
-                      <td key={j} className={`py-3 px-4 text-sm ${j === row.cells.length - 1 ? 'font-medium text-brand' : 'text-body'}`}>{cell}</td>
+      {/* ── Tabela porównawcza — rows with any null cell are hidden ── */}
+      {(() => {
+        const visibleRows = landing.comparison.rows.filter((row) => row.cells.every(isKnown));
+        if (visibleRows.length < 3) return null;
+        return (
+          <section className="py-16 md:py-24 bg-surface">
+            <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.comparison.title}</h2>
+              {landing.comparison.note && <p className="text-body mb-8 fade-in-up">{landing.comparison.note}</p>}
+              <div className="overflow-x-auto fade-in-up">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                  <thead>
+                    <tr className="border-b-2 border-brand/20">
+                      <th className="py-3 pr-4 text-body font-medium text-sm w-1/4"></th>
+                      {landing.comparison.columns.map((col, i) => (
+                        <th key={i} className={`py-3 px-4 text-sm font-bold ${i === landing.comparison.columns.length - 1 ? 'text-brand' : 'text-ink'}`}>{col}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visibleRows.map((row, i) => (
+                      <tr key={i} className="border-b border-gray-100">
+                        <td className="py-3 pr-4 text-sm font-medium text-ink">{row.label}</td>
+                        {row.cells.map((cell, j) => (
+                          <td key={j} className={`py-3 px-4 text-sm ${j === row.cells.length - 1 ? 'font-medium text-brand' : 'text-body'}`}>{cell}</td>
+                        ))}
+                      </tr>
                     ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
-      {/* ── FAQ ── */}
-      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="faq">
-        <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.faq.title}</h2>
-          <div className="max-w-3xl space-y-3">
-            {landing.faq.items.map((item, i) => (
-              <details
-                key={i}
-                className="fade-in-up group bg-surface rounded-[12px] overflow-hidden"
-                style={{ transitionDelay: `${i * 75}ms` }}
-                onToggle={(e) => {
-                  if ((e.target as HTMLDetailsElement).open) {
-                    pushEvent(EVENTS.faqOpen, { landing_slug: landing.slug, question: item.q.slice(0, 60) });
-                  }
-                }}
-              >
-                <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-ink font-semibold hover:text-brand transition-colors list-none [&::-webkit-details-marker]:hidden">
-                  <span>{item.q}</span>
-                  <span className="ml-4 flex-shrink-0 text-brand transition-transform group-open:rotate-45 text-2xl leading-none" aria-hidden="true">+</span>
-                </summary>
-                <div className="px-6 pb-4 text-body leading-relaxed">{item.a}</div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── FAQ — items with null answer are hidden ── */}
+      {(() => {
+        const visibleFaq = landing.faq.items.filter((item) => isKnown(item.a));
+        if (visibleFaq.length === 0) return null;
+        return (
+          <section className="py-16 md:py-24 bg-white scroll-mt-16" id="faq">
+            <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.faq.title}</h2>
+              <div className="max-w-3xl space-y-3">
+                {visibleFaq.map((item, i) => (
+                  <details
+                    key={i}
+                    className="fade-in-up group bg-surface rounded-[12px] overflow-hidden"
+                    style={{ transitionDelay: `${i * 75}ms` }}
+                    onToggle={(e) => {
+                      if ((e.target as HTMLDetailsElement).open) {
+                        pushEvent(EVENTS.faqOpen, { landing_slug: landing.slug, question: item.q.slice(0, 60) });
+                      }
+                    }}
+                  >
+                    <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-ink font-semibold hover:text-brand transition-colors list-none [&::-webkit-details-marker]:hidden">
+                      <span>{item.q}</span>
+                      <span className="ml-4 flex-shrink-0 text-brand transition-transform group-open:rotate-45 text-2xl leading-none" aria-hidden="true">+</span>
+                    </summary>
+                    <div className="px-6 pb-4 text-body leading-relaxed">{item.a}</div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── Opinie — only if non-empty ── */}
       {landing.testimonials.items.length > 0 && (
