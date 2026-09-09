@@ -50,7 +50,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-14">
           <span className="text-white font-bold text-sm">Fundacja Firma Dla Każdego</span>
           <div className="flex items-center gap-4">
-            <nav className="hidden md:flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-6">
               {landing.nav.anchors.map((a) => (
                 <a key={a.href} href={a.href} className="text-white/70 hover:text-white text-xs font-medium transition-colors" style={{ scrollMarginTop: '4rem' }}>
                   {a.label}

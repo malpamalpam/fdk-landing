@@ -140,8 +140,8 @@ export const landings: LandingContent[] = [
     },
     nav: {
       anchors: [
-        { label: 'Opcje', href: '#opcje' },
-        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'Możliwości', href: '#opcje' },
+        { label: 'Jak to działa?', href: '#kroki' },
         { label: 'FAQ', href: '#faq' },
         { label: 'Kontakt', href: '#formularz' },
       ],
@@ -248,7 +248,7 @@ export const landings: LandingContent[] = [
     nav: {
       anchors: [
         { label: 'Ile faktur', href: '#opcje' },
-        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'Jak to działa?', href: '#kroki' },
         { label: 'FAQ', href: '#faq' },
         { label: 'Kontakt', href: '#formularz' },
       ],
@@ -400,7 +400,7 @@ export const landings: LandingContent[] = [
     nav: {
       anchors: [
         { label: 'Dla kogo', href: '#dla-kogo' },
-        { label: 'Jak to działa', href: '#kroki' },
+        { label: 'Jak to działa?', href: '#kroki' },
         { label: 'FAQ', href: '#faq' },
         { label: 'Kontakt', href: '#formularz' },
       ],
