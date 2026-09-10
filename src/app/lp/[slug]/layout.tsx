@@ -44,40 +44,32 @@ export default async function LandingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
-
   return (
     <html lang="pl" className={montserrat.variable}>
-      <body className="font-sans antialiased text-ink bg-white">
+      <head>
+        {/* Google Tag Manager */}
         <Script
-          id="lp-consent-defaults"
+          id="gtm-head"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer=window.dataLayer||[];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('consent','default',{
-                'ad_storage':'denied','ad_user_data':'denied',
-                'ad_personalization':'denied','analytics_storage':'denied',
-                'functionality_storage':'granted','security_storage':'granted',
-                'wait_for_update':500
-              });
-              (function(){try{var c=JSON.parse(localStorage.getItem('fdk_lp_consent'));
-              if(c){gtag('consent','update',{analytics_storage:c.analytics||'denied',
-              ad_storage:c.advertising||'denied',ad_user_data:c.advertising||'denied',
-              ad_personalization:c.advertising||'denied'});}}catch(e){}})();
-            `,
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PD48WSK');`,
           }}
         />
-        {gtmId && (
-          <Script
-            id="lp-gtm"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`,
-            }}
+      </head>
+      <body className="font-sans antialiased text-ink bg-white">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-PD48WSK"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
           />
-        )}
+        </noscript>
         {children}
         <LandingConsentBanner />
       </body>
