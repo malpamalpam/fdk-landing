@@ -13,8 +13,23 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/pl",
-        permanent: false,
+        destination: "/kontrakt-b2b",
+        permanent: true,
+      },
+      {
+        source: "/lp/landing1",
+        destination: "/kontrakt-b2b",
+        permanent: true,
+      },
+      {
+        source: "/lp/landing2",
+        destination: "/faktura-bez-firmy",
+        permanent: true,
+      },
+      {
+        source: "/lp/landing3",
+        destination: "/wspolpraca-b2b",
+        permanent: true,
       },
     ];
   },
