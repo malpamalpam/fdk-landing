@@ -19,4 +19,9 @@ export const facts = {
   noticePeriod: null as string | null,         // TODO FDK: okres wypowiedzenia
   zusStatus: null as string | null,            // TODO FDK: składki ZUS w inkubatorze
   comparisonInvoices: null as number | null,   // TODO FDK: liczba faktur do tabeli na landing2
+
+  // ── Google Reviews — uzupełnić po weryfikacji profilu ──
+  googleRating: null as number | null,         // TODO FDK: ocena z profilu Google (np. 4.7)
+  googleReviewsCount: null as number | null,   // TODO FDK: liczba opinii (np. 111)
+  googleReviewsUrl: null as string | null,     // TODO FDK: link do profilu Google
 } as const;
