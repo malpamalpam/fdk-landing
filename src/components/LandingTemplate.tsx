@@ -9,16 +9,34 @@ import LeadForm from '@/components/LeadForm';
 import { pushEvent, EVENTS } from '@/lib/analytics';
 import { captureAttribution } from '@/lib/attribution';
 
+// ─── Scroll-reveal with 800 ms fail-safe ───
 function useFadeIn(ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mq.matches) return;
+
+    // Immediately show everything if reduced-motion or no IO support
+    if (mq.matches || typeof IntersectionObserver === 'undefined') {
+      ref.current?.querySelectorAll('.fade-in-up').forEach((el) => el.classList.add('visible'));
+      return;
+    }
+
+    const els = ref.current ? Array.from(ref.current.querySelectorAll('.fade-in-up')) : [];
+
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
-    ref.current?.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    els.forEach((el) => observer.observe(el));
+
+    // Fail-safe: reveal anything still invisible after 800 ms
+    const timer = setTimeout(() => {
+      els.forEach((el) => el.classList.add('visible'));
+    }, 800);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, [ref]);
 }
 
@@ -29,6 +47,30 @@ function scrollToForm(e: React.MouseEvent) {
     el.scrollIntoView({ behavior: 'smooth' });
     el.querySelector<HTMLInputElement>('input:not([type=hidden]):not([tabindex="-1"])')?.focus({ preventScroll: true });
   }
+}
+
+// ─── Mobile card view for comparison table ───
+function ComparisonCards({ columns, rows }: { columns: string[]; rows: { label: string; cells: (string | null)[] }[] }) {
+  const lastIdx = columns.length - 1;
+  return (
+    <div className="space-y-4 sm:hidden" aria-label="Tabela porównawcza">
+      {rows.map((row, i) => (
+        <div key={i} className="bg-white rounded-[12px] p-4 border border-gray-100">
+          <p className="text-sm font-bold text-ink mb-3">{row.label}</p>
+          <div className="space-y-1.5">
+            {columns.map((col, j) => (
+              <div key={j} className="flex items-start justify-between gap-2">
+                <span className="text-xs text-body flex-shrink-0">{col}</span>
+                <span className={`text-xs text-right ${j === lastIdx ? 'font-semibold text-brand' : 'text-body'}`}>
+                  {row.cells[j]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function LandingTemplate({ landing }: { landing: LandingContent }) {
@@ -44,11 +86,13 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
     return () => window.removeEventListener('scroll', onScroll);
   }, [landing.slug, landing.segment]);
 
+  const isL3 = landing.slug === 'landing3';
+
   return (
     <div ref={pageRef}>
       {/* ── Sticky header ── */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'}`}>
-        <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-14">
+        <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-14 md:h-16">
           <a href="#hero" className="text-white font-bold text-sm md:text-base leading-tight hover:text-brand transition-colors">
             Firma Dla Każdego
           </a>
@@ -68,15 +112,30 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </header>
 
       {/* ── Hero with form ── */}
-      <section className="relative bg-ink text-white pt-14" id="hero">
+      <section className="relative bg-ink text-white pt-14 md:pt-16" id="hero">
         <Image src="/hero.jpg" alt="" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-[rgba(26,30,35,0.87)]" aria-hidden="true" />
-        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-8 lg:py-12">
+        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-6 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-6 lg:gap-10 items-start">
             <div className="lg:py-4">
               <p className="text-brand text-xs font-semibold uppercase tracking-wide mb-2">{landing.hero.eyebrow}</p>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-3">{landing.hero.h1}</h1>
-              <p className="text-sm lg:text-base text-white/80 mb-3">{landing.hero.lead}</p>
+              <h1 className="text-[1.6rem] sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-2">
+                {/* landing3 has a long H1 — shorter version on mobile */}
+                {isL3 ? (
+                  <>
+                    <span className="sm:hidden">Wasz współpracownik wystawi fakturę VAT.</span>
+                    <span className="hidden sm:inline">{landing.hero.h1}</span>
+                  </>
+                ) : landing.hero.h1}
+              </h1>
+              <p className="text-sm lg:text-base text-white/80 mb-2">
+                {isL3 ? (
+                  <>
+                    <span className="sm:hidden">Rozliczajcie się z podwykonawcami na fakturę — bez umowy o pracę i bez obowiązków płatnika.</span>
+                    <span className="hidden sm:inline">{landing.hero.lead}</span>
+                  </>
+                ) : landing.hero.lead}
+              </p>
               <p className="text-white/50 text-xs hidden lg:block">{landing.hero.trustLine}</p>
             </div>
             <div className="bg-white rounded-[12px] p-4 lg:p-5 text-ink shadow-2xl" id="formularz">
@@ -89,7 +148,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Highlight ── */}
-      <section className="py-12 md:py-16 bg-surface scroll-mt-20" id="opcje">
+      <section className="py-12 md:py-16 bg-surface scroll-mt-[--header-h]" id="opcje" style={{ scrollMarginTop: 'var(--header-h, 56px)' }}>
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.highlight.title}</h2>
           {landing.highlight.intro && <p className="text-body text-lg mb-10 fade-in-up">{landing.highlight.intro}</p>}
@@ -150,7 +209,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       )}
 
       {/* ── Dla kogo ── */}
-      <section className="py-12 md:py-16 bg-white scroll-mt-20" id="dla-kogo">
+      <section className="py-12 md:py-16 bg-white" id="dla-kogo" style={{ scrollMarginTop: 'var(--header-h, 56px)' }}>
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.forWhom.title}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -181,7 +240,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Jak to działa ── */}
-      <section className="py-12 md:py-16 bg-white scroll-mt-20" id="kroki">
+      <section className="py-12 md:py-16 bg-white" id="kroki" style={{ scrollMarginTop: 'var(--header-h, 56px)' }}>
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-12 fade-in-up">{landing.howItWorks.title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -199,7 +258,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </div>
       </section>
 
-      {/* ── Tabela porównawcza — rows with any null cell are hidden ── */}
+      {/* ── Tabela porównawcza ── */}
       {(() => {
         const visibleRows = landing.comparison.rows.filter((row) => row.cells.every(isKnown));
         if (visibleRows.length < 3) return null;
@@ -208,7 +267,14 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
             <div className="max-w-[1140px] mx-auto px-4 md:px-6">
               <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.comparison.title}</h2>
               {landing.comparison.note && <p className="text-body mb-8 fade-in-up">{landing.comparison.note}</p>}
-              <div className="overflow-x-auto fade-in-up">
+
+              {/* Mobile: card view */}
+              <div className="fade-in-up">
+                <ComparisonCards columns={landing.comparison.columns} rows={visibleRows} />
+              </div>
+
+              {/* Desktop: table */}
+              <div className="overflow-x-auto fade-in-up hidden sm:block" aria-hidden="false">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
                     <tr className="border-b-2 border-brand/20">
@@ -239,11 +305,36 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       {landing.socialProof && (
         <section className="py-10 bg-ink text-white">
           <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
               {landing.socialProof.items.map((item, i) => (
                 <div key={i}>
-                  <div className="text-xl md:text-2xl font-extrabold text-brand">{item.value}</div>
-                  <div className="text-xs text-white/60 mt-1">{item.label}</div>
+                  {/* 4th tile: on mobile show shorter value */}
+                  <div className="text-[22px] md:text-2xl font-extrabold text-brand leading-tight">
+                    {i === 3 ? (
+                      <>
+                        <span className="sm:hidden">4 działy</span>
+                        <span className="hidden sm:inline">{item.value}</span>
+                      </>
+                    ) : i === 2 ? (
+                      // Languages tile: if too long, show "4 języki" on mobile
+                      <>
+                        <span className="sm:hidden">4 języki</span>
+                        <span className="hidden sm:inline">{item.value}</span>
+                      </>
+                    ) : (
+                      item.value
+                    )}
+                  </div>
+                  <div className="text-[11px] md:text-xs text-white/60 mt-1 leading-snug">
+                    {i === 3 ? (
+                      <>
+                        <span className="sm:hidden">administracja · księgowość · HR · legalizacja</span>
+                        <span className="hidden sm:inline">{item.label}</span>
+                      </>
+                    ) : (
+                      item.label
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -256,7 +347,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         const visibleFaq = landing.faq.items.filter((item) => isKnown(item.a));
         if (visibleFaq.length === 0) return null;
         return (
-          <section className="py-12 md:py-16 bg-white scroll-mt-20" id="faq">
+          <section className="py-12 md:py-16 bg-white" id="faq" style={{ scrollMarginTop: 'var(--header-h, 56px)' }}>
             <div className="max-w-[1140px] mx-auto px-4 md:px-6">
               <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.faq.title}</h2>
               <div className="max-w-3xl space-y-3">
@@ -302,7 +393,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </section>
       )}
 
-      {/* ── Final CTA — scroll to hero form ── */}
+      {/* ── Final CTA ── */}
       <section className="py-12 md:py-16 bg-white">
         <div className="max-w-[600px] mx-auto px-4 md:px-6 text-center fade-in-up">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-3">{landing.finalCta.title}</h2>

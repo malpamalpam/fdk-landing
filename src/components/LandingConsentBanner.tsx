@@ -48,13 +48,16 @@ export default function LandingConsentBanner() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[60] bg-white border-t border-gray-200 shadow-2xl p-4 md:p-6 md:bottom-4 md:left-4 md:right-auto md:max-w-md md:rounded-[12px] md:border">
-      <p className="text-sm text-body mb-4">
-        Używamy plików cookie do mierzenia skuteczności reklam. Możesz zaakceptować wszystkie albo wybrać kategorie.
+    <div className="fixed bottom-0 left-0 right-0 z-[60] bg-white border-t border-gray-200 shadow-2xl
+      px-3 py-3 md:p-6 md:bottom-4 md:left-4 md:right-auto md:max-w-md md:rounded-[12px] md:border">
+
+      <p className="text-[13px] md:text-sm text-body mb-2 md:mb-4 leading-snug">
+        <span className="md:hidden">Używamy cookies do mierzenia skuteczności reklam.</span>
+        <span className="hidden md:inline">Używamy plików cookie do mierzenia skuteczności reklam. Możesz zaakceptować wszystkie albo wybrać kategorie.</span>
       </p>
 
       {showSettings ? (
-        <div className="space-y-3 mb-4">
+        <div className="space-y-3 mb-3 md:mb-4">
           <label className="flex items-center justify-between text-sm">
             <span className="text-ink font-medium">Analityka</span>
             <input type="checkbox" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} className="w-4 h-4 rounded text-brand focus:ring-brand" />
@@ -65,22 +68,29 @@ export default function LandingConsentBanner() {
           </label>
           <button
             onClick={() => accept({ analytics: analytics ? 'granted' : 'denied', advertising: advertising ? 'granted' : 'denied' })}
-            className="w-full bg-brand hover:bg-brandDark text-white text-sm font-semibold py-2.5 rounded-[4px] transition-colors"
+            className="w-full bg-brand hover:bg-brandDark text-white text-sm font-semibold py-2 rounded-[4px] transition-colors"
           >
             Zapisz
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-3">
-            <button onClick={() => accept({ analytics: 'granted', advertising: 'granted' })} className="flex-1 bg-brand hover:bg-brandDark text-white text-sm font-semibold py-2.5 px-4 rounded-[4px] transition-colors">
-              Akceptuję
-            </button>
-            <button onClick={() => accept({ analytics: 'denied', advertising: 'denied' })} className="flex-1 border border-gray-300 text-ink text-sm font-semibold py-2.5 px-4 rounded-[4px] hover:bg-gray-50 transition-colors">
-              Tylko niezbędne
-            </button>
-          </div>
-          <button onClick={() => setShowSettings(true)} className="text-sm text-body hover:text-ink underline transition-colors">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => accept({ analytics: 'granted', advertising: 'granted' })}
+            className="flex-1 bg-brand hover:bg-brandDark text-white text-[13px] md:text-sm font-semibold py-2 px-3 rounded-[4px] transition-colors"
+          >
+            Akceptuję
+          </button>
+          <button
+            onClick={() => accept({ analytics: 'denied', advertising: 'denied' })}
+            className="flex-1 border border-gray-300 text-ink text-[13px] md:text-sm font-semibold py-2 px-3 rounded-[4px] hover:bg-gray-50 transition-colors"
+          >
+            Tylko niezbędne
+          </button>
+          <button
+            onClick={() => setShowSettings(true)}
+            className="text-[12px] text-body hover:text-ink underline transition-colors whitespace-nowrap flex-shrink-0"
+          >
             Ustawienia
           </button>
         </div>
