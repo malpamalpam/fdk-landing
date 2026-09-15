@@ -2,6 +2,7 @@ import { facts } from './facts';
 
 export type RoleSplitItem = { label: string; items: string[] };
 export type SocialProofItem = { value: string; label: string };
+export type TrustCard = { title: string; desc: string };
 
 export type LandingContent = {
   slug: string;
@@ -11,11 +12,15 @@ export type LandingContent = {
     eyebrow: string;
     h1: string;
     lead: string;
+    bullets: string[];
+    disclaimer: string;
+    imageCardText: string;
     formHeading: string;
     formIntro: string;
     submitLabel: string;
     trustLine: string;
   };
+  trustCards: TrustCard[];
   highlight: { title: string; intro?: string; items: { label: string; text: string }[] };
   roleSplit?: { title: string; columns: [RoleSplitItem, RoleSplitItem] };
   foreignWorkers?: { title: string; intro?: string; items: string[]; disclaimer: string };
@@ -28,6 +33,8 @@ export type LandingContent = {
   testimonials: { title: string; items: { name: string; role: string; text: string }[] };
   finalCta: { title: string; text: string; submitLabel: string };
   form: {
+    situationLabel: string;
+    situationOptions: string[];
     descriptionLabel: string;
     descriptionPlaceholder: string;
     extraFields?: {
@@ -51,12 +58,24 @@ const landing1: LandingContent = {
   hero: {
     eyebrow: 'Dla przechodzących z etatu na kontrakt',
     h1: 'Masz kontrakt B2B. Nie musisz zakładać firmy.',
-    lead: 'Wystawiaj faktury przez inkubator przedsiębiorczości — bez składek ZUS przedsiębiorcy, bez księgowej, bez wizyty w urzędzie. Sprawdzimy, czy w Twoim przypadku to ma sens, i powiemy wprost, jeśli nie ma.',
-    formHeading: 'Powiedz nam, co podpisujesz',
-    formIntro: 'Napisz, czym się zajmujesz i kiedy startuje kontrakt. Odpowiadamy w 1 dzień roboczy.',
+    lead: 'Wystawiaj faktury przez inkubator przedsiębiorczości — bez składek ZUS przedsiębiorcy, bez księgowej, bez wizyty w urzędzie.',
+    bullets: [
+      'Wystawiasz faktury bez rejestracji działalności',
+      'Formalności prowadzi inkubator',
+      'Jeśli to się nie opłaca, powiemy wprost',
+    ],
+    disclaimer: 'Możliwość współpracy i sposób rozliczenia zależą od Twojej sytuacji. Zweryfikujemy je indywidualnie.',
+    imageCardText: 'Opisz kontrakt. Sprawdzimy, czy inkubator pasuje do Twojej sytuacji.',
+    formHeading: 'Sprawdź swoją sytuację',
+    formIntro: 'Minuta wypełniania i wiemy, czy inkubator ma dla Ciebie sens.',
     submitLabel: 'Wyślij',
     trustLine: 'Bez zobowiązań. Nie wysyłamy ofert masowych.',
   },
+  trustCards: [
+    { title: 'Indywidualna weryfikacja', desc: 'Sprawdzamy charakter współpracy i branżę, zanim przedstawimy warunki.' },
+    { title: 'Bez zakładania firmy na start', desc: 'Jeśli Twój przypadek na to pozwala, rozliczasz kontrakt przez inkubator.' },
+    { title: 'Uczciwa odpowiedź', desc: 'Jeżeli własna działalność będzie lepszym rozwiązaniem, powiemy Ci to wprost.' },
+  ],
   highlight: {
     title: 'Dostałeś kontrakt B2B. Masz trzy opcje.',
     items: [
@@ -126,7 +145,17 @@ const landing1: LandingContent = {
   },
   testimonials: { title: 'Osoby, które przez to przeszły', items: [] },
   finalCta: { title: 'Kontrakt już czeka?', text: 'Napisz nam datę startu — sprawdzimy, co zdążysz.', submitLabel: 'Wyślij' },
-  form: { descriptionLabel: 'Krótki opis Twojej działalności', descriptionPlaceholder: 'Czym się zajmujesz, kiedy startuje kontrakt, dla kogo będziesz pracować?' },
+  form: {
+    situationLabel: 'Twoja sytuacja',
+    situationOptions: [
+      'Mam ofertę kontraktu B2B',
+      'Już pracuję na B2B przez własną firmę',
+      'Dopiero rozważam przejście z etatu',
+      'Inna sytuacja',
+    ],
+    descriptionLabel: 'Czym się zajmujesz? (branża lub krótki opis)',
+    descriptionPlaceholder: 'np. programista, kontrakt od października dla firmy z Niemiec',
+  },
   thankYou: {
     h1: 'Dziękujemy — mamy Twoje zgłoszenie.',
     lead: 'Odpowiadamy w 1 dzień roboczy, na adres, który podałeś.',
@@ -147,11 +176,23 @@ const landing2: LandingContent = {
     eyebrow: 'Dla wolnych zawodów i freelancerów',
     h1: 'Wystawiaj faktury bez zakładania firmy.',
     lead: 'Kilku klientów, regularne zlecenia i zero ochoty na administrację wokół tego. Wystawiasz fakturę, my zajmujemy się resztą.',
-    formHeading: 'Policzmy Twój przypadek',
-    formIntro: 'Napisz, czym się zajmujesz i ile faktur miesięcznie planujesz. Odpowiadamy w 1 dzień roboczy.',
+    bullets: [
+      'Faktura bez CEIDG i bez księgowej',
+      'Koszty, waluty i klienci zagraniczni w pakiecie',
+      'Policzymy, czy Ci się opłaca — także gdy nie',
+    ],
+    disclaimer: 'Możliwość współpracy i sposób rozliczenia zależą od Twojej sytuacji. Zweryfikujemy je indywidualnie.',
+    imageCardText: 'Opisz swoją sytuację. Sprawdzimy, co się opłaca.',
+    formHeading: 'Sprawdź swoją sytuację',
+    formIntro: 'Minuta wypełniania i policzymy, czy inkubator Ci się opłaca.',
     submitLabel: 'Wyślij',
     trustLine: 'Jeśli przy Twojej skali taniej wyjdzie coś innego — powiemy to wprost.',
   },
+  trustCards: [
+    { title: 'Indywidualna weryfikacja', desc: 'Sprawdzamy charakter współpracy i branżę, zanim przedstawimy warunki.' },
+    { title: 'Bez zakładania firmy na start', desc: 'Jeśli Twój przypadek na to pozwala, rozliczasz zlecenia przez inkubator.' },
+    { title: 'Uczciwa odpowiedź', desc: 'Jeżeli własna działalność będzie lepszym rozwiązaniem, powiemy Ci to wprost.' },
+  ],
   highlight: {
     title: 'Ile faktur miesięcznie wystawiasz?',
     intro: 'To jedno pytanie decyduje o tym, co się opłaca. Odpowiadamy uczciwie, także wtedy, gdy odpowiedzią nie jesteśmy my.',
@@ -211,7 +252,18 @@ const landing2: LandingContent = {
   },
   testimonials: { title: 'Osoby, które tak pracują', items: [] },
   finalCta: { title: 'Nie wiesz, czy Ci się opłaca?', text: 'Napisz, ile faktur miesięcznie planujesz — policzymy i odpiszemy.', submitLabel: 'Wyślij' },
-  form: { descriptionLabel: 'Krótki opis Twojej działalności', descriptionPlaceholder: 'Czym się zajmujesz, dla kogo pracujesz, jak często wystawiasz faktury?', extraFields: { invoicesPerMonth: true } },
+  form: {
+    situationLabel: 'Twoja sytuacja',
+    situationOptions: [
+      'Pierwsze zlecenia, jeszcze nie fakturuję',
+      'Fakturuję przez serwis prowizyjny',
+      'Mam działalność i rozważam zmianę',
+      'Inna sytuacja',
+    ],
+    descriptionLabel: 'Czym się zajmujesz? (branża lub krótki opis)',
+    descriptionPlaceholder: 'np. grafik, kilka projektów miesięcznie dla agencji w Niemczech',
+    extraFields: { invoicesPerMonth: true },
+  },
   thankYou: {
     h1: 'Dziękujemy — policzymy Twój przypadek.',
     lead: 'Odpowiadamy w 1 dzień roboczy, na podany adres.',
@@ -231,12 +283,24 @@ const landing3: LandingContent = {
   hero: {
     eyebrow: 'Dla firm współpracujących z freelancerami',
     h1: 'Wasz współpracownik wystawi Wam fakturę VAT. Bez zakładania działalności.',
-    lead: 'Rozwiązanie dla firm, które chcą rozliczać się z podwykonawcami na fakturę — bez umowy o pracę i bez zlecenia z pełnymi obowiązkami płatnika.',
-    formHeading: 'Napiszcie, kogo to dotyczy',
-    formIntro: 'Ilu współpracowników i w jakich rolach. Odpowiadamy w 1 dzień roboczy.',
+    lead: 'Rozwiązanie dla firm, które chcą rozliczać się z podwykonawcami na fakturę — bez umowy o pracę i bez obowiązków płatnika.',
+    bullets: [
+      'Współpracownik wystawia Wam fakturę VAT',
+      'Zero obowiązków płatnika po Waszej stronie',
+      'Cudzoziemcy — legalizacja po naszej stronie',
+    ],
+    disclaimer: 'Możliwość współpracy i sposób rozliczenia zależą od sytuacji Waszej firmy i współpracowników. Zweryfikujemy je indywidualnie.',
+    imageCardText: 'Opiszcie sytuację. Sprawdzimy, jak to poukładać.',
+    formHeading: 'Sprawdźcie swoją sytuację',
+    formIntro: 'Minuta wypełniania i powiemy, czy to rozwiązanie pasuje do Waszej firmy.',
     submitLabel: 'Wyślij',
     trustLine: 'Bez zobowiązań. Rozmawiamy najpierw o Waszej sytuacji, nie o cenniku.',
   },
+  trustCards: [
+    { title: 'Indywidualna weryfikacja', desc: 'Sprawdzamy sytuację Waszej firmy i współpracowników, zanim przedstawimy warunki.' },
+    { title: 'Bez zakładania firmy na start', desc: 'Jeśli sytuacja na to pozwala, współpracownicy wystawiają faktury przez inkubator.' },
+    { title: 'Uczciwa odpowiedź', desc: 'Jeżeli inne rozwiązanie będzie lepsze dla Waszej firmy, powiemy Wam to wprost.' },
+  ],
   highlight: {
     title: 'Co się zmienia w Waszym procesie',
     intro: 'Nic. I to jest cała idea tego rozwiązania.',
@@ -310,7 +374,18 @@ const landing3: LandingContent = {
   },
   testimonials: { title: 'Firmy, które tak pracują', items: [] },
   finalCta: { title: 'Macie konkretną sytuację do poukładania?', text: 'Napiszcie, ilu osób to dotyczy — odezwiemy się z konkretami.', submitLabel: 'Wyślij' },
-  form: { descriptionLabel: 'Kim są współpracownicy i czym się zajmują', descriptionPlaceholder: 'Ilu współpracowników to dotyczy, w jakich rolach pracują, jak rozliczacie się z nimi teraz?', extraFields: { company: true, specialistsCount: true } },
+  form: {
+    situationLabel: 'Wasza sytuacja',
+    situationOptions: [
+      'Mamy współpracownika bez działalności',
+      'Planujemy zatrudnić kogoś spoza Polski',
+      'Rozliczamy podwykonawców na zlecenie i chcemy to zmienić',
+      'Inna sytuacja',
+    ],
+    descriptionLabel: 'Kim są współpracownicy i czym się zajmują?',
+    descriptionPlaceholder: 'np. programista i grafik, projekt na 6 miesięcy, firma z Białorusi',
+    extraFields: { company: true, specialistsCount: true },
+  },
   thankYou: {
     h1: 'Dziękujemy — mamy Wasze zgłoszenie.',
     lead: 'Odpowiadamy w 1 dzień roboczy, na podany adres.',
