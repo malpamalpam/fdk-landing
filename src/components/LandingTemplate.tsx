@@ -94,7 +94,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'}`}>
         <div className="max-w-[1140px] mx-auto px-4 md:px-6 flex items-center justify-between h-14 md:h-16">
           <a href="#hero" className="flex-shrink-0">
-            <Image src="/logo-white.png" alt="Firma Dla Każdego" width={120} height={40} className="h-8 w-auto" priority />
+            <Image src="/logo-white.png" alt="Firma Dla Każdego" width={180} height={60} className="h-12 w-auto" priority />
           </a>
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center gap-6">
