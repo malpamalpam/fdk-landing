@@ -9,7 +9,7 @@ const config: Config = {
         brand: "#00BBFF",
         brandDark: "#0099D6",
         ink: "#1A1E23",
-        body: "#5A5A5A",
+        body: "#4b5563",
         surface: "#F7F7F7",
       },
       borderRadius: {

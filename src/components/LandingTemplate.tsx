@@ -55,7 +55,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center gap-6">
               {landing.nav.anchors.map((a) => (
-                <a key={a.href} href={a.href} className="text-white/70 hover:text-white text-xs font-medium transition-colors" style={{ scrollMarginTop: '4rem' }}>
+                <a key={a.href} href={a.href} className="text-white/70 hover:text-white text-xs font-medium transition-colors">
                   {a.label}
                 </a>
               ))}
@@ -89,13 +89,13 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Highlight ── */}
-      <section className="py-16 md:py-24 bg-surface scroll-mt-16" id="opcje">
+      <section className="py-12 md:py-16 bg-surface scroll-mt-20" id="opcje">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.highlight.title}</h2>
           {landing.highlight.intro && <p className="text-body text-lg mb-10 fade-in-up">{landing.highlight.intro}</p>}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {landing.highlight.items.map((item, i) => (
-              <div key={i} className="bg-white rounded-[12px] p-6 fade-in-up" style={{ transitionDelay: `${i * 100}ms` }}>
+              <div key={i} className="bg-white rounded-[12px] p-6 fade-in-up">
                 <h3 className="text-lg font-bold text-ink mb-2">{item.label}</h3>
                 <p className="text-body leading-relaxed">{item.text}</p>
               </div>
@@ -106,12 +106,12 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
 
       {/* ── Role Split (landing3 only) ── */}
       {landing.roleSplit && (
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-12 md:py-16 bg-white">
           <div className="max-w-[1140px] mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.roleSplit.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {landing.roleSplit.columns.map((col, i) => (
-                <div key={i} className="fade-in-up" style={{ transitionDelay: `${i * 150}ms` }}>
+                <div key={i} className="fade-in-up">
                   <h3 className={`text-xl font-bold mb-4 ${i === 1 ? 'text-brand' : 'text-ink'}`}>{col.label}</h3>
                   <ul className="space-y-2">
                     {col.items.map((item, j) => (
@@ -130,12 +130,15 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
 
       {/* ── Foreign workers (landing3 only) ── */}
       {landing.foreignWorkers && (
-        <section className="py-16 md:py-24 bg-surface">
+        <section className="py-12 md:py-16 bg-surface">
           <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-ink mb-8 fade-in-up">{landing.foreignWorkers.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.foreignWorkers.title}</h2>
+            {landing.foreignWorkers.intro && (
+              <p className="text-body text-lg mb-6 fade-in-up">{landing.foreignWorkers.intro}</p>
+            )}
             <div className="space-y-3 max-w-3xl mb-6">
               {landing.foreignWorkers.items.map((item, i) => (
-                <div key={i} className="flex items-start gap-3 fade-in-up" style={{ transitionDelay: `${i * 75}ms` }}>
+                <div key={i} className="flex items-start gap-3 fade-in-up">
                   <Shield className="w-5 h-5 text-brand mt-0.5 flex-shrink-0" aria-hidden="true" />
                   <p className="text-body">{item}</p>
                 </div>
@@ -146,29 +149,13 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         </section>
       )}
 
-      {/* ── Social Proof (landing3 only) ── */}
-      {landing.socialProof && (
-        <section className="py-10 bg-ink text-white">
-          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              {landing.socialProof.items.map((item, i) => (
-                <div key={i}>
-                  <div className="text-xl md:text-2xl font-extrabold text-brand">{item.value}</div>
-                  <div className="text-xs text-white/60 mt-1">{item.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ── Dla kogo ── */}
-      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="dla-kogo">
+      <section className="py-12 md:py-16 bg-white scroll-mt-20" id="dla-kogo">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.forWhom.title}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {landing.forWhom.items.map((item, i) => (
-              <div key={i} className="flex items-center gap-3 p-4 rounded-[12px] bg-surface fade-in-up" style={{ transitionDelay: `${i * 75}ms` }}>
+              <div key={i} className="flex items-center gap-3 p-4 rounded-[12px] bg-surface fade-in-up">
                 <Check className="w-5 h-5 text-brand flex-shrink-0" aria-hidden="true" />
                 <span className="text-ink font-medium">{item}</span>
               </div>
@@ -178,13 +165,13 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Dla kogo NIE ── */}
-      <section className="py-16 md:py-24 bg-surface">
+      <section className="py-12 md:py-16 bg-surface">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.notForWhom.title}</h2>
           {landing.notForWhom.intro && <p className="text-body text-lg mb-8 fade-in-up">{landing.notForWhom.intro}</p>}
           <div className="space-y-4 max-w-3xl">
             {landing.notForWhom.items.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 fade-in-up" style={{ transitionDelay: `${i * 75}ms` }}>
+              <div key={i} className="flex items-start gap-3 fade-in-up">
                 <X className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                 <p className="text-body">{item}</p>
               </div>
@@ -194,12 +181,12 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </section>
 
       {/* ── Jak to działa ── */}
-      <section className="py-16 md:py-24 bg-white scroll-mt-16" id="kroki">
+      <section className="py-12 md:py-16 bg-white scroll-mt-20" id="kroki">
         <div className="max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-12 fade-in-up">{landing.howItWorks.title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {landing.howItWorks.steps.map((step, i) => (
-              <div key={i} className="relative fade-in-up" style={{ transitionDelay: `${i * 150}ms` }}>
+              <div key={i} className="relative fade-in-up">
                 <div className="text-6xl font-extrabold text-brand/20 mb-2 leading-none">{String(i + 1).padStart(2, '0')}</div>
                 <h3 className="text-xl font-bold text-ink mb-2">{step.title}</h3>
                 <p className="text-body">{step.text}</p>
@@ -217,7 +204,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         const visibleRows = landing.comparison.rows.filter((row) => row.cells.every(isKnown));
         if (visibleRows.length < 3) return null;
         return (
-          <section className="py-16 md:py-24 bg-surface">
+          <section className="py-12 md:py-16 bg-surface">
             <div className="max-w-[1140px] mx-auto px-4 md:px-6">
               <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4 fade-in-up">{landing.comparison.title}</h2>
               {landing.comparison.note && <p className="text-body mb-8 fade-in-up">{landing.comparison.note}</p>}
@@ -248,12 +235,28 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
         );
       })()}
 
+      {/* ── Social Proof — directly above FAQ ── */}
+      {landing.socialProof && (
+        <section className="py-10 bg-ink text-white">
+          <div className="max-w-[1140px] mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {landing.socialProof.items.map((item, i) => (
+                <div key={i}>
+                  <div className="text-xl md:text-2xl font-extrabold text-brand">{item.value}</div>
+                  <div className="text-xs text-white/60 mt-1">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── FAQ — items with null answer are hidden ── */}
       {(() => {
         const visibleFaq = landing.faq.items.filter((item) => isKnown(item.a));
         if (visibleFaq.length === 0) return null;
         return (
-          <section className="py-16 md:py-24 bg-white scroll-mt-16" id="faq">
+          <section className="py-12 md:py-16 bg-white scroll-mt-20" id="faq">
             <div className="max-w-[1140px] mx-auto px-4 md:px-6">
               <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.faq.title}</h2>
               <div className="max-w-3xl space-y-3">
@@ -261,7 +264,6 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
                   <details
                     key={i}
                     className="fade-in-up group bg-surface rounded-[12px] overflow-hidden"
-                    style={{ transitionDelay: `${i * 75}ms` }}
                     onToggle={(e) => {
                       if ((e.target as HTMLDetailsElement).open) {
                         pushEvent(EVENTS.faqOpen, { landing_slug: landing.slug, question: item.q.slice(0, 60) });
@@ -283,12 +285,12 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
 
       {/* ── Opinie — only if non-empty ── */}
       {landing.testimonials.items.length > 0 && (
-        <section className="py-16 md:py-24 bg-surface">
+        <section className="py-12 md:py-16 bg-surface">
           <div className="max-w-[1140px] mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 fade-in-up">{landing.testimonials.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {landing.testimonials.items.map((t, i) => (
-                <div key={i} className="bg-white rounded-[12px] p-6 fade-in-up" style={{ transitionDelay: `${i * 100}ms` }}>
+                <div key={i} className="bg-white rounded-[12px] p-6 fade-in-up">
                   <MessageCircle className="w-8 h-8 text-brand/20 mb-3" aria-hidden="true" />
                   <p className="text-body italic mb-4">{t.text}</p>
                   <p className="font-semibold text-ink">{t.name}</p>
@@ -301,13 +303,14 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       )}
 
       {/* ── Final CTA — scroll to hero form ── */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-12 md:py-16 bg-white">
         <div className="max-w-[600px] mx-auto px-4 md:px-6 text-center fade-in-up">
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-3">{landing.finalCta.title}</h2>
           <p className="text-body mb-8">{landing.finalCta.text}</p>
           <a href="#formularz" onClick={scrollToForm} className="inline-flex items-center justify-center bg-brand hover:bg-brandDark text-white font-semibold px-8 py-4 rounded-[4px] transition-colors text-lg">
             {landing.finalCta.submitLabel}
           </a>
+          <p className="text-sm text-body/60 mt-4">Formularz jest na górze strony — 30 sekund.</p>
         </div>
       </section>
 
