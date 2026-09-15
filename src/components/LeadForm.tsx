@@ -9,13 +9,13 @@ import { pushEvent, EVENTS } from '@/lib/analytics';
 import { getFirstTouch, getLastTouch, getSessionParam } from '@/lib/attribution';
 import { DISPOSABLE_DOMAINS } from '@/lib/disposable-domains';
 
-const DESC_MIN = 20;
+const DESC_MIN = 10;
 const DESC_MAX = 1000;
 
 function makeSchema() {
   return z.object({
     firstName: z.string().min(2, 'Imię musi mieć co najmniej 2 znaki'),
-    lastName: z.string().min(2, 'Nazwisko musi mieć co najmniej 2 znaki'),
+    situation: z.string().min(1, 'Wybierz swoją sytuację'),
     email: z.string().min(1, 'Podaj adres e-mail').email('Podaj poprawny adres e-mail').refine(
       (v) => !DISPOSABLE_DOMAINS.has(v.split('@')[1]?.toLowerCase()),
       'Podaj stały adres e-mail, nie jednorazowy'
@@ -48,14 +48,11 @@ export default function LeadForm({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { consent_rodo: undefined, consent_marketing: false, website: '', phone: '' },
+    defaultValues: { consent_rodo: undefined, consent_marketing: false, website: '', phone: '', situation: '' },
   });
-
-  const descVal = watch('description') || '';
 
   const handleFormFocus = () => {
     if (!formStarted) {
@@ -72,6 +69,7 @@ export default function LeadForm({
 
     // Collect extra field values and prepend to description
     const extras: string[] = [];
+    if (data.situation) extras.push(`Sytuacja: ${data.situation}`);
     const companyEl = document.getElementById(`co-${variant}`) as HTMLInputElement;
     if (companyEl?.value) extras.push(`Firma: ${companyEl.value}`);
     const scEl = document.getElementById(`sc-val-${variant}`) as HTMLInputElement;
@@ -82,9 +80,10 @@ export default function LeadForm({
 
     const payload = {
       firstName: data.firstName,
-      lastName: data.lastName,
+      lastName: '',
       email: data.email,
       phone: data.phone || '',
+      situation: data.situation,
       description: fullDescription,
       consent_rodo: data.consent_rodo,
       consent_marketing: data.consent_marketing || false,
@@ -149,7 +148,7 @@ export default function LeadForm({
   }
 
   const inp = 'w-full px-3 py-2 border border-gray-200 rounded-[4px] text-ink text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-shadow';
-  const lbl = 'block text-[11px] font-medium text-ink mb-0.5';
+  const lbl = 'block text-sm font-medium text-ink mb-0.5';
   const errCls = 'text-red-500 text-[11px] mt-0.5';
 
   return (
@@ -161,31 +160,36 @@ export default function LeadForm({
         <input id={`hp-${variant}`} type="text" tabIndex={-1} autoComplete="off" {...register('website')} />
       </div>
 
-      {/* Imię + Nazwisko — one row */}
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label htmlFor={`fn-${variant}`} className={lbl}>Imię *</label>
-          <input id={`fn-${variant}`} type="text" autoComplete="given-name" className={inp} {...register('firstName')} aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? `fn-e-${variant}` : undefined} />
-          {errors.firstName && <p id={`fn-e-${variant}`} className={errCls} role="alert">{errors.firstName.message}</p>}
-        </div>
-        <div>
-          <label htmlFor={`ln-${variant}`} className={lbl}>Nazwisko *</label>
-          <input id={`ln-${variant}`} type="text" autoComplete="family-name" className={inp} {...register('lastName')} aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? `ln-e-${variant}` : undefined} />
-          {errors.lastName && <p id={`ln-e-${variant}`} className={errCls} role="alert">{errors.lastName.message}</p>}
-        </div>
+      {/* Imię — full width */}
+      <div>
+        <label htmlFor={`fn-${variant}`} className={lbl}>Imię *</label>
+        <input id={`fn-${variant}`} type="text" autoComplete="given-name" className={inp} {...register('firstName')} aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? `fn-e-${variant}` : undefined} />
+        {errors.firstName && <p id={`fn-e-${variant}`} className={errCls} role="alert">{errors.firstName.message}</p>}
       </div>
 
-      {/* E-mail + Telefon — one row */}
+      {/* Telefon + E-mail */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div>
+          <label htmlFor={`ph-${variant}`} className={lbl}>Telefon (opcj.)</label>
+          <input id={`ph-${variant}`} type="tel" autoComplete="tel" className={inp} {...register('phone')} />
+        </div>
         <div>
           <label htmlFor={`em-${variant}`} className={lbl}>E-mail *</label>
           <input id={`em-${variant}`} type="email" autoComplete="email" className={inp} {...register('email')} aria-invalid={!!errors.email} aria-describedby={errors.email ? `em-e-${variant}` : undefined} />
           {errors.email && <p id={`em-e-${variant}`} className={errCls} role="alert">{errors.email.message}</p>}
         </div>
-        <div>
-          <label htmlFor={`ph-${variant}`} className={lbl}>Telefon (opcj.)</label>
-          <input id={`ph-${variant}`} type="tel" autoComplete="tel" className={inp} {...register('phone')} />
-        </div>
+      </div>
+
+      {/* Sytuacja */}
+      <div>
+        <label htmlFor={`sit-${variant}`} className={lbl}>{landing.form.situationLabel} *</label>
+        <select id={`sit-${variant}`} className={inp} {...register('situation')} aria-invalid={!!errors.situation} aria-describedby={errors.situation ? `sit-e-${variant}` : undefined}>
+          <option value="">— wybierz —</option>
+          {landing.form.situationOptions.map((opt) => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+        {errors.situation && <p id={`sit-e-${variant}`} className={errCls} role="alert">{errors.situation.message}</p>}
       </div>
 
       {/* Extra fields — per landing */}
@@ -240,12 +244,9 @@ export default function LeadForm({
           placeholder={landing.form.descriptionPlaceholder}
           {...register('description')}
           aria-invalid={!!errors.description}
-          aria-describedby={errors.description ? `desc-e-${variant}` : `desc-c-${variant}`}
+          aria-describedby={errors.description ? `desc-e-${variant}` : undefined}
         />
-        <div className="flex justify-between mt-0.5">
-          {errors.description ? <p id={`desc-e-${variant}`} className={errCls} role="alert">{errors.description.message}</p> : <span />}
-          <span id={`desc-c-${variant}`} className={`text-[11px] ${descVal.length > DESC_MAX ? 'text-red-500' : 'text-body'}`}>{descVal.length}/{DESC_MAX}</span>
-        </div>
+        {errors.description && <p id={`desc-e-${variant}`} className={errCls} role="alert">{errors.description.message}</p>}
       </div>
 
       {/* Zgody — compact */}
@@ -283,7 +284,7 @@ export default function LeadForm({
             Wysyłanie…
           </>
         ) : (
-          'Wyślij'
+          landing.hero.submitLabel
         )}
       </button>
 

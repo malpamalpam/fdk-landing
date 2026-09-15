@@ -6,6 +6,7 @@ import Image from 'next/image';
 import type { LandingContent } from '@/content/landings';
 import { isKnown } from '@/lib/fdk';
 import LeadForm from '@/components/LeadForm';
+import GoogleRating from '@/components/GoogleRating';
 import { pushEvent, EVENTS } from '@/lib/analytics';
 import { captureAttribution } from '@/lib/attribution';
 
@@ -112,15 +113,16 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
       </header>
 
       {/* ── Hero with form ── */}
-      <section className="relative bg-ink text-white pt-14 md:pt-16" id="hero">
+      <section className="relative bg-ink text-white pt-14 md:pt-16 min-h-[85vh] flex flex-col" id="hero">
         <Image src="/hero.jpg" alt="" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-[rgba(26,30,35,0.87)]" aria-hidden="true" />
-        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-6 lg:py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-6 lg:gap-10 items-start">
+        <div className="relative z-10 max-w-[1140px] mx-auto px-4 md:px-6 py-8 lg:py-14 flex-1 flex items-center w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-8 lg:gap-12 items-start w-full">
+
+            {/* Left column */}
             <div className="lg:py-4">
-              <p className="text-brand text-xs font-semibold uppercase tracking-wide mb-2">{landing.hero.eyebrow}</p>
-              <h1 className="text-[1.6rem] sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-2">
-                {/* landing3 has a long H1 — shorter version on mobile */}
+              <p className="text-brand text-xs font-semibold uppercase tracking-wide mb-3">{landing.hero.eyebrow}</p>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold leading-tight mb-4">
                 {isL3 ? (
                   <>
                     <span className="sm:hidden">Wasz współpracownik wystawi fakturę VAT.</span>
@@ -128,7 +130,7 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
                   </>
                 ) : landing.hero.h1}
               </h1>
-              <p className="text-sm lg:text-base text-white/80 mb-2">
+              <p className="text-base lg:text-xl text-white/80 mb-5 leading-relaxed">
                 {isL3 ? (
                   <>
                     <span className="sm:hidden">Rozliczajcie się z podwykonawcami na fakturę — bez umowy o pracę i bez obowiązków płatnika.</span>
@@ -136,16 +138,46 @@ export default function LandingTemplate({ landing }: { landing: LandingContent }
                   </>
                 ) : landing.hero.lead}
               </p>
-              <p className="text-white/50 text-xs hidden lg:block">{landing.hero.trustLine}</p>
+
+              {/* Bullets */}
+              <ul className="space-y-2.5 mb-5">
+                {landing.hero.bullets.map((bullet, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-white/90">
+                    <span className="text-brand font-bold mt-0.5 flex-shrink-0 leading-tight">✓</span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Disclaimer */}
+              <div className="bg-white/10 border border-white/20 rounded-[8px] px-4 py-3 text-xs text-white/60 leading-relaxed max-w-md">
+                {landing.hero.disclaimer}
+              </div>
             </div>
-            <div className="bg-white rounded-[12px] p-4 lg:p-5 text-ink shadow-2xl" id="formularz">
-              <h2 className="text-base lg:text-lg font-bold mb-0.5">{landing.hero.formHeading}</h2>
-              <p className="text-body text-xs mb-2">{landing.hero.formIntro}</p>
-              <LeadForm landing={landing} />
+
+            {/* Right column — sticky form */}
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-white rounded-[12px] p-4 lg:p-6 text-ink shadow-2xl" id="formularz">
+                <h2 className="text-base lg:text-lg font-bold mb-0.5">{landing.hero.formHeading}</h2>
+                <p className="text-body text-xs mb-3">{landing.hero.formIntro}</p>
+                <LeadForm landing={landing} />
+              </div>
+
+              {/* Image with card overlay — desktop only */}
+              <div className="mt-3 relative h-[120px] rounded-[12px] overflow-hidden hidden lg:block">
+                <Image src="/hero.jpg" alt="" fill className="object-cover object-center" sizes="(min-width: 1024px) 45vw, 100vw" />
+                <div className="absolute inset-0 bg-ink/70" aria-hidden="true" />
+                <div className="absolute inset-0 flex items-center px-5">
+                  <p className="text-white text-sm font-medium leading-snug">{landing.hero.imageCardText}</p>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
+
+      <GoogleRating landing={landing} />
 
       {/* ── Highlight ── */}
       <section className="py-12 md:py-16 bg-surface scroll-mt-[--header-h]" id="opcje" style={{ scrollMarginTop: 'var(--header-h, 56px)' }}>
