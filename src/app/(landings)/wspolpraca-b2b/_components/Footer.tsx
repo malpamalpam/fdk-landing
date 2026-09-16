@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto px-5 lg:px-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div className="flex flex-col gap-2">
-            <Image src="/img/wspolpraca/logo-fdk.svg" alt="FDK" width={160} height={40} className="h-10 w-auto" style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
+            <Image src="/img/wspolpraca/logo-fdk.svg" alt="FDK" width={160} height={40} className="h-10 w-auto brightness-0 invert opacity-90" />
             <p className="text-white/40 text-xs mt-1">{t.footer.tagline}</p>
           </div>
           <div className="flex flex-col gap-1 text-center">

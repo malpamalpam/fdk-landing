@@ -44,7 +44,7 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-16">
         <button onClick={() => scrollTo('top')} className="flex-shrink-0 flex items-center gap-2.5">
-          <Image src="/img/wspolpraca/logo-fdk.svg" alt="FDK Inkubator" width={140} height={36} className="h-9 w-auto" style={{ filter: 'brightness(0)' }} priority />
+          <Image src="/img/wspolpraca/logo-fdk.svg" alt="FDK Inkubator" width={140} height={36} className="h-9 w-auto" priority />
         </button>
 
         <nav className="hidden lg:flex items-center gap-5">
