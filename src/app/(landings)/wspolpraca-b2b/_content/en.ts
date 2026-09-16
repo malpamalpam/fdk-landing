@@ -1,0 +1,105 @@
+import type { Dictionary } from './types';
+
+export const en: Dictionary = {
+  nav: { forWhom: 'Who is it for?', whyUs: 'Why us?', services: 'Services', howItWorks: 'How it works', faq: 'FAQ', cta: 'Free consultation' },
+  hero: {
+    badge: 'FDK | Business Incubator — supporting you since 2015',
+    h1: 'B2B Specialist Collaboration without setting up a business',
+    h1accent: 'Collaboration',
+    subtitle: 'Your collaborator issues you a VAT invoice. We take over formalities, settlements and legalization.',
+    sub2: 'You find the specialist. We handle the formalities and settlements.',
+    cta: 'Free consultation',
+  },
+  stats: [
+    { value: '2015', label: 'year founded' },
+    { value: '16+', label: 'countries served' },
+    { value: '4', label: 'languages: PL · EN · RU · UA' },
+    { value: '360°', label: 'Admin · Accounting · HR · Legalization' },
+  ],
+  forWhom: {
+    heading: 'Who is this solution for?',
+    sub: 'We support companies that want to cooperate with specialists from Poland and abroad efficiently, flexibly and in compliance with regulations.',
+    cards: [
+      { num: '01', title: 'For companies cooperating with B2B specialists', body: 'Want to use a freelancer\'s services without their own business? We provide formal settlement without the need to establish one.', tag: 'B2B' },
+      { num: '02', title: 'For companies hiring specialists from abroad', body: 'Planning to cooperate with someone from outside Poland? We help with legalizing their stay, work and foreigner services.', tag: 'GLOBAL' },
+      { num: '03', title: 'For companies using freelancers and experts', body: 'Need a project specialist without payroll and independent billing? We simplify management and save your time.', tag: 'FREELANCE' },
+      { num: '04', title: 'For IT companies and startups', body: 'Need a flexible model without expanding HR and accounting? You receive one invoice for collaboration with developers, designers and experts.', tag: 'IT / STARTUP' },
+    ],
+  },
+  roles: {
+    heading: 'You choose the specialist. We handle the billing.',
+    company: { title: 'Company', items: ['chooses the specialist', 'defines scope of services', 'sets cooperation terms', 'assigns tasks', 'pays the invoice'] },
+    incubator: { title: 'FDK Incubator', items: ['Documents ready to sign', 'Zero employer obligations on your side', 'Accounting and taxes settled without your involvement', 'Foreigner legal from day one of cooperation', 'Contract your legal department will approve', 'VAT invoice in your standard workflow'] },
+    sub: 'A clear division of responsibility — maximum efficiency.',
+    cta: 'Schedule a free consultation',
+  },
+  howItWorks: {
+    heading: 'How does cooperation work — step by step?',
+    processLabel: 'Process',
+    steps: [
+      { num: '01', title: 'You submit a specialist', body: 'You choose the person you want to work with — from Poland or abroad.' },
+      { num: '02', title: 'We establish the details', body: 'You provide us with information about the specialist, scope of services and cooperation terms.' },
+      { num: '03', title: 'We handle the formalities', body: 'We verify documents, prepare the agreement and organize the necessary administrative, accounting and HR support.' },
+      { num: '04', title: 'The specialist starts work', body: 'Once formalities are complete, the specialist can begin providing services for your company.' },
+      { num: '05', title: 'You receive an invoice', body: 'You receive an invoice for the completed service. You pay it, and we handle the rest.' },
+    ],
+  },
+  whyUs: {
+    heading: 'Why do companies choose our solution?',
+    sub: 'Simple model, clear rules, real benefits.',
+    items: [
+      { title: 'Comprehensive service', body: 'From B2B to legalization of stay' },
+      { title: 'Minimum formalities', body: 'We take over documentation and administration' },
+      { title: 'Faster start of cooperation', body: 'No waiting for the specialist to register' },
+      { title: 'Support for foreigners', body: 'Employment and legalization in Poland' },
+      { title: 'Flexible B2B model', body: 'Settlements in PLN, EUR, USD, USDT' },
+      { title: '4-language support', body: 'Contact in PL, EN, UA, RU' },
+    ],
+  },
+  notWeDo: {
+    heading: 'What we don\'t do',
+    sub: 'We say this upfront because it\'s the most common question we get from companies:',
+    items: [
+      'We don\'t transfer existing full-time employees to B2B cooperation and don\'t advise such a solution.',
+      'We\'re not a temporary staffing agency or an outsourcing company.',
+      'We don\'t service professions that require licenses, concessions, or professional qualifications.',
+      'We don\'t conduct recruitment or supply subcontractors.',
+    ],
+  },
+  services: {
+    heading: 'Comprehensive B2B Cooperation Support',
+    scopeLabel: 'Service scope',
+    tabs: [
+      { id: 'admin', label: 'Administration & HR', items: ['Employee documentation and onboarding', 'B2B contract verification', 'Certificates and statements', 'Dedicated HR guardian'] },
+      { id: 'accounting', label: 'Accounting & Taxes', items: ['Monthly and quarterly settlements', 'Sales and cost invoices', 'Tax declarations (PIT, VAT)', 'Individual tax advisory'] },
+      { id: 'payments', label: 'Invoicing & Payments', items: ['Online invoicing system', 'PLN / EUR / USD settlements', 'IBAN / SWIFT transfers', 'USDT payments'] },
+      { id: 'legal', label: 'Stay & Work Legalization', items: ['Work entrustment statements', 'Work permit type A', 'Residence card and Blue Card', 'Ukrainian citizens procedures', 'Visa support'] },
+    ],
+    legalDisclaimer: 'The possibility of legalizing stay depends on the individual\'s situation and applicable regulations — we verify this individually.',
+  },
+  faq: {
+    heading: 'Frequently Asked Questions',
+    items: [
+      { q: 'Is this formally safe for our company?', a: 'Yes. The contracting party is the Foundation — an entity operating since 2015, which is the taxpayer and payer. Your company receives a VAT invoice and no employer obligations or employment relationship arise on your side. Upon request, we will provide documentation for your legal department.' },
+      { q: 'How do we book such an invoice?', a: 'The same way as an invoice from any contractor — as a tax-deductible cost. There\'s no payroll or commission invoices to process.' },
+      { q: 'Who do we sign the contract with?', a: 'You sign a service agreement with the Foundation. The Foundation is the contracting party, and the collaborator is indicated as the service provider. We can prepare the agreement or review yours.' },
+      { q: 'Who bears the cost of participation in the incubator?', a: 'The fee and taxes are deducted from the specialist\'s sub-account; if the company and specialist agree, the specialist may add it to the company\'s invoice.' },
+      { q: 'How long does it take to onboard one person?', a: 'It\'s quick, because the collaborator doesn\'t register a business or wait for registry entries. Tell us how many people it concerns — we\'ll respond within 1 business day with a specific timeline.' },
+      { q: 'What if the collaborator ends cooperation with us?', a: 'You end cooperation on the terms of the service agreement you establish with the collaborator. There\'s no notice period from the Labor Code or severance pay.' },
+      { q: 'Can you handle collaborators from outside Poland?', a: 'Yes. We handle declarations, work permits and residence permits, as well as notifications for Ukrainian citizens. We file applications within 1–2 days of completing documents. The possibility of legalization depends on the individual\'s situation — we verify this individually.' },
+      { q: 'Can this be launched for a larger group at once?', a: 'Yes. We service teams of subcontractors; for larger groups, we establish one process and one dedicated coordinator for your company.' },
+      { q: 'Can we sign documents online?', a: 'Yes. The entire process, including signing documents, can be done remotely.' },
+    ],
+  },
+  contact: {
+    heading: 'Schedule a free consultation',
+    sub: 'Tell us who you want to work with — we\'ll figure out the best approach. We respond within 1 business day.',
+    fields: { name: 'First name', email: 'E-mail', phone: 'Phone (optional)', description: 'Describe your situation', descriptionPlaceholder: 'e.g. brief company description, number of people, positions...' },
+    consentRodo: 'I consent to the processing of my personal data in order to respond to my inquiry. I have read the',
+    consentMarketing: 'I want to receive information about the Foundation\'s services by email or phone. I can withdraw my consent at any time.',
+    submit: 'Send',
+    privacyLink: 'Privacy Policy',
+    validation: { nameMin: 'Name must have at least 2 characters', emailRequired: 'Provide your e-mail address', emailInvalid: 'Provide a valid e-mail address', emailDisposable: 'Provide a permanent e-mail address, not a disposable one', descMin: 'Describe your situation (min. 10 characters)', descMax: 'Maximum 1000 characters', consentRequired: 'Consent to data processing is required' },
+  },
+  footer: { tagline: 'Formalities ours, results yours.', rights: `© ${new Date().getFullYear()} Firma Dla Każdego Foundation`, privacy: 'Privacy Policy' },
+};

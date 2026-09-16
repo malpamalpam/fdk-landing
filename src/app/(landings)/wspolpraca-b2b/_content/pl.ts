@@ -1,0 +1,105 @@
+import type { Dictionary } from './types';
+
+export const pl: Dictionary = {
+  nav: { forWhom: 'Dla kogo?', whyUs: 'Dlaczego my?', services: 'Usługi', howItWorks: 'Jak to działa', faq: 'FAQ', cta: 'Bezpłatna konsultacja' },
+  hero: {
+    badge: 'FDK | Inkubator Przedsiębiorczości — wspieramy od 2015',
+    h1: 'Współpraca ze specjalistami B2B bez zakładania działalności',
+    h1accent: 'Współpraca',
+    subtitle: 'Wasz współpracownik wystawia Wam fakturę VAT. My przejmujemy formalności, rozliczenia i legalizację.',
+    sub2: 'Ty znajdujesz specjalistę. My przejmujemy formalności i rozliczenia.',
+    cta: 'Bezpłatna konsultacja',
+  },
+  stats: [
+    { value: '2015', label: 'rok założenia' },
+    { value: '16+', label: 'krajów obsługi' },
+    { value: '4', label: 'języki: PL · EN · RU · UA' },
+    { value: '360°', label: 'Administracja · Księgowość · HR · Legalizacja' },
+  ],
+  forWhom: {
+    heading: 'Dla kogo jest to rozwiązanie?',
+    sub: 'Wspieramy firmy, które chcą sprawnie, elastycznie i zgodnie z przepisami współpracować ze specjalistami z Polski i z zagranicy.',
+    cards: [
+      { num: '01', title: 'Dla firm współpracujących ze specjalistami B2B', body: 'Chcesz korzystać z usług freelancera bez własnej działalności? Zapewniamy formalne rozliczenie bez konieczności jej zakładania.', tag: 'B2B' },
+      { num: '02', title: 'Dla firm zatrudniających specjalistów z zagranicy', body: 'Planujesz współpracę z osobą spoza Polski? Pomagamy w legalizacji pobytu, pracy i obsłudze cudzoziemców.', tag: 'GLOBAL' },
+      { num: '03', title: 'Dla firm korzystających z usług freelancerów', body: 'Potrzebujesz specjalisty do projektu bez etatu i samodzielnych rozliczeń? Upraszczamy obsługę i oszczędzamy Twój czas.', tag: 'FREELANCE' },
+      { num: '04', title: 'Dla firm IT i startupów', body: 'Potrzebujesz elastycznego modelu bez rozbudowywania HR i księgowości? Otrzymujesz fakturę za współpracę z programistami, designerami i ekspertami.', tag: 'IT / STARTUP' },
+    ],
+  },
+  roles: {
+    heading: 'Ty wybierasz specjalistę. My obsługujemy rozliczenia.',
+    company: { title: 'Firma', items: ['wybiera specjalistę', 'ustala zakres usług', 'ustala warunki współpracy', 'przekazuje zadania', 'opłaca fakturę'] },
+    incubator: { title: 'Inkubator FDK', items: ['Dokumenty gotowe do podpisu', 'Zero obowiązków płatnika po Waszej stronie', 'Księgowość i podatki rozliczone bez Waszego udziału', 'Cudzoziemiec legalnie od pierwszego dnia współpracy', 'Umowa, którą zaakceptuje Wasz dział prawny', 'Faktura VAT w Waszym zwykłym obiegu'] },
+    sub: 'Prosty podział odpowiedzialności — maksymalna efektywność.',
+    cta: 'Umów bezpłatną konsultację',
+  },
+  howItWorks: {
+    heading: 'Jak wygląda współpraca krok po kroku?',
+    processLabel: 'Proces',
+    steps: [
+      { num: '01', title: 'Zgłaszasz specjalistę', body: 'Wybierasz osobę, z którą chcesz współpracować — z Polski lub z zagranicy.' },
+      { num: '02', title: 'Ustalamy szczegóły', body: 'Przekazujesz nam informacje o specjaliście, zakresie usług i warunkach współpracy.' },
+      { num: '03', title: 'My zajmujemy się formalnościami', body: 'Weryfikujemy dokumenty, przygotowujemy umowę i organizujemy niezbędną obsługę administracyjną, księgową i HR.' },
+      { num: '04', title: 'Specjalista zaczyna pracę', body: 'Po zakończeniu formalności specjalista może rozpocząć realizację usług dla Twojej firmy.' },
+      { num: '05', title: 'Otrzymujesz fakturę', body: 'Otrzymujesz fakturę za wykonaną usługę. Opłacasz ją, a my zajmujemy się resztą.' },
+    ],
+  },
+  whyUs: {
+    heading: 'Dlaczego firmy wybierają nasze rozwiązanie?',
+    sub: 'Prosty model, przejrzyste zasady, realne korzyści.',
+    items: [
+      { title: 'Kompleksowa obsługa', body: 'Od B2B po legalizację pobytu' },
+      { title: 'Minimum formalności', body: 'Przejmujemy dokumentację i administrację' },
+      { title: 'Szybszy start współpracy', body: 'Bez czekania na założenie działalności' },
+      { title: 'Wsparcie dla cudzoziemców', body: 'Zatrudnienie i legalizacja w Polsce' },
+      { title: 'Elastyczny model B2B', body: 'Rozliczenia w PLN, EUR, USD, USDT' },
+      { title: '4 języki obsługi', body: 'Kontakt w PL, EN, UA, RU' },
+    ],
+  },
+  notWeDo: {
+    heading: 'Czego nie robimy',
+    sub: 'Mówimy to wprost, bo to najczęstsze pytanie, jakie dostajemy od firm:',
+    items: [
+      'Nie przenosimy obecnych pracowników etatowych na współpracę B2B i nie doradzamy takiego rozwiązania.',
+      'Nie jesteśmy agencją pracy tymczasowej ani firmą outsourcingową.',
+      'Nie obsługujemy zawodów wymagających koncesji, licencji lub uprawnień branżowych.',
+      'Nie prowadzimy rekrutacji ani nie dostarczamy podwykonawców.',
+    ],
+  },
+  services: {
+    heading: 'Kompleksowa obsługa współpracy B2B',
+    scopeLabel: 'Zakres usług',
+    tabs: [
+      { id: 'admin', label: 'Administracja i HR', items: ['Dokumentacja pracownicza i onboarding', 'Weryfikacja umów B2B', 'Zaświadczenia i oświadczenia', 'Dedykowany opiekun HR'] },
+      { id: 'accounting', label: 'Księgowość i podatki', items: ['Rozliczenia miesięczne i kwartalne', 'Faktury sprzedażowe i kosztowe', 'Deklaracje podatkowe (PIT, VAT)', 'Indywidualne doradztwo podatkowe'] },
+      { id: 'payments', label: 'Fakturowanie i płatności', items: ['System fakturowania online', 'Rozliczenia PLN / EUR / USD', 'Przelewy IBAN / SWIFT', 'Płatności USDT'] },
+      { id: 'legal', label: 'Legalizacja pobytu i pracy', items: ['Oświadczenia o powierzeniu pracy', 'Zezwolenia na pracę typ A', 'Karta pobytu i Blue Card', 'Procedury dla obywateli Ukrainy', 'Wsparcie wizowe'] },
+    ],
+    legalDisclaimer: 'Możliwość legalizacji pobytu zależy od sytuacji danej osoby i obowiązujących przepisów — sprawdzamy to indywidualnie.',
+  },
+  faq: {
+    heading: 'Najczęściej zadawane pytania',
+    items: [
+      { q: 'Czy to jest bezpieczne od strony formalnej dla naszej firmy?', a: 'Tak. Stroną umowy jest Fundacja — podmiot działający od 2015 roku, który jest podatnikiem i płatnikiem. Wasza firma dostaje fakturę VAT i nie powstają po jej stronie obowiązki płatnika ani stosunek pracy. Na życzenie dostarczymy dokumentację dla Waszego działu prawnego.' },
+      { q: 'Jak księgujemy taką fakturę?', a: 'Tak samo jak fakturę od każdego kontrahenta — jako koszt uzyskania przychodu. Nie ma listy płac ani rachunków do zlecenia.' },
+      { q: 'Z kim podpisujemy umowę?', a: 'Umowę o świadczenie usług podpisujecie z Fundacją. Fundacja jest stroną umowy, a współpracownik jest wskazany jako wykonawca. Możemy przygotować umowę albo zweryfikować Waszą.' },
+      { q: 'Kto ponosi koszt uczestnictwa w inkubatorze?', a: 'Opłata i podatki są pobierane z subkonta specjalisty; jeśli firma i specjalista tak ustalą, specjalista może doliczyć ją do faktury dla firmy.' },
+      { q: 'Ile trwa uruchomienie dla jednej osoby?', a: 'Krótko, bo współpracownik nie zakłada firmy ani nie czeka na wpisy do rejestrów. Napiszcie, ilu osób to dotyczy — odpowiemy w 1 dzień roboczy z konkretnym terminem.' },
+      { q: 'Co, jeśli współpracownik zakończy współpracę z nami?', a: 'Kończycie współpracę na warunkach z umowy o świadczenie usług, które ustalacie ze współpracownikiem. Nie ma okresu wypowiedzenia z Kodeksu pracy ani odpraw.' },
+      { q: 'Czy możecie obsłużyć współpracowników spoza Polski?', a: 'Tak. Zajmujemy się oświadczeniami, zezwoleniami na pracę i pobyt oraz powiadomieniami dla obywateli Ukrainy. Wnioski składamy w 1–2 dni od skompletowania dokumentów. Możliwość legalizacji zależy od sytuacji danej osoby — sprawdzamy to indywidualnie.' },
+      { q: 'Czy da się to uruchomić dla większej grupy naraz?', a: 'Tak. Obsługujemy zespoły podwykonawców; przy większej liczbie osób ustalamy jeden proces i jednego opiekuna dla Waszej firmy.' },
+      { q: 'Czy dokumenty możemy podpisać online?', a: 'Tak. Cały proces, łącznie z podpisaniem dokumentów, może odbyć się zdalnie.' },
+    ],
+  },
+  contact: {
+    heading: 'Umówcie bezpłatną konsultację',
+    sub: 'Napiszcie, z kim chcecie współpracować — sprawdzimy, jak to poukładać. Odpowiadamy w 1 dzień roboczy.',
+    fields: { name: 'Imię', email: 'E-mail', phone: 'Telefon (opcjonalnie)', description: 'Opisz swoją sytuację', descriptionPlaceholder: 'np. krótki opis firmy, ilości osób zatrudnionych, stanowiska...' },
+    consentRodo: 'Wyrażam zgodę na przetwarzanie danych osobowych w celu odpowiedzi na zapytanie. Zapoznałem/am się z',
+    consentMarketing: 'Chcę otrzymywać informacje o usługach Fundacji e-mailem lub telefonicznie. Zgodę mogę wycofać w każdej chwili.',
+    submit: 'Wyślij',
+    privacyLink: 'Polityką prywatności',
+    validation: { nameMin: 'Imię musi mieć co najmniej 2 znaki', emailRequired: 'Podaj adres e-mail', emailInvalid: 'Podaj poprawny adres e-mail', emailDisposable: 'Podaj stały adres e-mail, nie jednorazowy', descMin: 'Opisz swoją sytuację (min. 10 znaków)', descMax: 'Maksymalnie 1000 znaków', consentRequired: 'Zgoda na przetwarzanie danych jest wymagana' },
+  },
+  footer: { tagline: 'Formalności nasze, wyniki Twoje.', rights: `© ${new Date().getFullYear()} Fundacja Firma Dla Każdego`, privacy: 'Polityka prywatności' },
+};
