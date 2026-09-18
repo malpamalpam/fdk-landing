@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ArrowRight, Globe, CreditCard, Scale, Heart } from 'lucide-react';
-import { NAVY, BLUE, VIOLET, SLATE_1, MID, GRAD } from '../_lib/tokens';
+import { NAVY, VIOLET, SLATE_1, MID, GRAD } from '../_lib/tokens';
 import { useLang } from './LangProvider';
 import GlowCard from './GlowCard';
 
