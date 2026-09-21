@@ -11,9 +11,9 @@ export type Dictionary = {
   faq: { heading: string; items: { q: string; a: string }[] };
   contact: {
     heading: string; sub: string;
-    fields: { name: string; phone: string; email: string; services: string };
-    submit: string; gdpr: string; success: string;
-    consentCheckbox: string;
+    fields: { name: string; email: string; phone: string; description: string; descriptionPlaceholder: string };
+    submit: string; submitNote: string; success: string;
+    consentRodo: string; consentMarketing: string; privacyLink: string;
     validation: { nameMin: string; emailRequired: string; emailInvalid: string; emailDisposable: string; descMin: string; descMax: string; consentRequired: string };
   };
   footer: { rights: string; officeLabel: string; workdays: string; privacy: string };

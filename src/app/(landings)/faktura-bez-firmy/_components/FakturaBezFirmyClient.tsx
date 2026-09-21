@@ -13,6 +13,7 @@ import Benefits from './Benefits';
 import Contact from './Contact';
 import Faq from './Faq';
 import Footer from './Footer';
+import MobileCtaBar from './MobileCtaBar';
 import { pushEvent, EVENTS } from '@/lib/analytics';
 import { captureAttribution } from '@/lib/attribution';
 import { useLang } from './LangProvider';
@@ -40,6 +41,7 @@ function PageInner() {
       <Contact />
       <Faq />
       <Footer />
+      <MobileCtaBar label={t.nav.cta} />
     </div>
   );
 }

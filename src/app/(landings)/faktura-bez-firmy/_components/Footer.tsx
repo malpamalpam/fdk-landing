@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto px-5 lg:px-8">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-10 pb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="flex flex-col gap-3">
-            <Image src="/img/wspolpraca/logo-fdk.svg" alt="Fundacja Firma dla każdego" width={128} height={32} className="h-8 w-auto brightness-0 invert opacity-85" />
+            <Image src="/img/logo-fdk.svg" alt="Fundacja Firma dla każdego" width={128} height={32} className="h-8 w-auto brightness-0 invert opacity-85" />
             <p className="text-white/45 text-sm leading-snug" style={{ maxWidth: '220px' }}>Fundacja Firma dla każdego</p>
           </div>
           <div className="flex flex-col gap-2">

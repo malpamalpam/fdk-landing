@@ -182,6 +182,7 @@ export default function Contact() {
                 id="desc-contact" rows={3}
                 placeholder={t.contact.fields.descriptionPlaceholder}
                 className={`${inp} resize-y`}
+                required
                 {...register('description')}
                 aria-invalid={!!errors.description}
               />

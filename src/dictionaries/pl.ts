@@ -185,7 +185,7 @@ const pl: Dictionary = {
     consentMarketing: 'Chcę otrzymywać informacje o usługach Fundacji e-mailem lub telefonicznie. Zgodę mogę wycofać w każdej chwili.',
     submit: 'Wyślij i umów konsultację',
     sending: 'Wysyłanie…',
-    note: 'Odpowiadamy w ciągu 24 godzin roboczych.',
+    note: 'Odpowiadamy w ciągu 1 dnia roboczego.',
     errorRequired: 'To pole jest wymagane',
     errorEmail: 'Podaj poprawny adres e-mail',
     errorPhone: 'Podaj poprawny numer telefonu',
@@ -202,7 +202,7 @@ const pl: Dictionary = {
   },
   thanks: {
     title: 'Dziękujemy! Zgłoszenie dotarło.',
-    text: 'Skontaktujemy się z Tobą w ciągu 24 godzin roboczych. Jeśli chcesz porozmawiać od razu — zadzwoń.',
+    text: 'Skontaktujemy się z Tobą w ciągu 1 dnia roboczego. Jeśli chcesz porozmawiać od razu — zadzwoń.',
     cta: 'Wróć na stronę główną',
   },
   footer: {
@@ -226,7 +226,7 @@ const pl: Dictionary = {
   email: {
     autoresponder: {
       subject: 'Dziękujemy za kontakt — Firma Dla Każdego',
-      body: 'Cześć!\n\nDziękujemy za zgłoszenie. Skontaktujemy się z Tobą w ciągu 24 godzin roboczych.\n\nJeśli chcesz porozmawiać od razu, zadzwoń: +48 575 594 500\n\nZespół Firma Dla Każdego\nhttps://firmadlakazdego.pl',
+      body: 'Cześć!\n\nDziękujemy za zgłoszenie. Skontaktujemy się z Tobą w ciągu 1 dnia roboczego.\n\nJeśli chcesz porozmawiać od razu, zadzwoń: +48 575 594 500\n\nZespół Firma Dla Każdego\nhttps://firmadlakazdego.pl',
     },
   },
 };

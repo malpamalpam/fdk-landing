@@ -24,8 +24,9 @@ function makeSchema(v: { nameMin: string; emailRequired: string; emailInvalid: s
       v.emailDisposable
     ),
     phone: z.string().optional(),
-    services: z.string().min(DESC_MIN, v.descMin).max(DESC_MAX, v.descMax),
+    description: z.string().min(DESC_MIN, v.descMin).max(DESC_MAX, v.descMax),
     consent_rodo: z.literal(true, { errorMap: () => ({ message: v.consentRequired }) }),
+    consent_marketing: z.boolean().optional(),
     website: z.string().max(0).optional(),
   });
 }
@@ -42,7 +43,7 @@ export default function Contact() {
   const schema = makeSchema(t.contact.validation);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { consent_rodo: undefined, website: '', phone: '' },
+    defaultValues: { consent_rodo: undefined, consent_marketing: false, website: '', phone: '' },
   });
 
   const handleFormFocus = () => {
@@ -64,9 +65,9 @@ export default function Contact() {
       lastName: '',
       email: data.email,
       phone: data.phone || '',
-      description: `Język: ${langTag} | ${data.services}`,
+      description: `Język: ${langTag} | ${data.description}`,
       consent_rodo: data.consent_rodo,
-      consent_marketing: false,
+      consent_marketing: data.consent_marketing || false,
       website: data.website,
       landing_slug: 'landing2',
       segment: 'faktura-bez-firmy',
@@ -101,12 +102,12 @@ export default function Contact() {
         pushEvent(EVENTS.formSubmit, { landing_slug: 'landing2', segment: 'faktura-bez-firmy', event_id: eventId });
         router.push('/lp-dziekujemy');
       } else if (result.error === 'rate_limited') {
-        setServerError('Too many requests. Please try again shortly.');
+        setServerError('Too many requests.');
       } else {
         setServerError(result.detail || result.error || 'Error');
       }
     } catch {
-      setServerError('Network error. Please try again.');
+      setServerError('Network error.');
     }
   };
 
@@ -116,14 +117,14 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-20 lg:py-28 bg-white" style={{ scrollMarginTop: '80px' }}>
-      <div className="max-w-2xl mx-auto px-5 lg:px-8">
+      <div className="max-w-3xl mx-auto px-5 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-black mb-4" style={{ color: NAVY, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}>{t.contact.heading}</h2>
           <p className="leading-relaxed max-w-lg mx-auto text-base" style={{ color: MID }}>{t.contact.sub}</p>
         </div>
 
         <GlowCard>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="p-8 space-y-5" onFocus={handleFormFocus}>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-5" onFocus={handleFormFocus}>
             {/* Honeypot */}
             <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }} aria-hidden="true">
               <label htmlFor="ws-fbf">Website</label>
@@ -137,12 +138,6 @@ export default function Contact() {
               {errors.firstName && <p className={errCls} role="alert">{errors.firstName.message}</p>}
             </div>
 
-            {/* Telefon */}
-            <div>
-              <label htmlFor="ph-fbf" className={lbl} style={{ color: NAVY }}>{t.contact.fields.phone}</label>
-              <input id="ph-fbf" type="tel" autoComplete="tel" className={inp} {...register('phone')} />
-            </div>
-
             {/* E-mail */}
             <div>
               <label htmlFor="em-fbf" className={lbl} style={{ color: NAVY }}>{t.contact.fields.email}<span style={{ color: BLUE }}> *</span></label>
@@ -150,23 +145,39 @@ export default function Contact() {
               {errors.email && <p className={errCls} role="alert">{errors.email.message}</p>}
             </div>
 
-            {/* Opis */}
-            <div>
-              <label htmlFor="svc-fbf" className={lbl} style={{ color: NAVY }}>{t.contact.fields.services}</label>
-              <textarea id="svc-fbf" rows={4} className={`${inp} resize-none`} {...register('services')} aria-invalid={!!errors.services} />
-              {errors.services && <p className={errCls} role="alert">{errors.services.message}</p>}
+            {/* Telefon */}
+            <div className="sm:col-span-2">
+              <label htmlFor="ph-fbf" className={lbl} style={{ color: NAVY }}>{t.contact.fields.phone}</label>
+              <input id="ph-fbf" type="tel" autoComplete="tel" className={inp} {...register('phone')} />
             </div>
 
-            {/* Consent checkbox */}
-            <label className="flex items-start gap-2 text-[11px] leading-snug cursor-pointer" style={{ color: MID }}>
-              <input type="checkbox" className="mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 accent-blue-600" {...register('consent_rodo')} aria-invalid={!!errors.consent_rodo} />
-              <span>{t.contact.consentCheckbox} *</span>
-            </label>
-            {errors.consent_rodo && <p className={errCls} role="alert">{errors.consent_rodo.message}</p>}
+            {/* Opis */}
+            <div className="sm:col-span-2">
+              <label htmlFor="desc-fbf" className={lbl} style={{ color: NAVY }}>{t.contact.fields.description}<span style={{ color: BLUE }}> *</span></label>
+              <textarea id="desc-fbf" rows={3} placeholder={t.contact.fields.descriptionPlaceholder} className={`${inp} resize-y`} required {...register('description')} aria-invalid={!!errors.description} />
+              {errors.description && <p className={errCls} role="alert">{errors.description.message}</p>}
+            </div>
 
-            {serverError && <p className="text-red-500 text-xs" role="alert">{serverError}</p>}
+            {/* Zgody */}
+            <div className="sm:col-span-2 space-y-2">
+              <label className="flex items-start gap-2 text-[11px] leading-snug cursor-pointer" style={{ color: MID }}>
+                <input type="checkbox" className="mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 accent-blue-600" {...register('consent_rodo')} aria-invalid={!!errors.consent_rodo} />
+                <span>
+                  {t.contact.consentRodo}{' '}
+                  <a href="https://firmadlakazdego.pl/polityka-prywatnosci/" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600">{t.contact.privacyLink}</a>. *
+                </span>
+              </label>
+              {errors.consent_rodo && <p className={errCls} role="alert">{errors.consent_rodo.message}</p>}
 
-            <div className="text-center pt-2 space-y-3">
+              <label className="flex items-start gap-2 text-[11px] leading-snug cursor-pointer" style={{ color: MID }}>
+                <input type="checkbox" className="mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 accent-blue-600" {...register('consent_marketing')} />
+                <span>{t.contact.consentMarketing}</span>
+              </label>
+            </div>
+
+            {serverError && <p className="sm:col-span-2 text-red-500 text-xs" role="alert">{serverError}</p>}
+
+            <div className="sm:col-span-2 text-center pt-2 space-y-2">
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -179,7 +190,7 @@ export default function Contact() {
                   <>{t.contact.submit}<ArrowRight className="w-4 h-4" /></>
                 )}
               </button>
-              <p className="text-xs leading-relaxed" style={{ color: MID }}>{t.contact.gdpr}</p>
+              <p className="text-[13px]" style={{ color: MID }}>{t.contact.submitNote}</p>
             </div>
           </form>
         </GlowCard>

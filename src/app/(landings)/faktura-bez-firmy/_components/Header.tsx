@@ -43,7 +43,7 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-16">
         <button onClick={() => scrollTo('top')} className="flex-shrink-0">
-          <Image src="/img/wspolpraca/logo-fdk.svg" alt="FDK Inkubator" width={140} height={36} className="h-9 w-auto" priority />
+          <Image src="/img/logo-fdk.svg" alt="FDK Inkubator" width={140} height={36} className="h-9 w-auto" priority />
         </button>
 
         <nav className="hidden lg:flex items-center gap-5">
@@ -64,6 +64,9 @@ export default function Header() {
           </div>
           <button onClick={() => scrollTo('contact')} className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-white px-4 py-2 rounded-xl transition-all hover:shadow-lg" style={{ background: GRAD, boxShadow: '0 2px 12px rgba(37,99,235,0.25)' }}>
             {t.nav.cta}
+          </button>
+          <button onClick={() => scrollTo('contact')} className="sm:hidden text-[13px] font-semibold text-white px-3.5 py-2 rounded-xl" style={{ background: GRAD }}>
+            <span className="sm:hidden">Konsultacja</span>
           </button>
           <button className="lg:hidden p-1.5 rounded-lg" style={{ color: NAVY }} onClick={() => setMobileOpen((v) => !v)} aria-label="Menu">
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
