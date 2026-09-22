@@ -1,0 +1,137 @@
+import type { Dictionary } from './types';
+
+export const pl: Dictionary = {
+  nav: { industries: 'Branże', howItWorks: 'Jak to działa', benefits: 'Co otrzymujesz', pricing: 'Cennik', faq: 'FAQ', cta: 'Bezpłatna konsultacja' },
+  hero: {
+    badge: 'Wspieramy specjalistów i freelancerów',
+    h1: 'Dostałeś ofertę B2B? Zacznij pracę bez zakładania firmy.',
+    h1accent: 'ofertę B2B',
+    bullets: [
+      'Współpracuj z klientami z całego świata.',
+      'Wystawiaj faktury oficjalnie w naszym systemie.',
+      'Otrzymuj płatności krajowe i walutowe.',
+    ],
+    cta: 'Bezpłatna konsultacja',
+    tagline: 'Dzięki współpracy z Fundacją Firma Dla Każdego możesz świadczyć usługi dla klientów bez zakładania własnej firmy.',
+    modules: ['Fakturowanie', 'Bankowość', 'Umowy B2B', 'Księgowość', 'Podatki', 'HR', 'Prawo', 'Benefity'],
+  },
+  stats: [
+    { value: '10+', label: 'lat na rynku' },
+    { value: '8 000+', label: 'klientów z całego świata' },
+    { value: '50 000+', label: 'wystawionych faktur' },
+    { value: '30%', label: 'średniej oszczędności kosztów' },
+  ],
+  industries: {
+    heading: 'Branże, z którymi współpracujemy',
+    list: [
+      'IT / Programiści', 'Graficy i ilustratorzy', 'Projektant / Architekt',
+      'Fotografowie / Videografowie', 'Content creatorzy / UGC', 'Muzycy i twórcy audio',
+      'Tłumacze', 'Lektorzy języka obcego', 'Autorzy artykułów i książek',
+      'E-commerce', 'Dziennikarze / Copywriterzy', 'Coaching i trenerzy rozwoju osobistego',
+    ],
+    exclusionsHeading: 'Z kim NIE współpracujemy',
+    exclusions: [
+      { title: 'Wymagana licencja lub koncesja', body: 'Jeśli Twoja usługa wymaga koncesji, licencji albo wpisu do rejestru branżowego.' },
+      { title: 'Branże wykluczone', body: 'Budowlana, mechanika, usługi kosmetyczne, gastronomia, taxi, dostawy, import z Chin, logistyka, transport.' },
+      { title: 'Kiedy odradzamy', body: 'Masz od lat zoptymalizowaną działalność i dobrą księgową. Zatrudniasz ludzi na etat. Budujesz firmę pod sprzedaż inwestorowi. W tych sytuacjach powiemy wprost, że inkubator nie ma sensu.' },
+    ],
+  },
+  threeOptions: {
+    heading: 'Dostałeś kontrakt B2B. Masz trzy opcje.',
+    options: [
+      { label: 'Własna działalność', text: 'Szybko, ale wchodzisz w składki, deklaracje i księgowość na stałe. To decyzja, którą trudno cofnąć w połowie kontraktu.' },
+      { label: 'Umowa zlecenie', text: 'Klient zwykle nie chce, bo po jego stronie oznacza koszt i obowiązki płatnika składek.' },
+      { label: 'Inkubator', text: 'Fakturujesz od razu, nie zakładasz firmy. Jeśli po kilku miesiącach uznasz, że wolisz własną działalność, przechodzisz na nią bez przeszkód.' },
+    ],
+  },
+  howItWorks: {
+    heading: 'Jak rozpocząć współpracę?',
+    processLabel: 'Proces',
+    steps: [
+      { num: '01', title: 'Konsultacja wstępna', body: 'Omawiamy zakres usług, model współpracy, tryb pracy oraz warunki rozliczeń. Weryfikujemy Twoją sytuację legalizacyjną oraz dokumenty pobytowe. W razie potrzeby pomagamy w uzyskaniu niezbędnych dokumentów.' },
+      { num: '02', title: 'Podpisanie umowy współpracy', body: 'Podpisujesz umowę o współpracy z Fundacją online lub w naszym biurze w Warszawie.' },
+      { num: '03', title: 'Weryfikacja umowy B2B z klientem', body: 'Weryfikujemy również umowę B2B z Twoim klientem. Formalną stroną umowy jest Fundacja. Umowa może zostać zawarta pomiędzy klientem a Fundacją lub pomiędzy klientem, Fundacją i Tobą — w zależności od ustalonego modelu współpracy.' },
+      { num: '04', title: 'Rozpoczynasz pracę i wystawiasz faktury', body: 'Otrzymujesz dostęp do systemu finansowego, konta bankowego oraz niezbędne instrukcje. Oficjalnie wystawiasz faktury firmom i osobom fizycznym w Polsce oraz za granicą. Otrzymujesz wynagrodzenie zgodnie z ustalonymi warunkami współpracy.' },
+    ],
+    cta: 'Bezpłatna konsultacja',
+  },
+  benefits: {
+    heading: 'Co otrzymujesz w ramach programu wsparcia FDK?',
+    programLabel: 'Program wsparcia',
+    cta: 'Chcę nawiązać współpracę',
+    categories: [
+      { label: 'KLIENCI Z CAŁEGO ŚWIATA', title: 'Współpracujesz globalnie', items: ['Współpraca z klientami z całego świata', 'Rozliczanie firm i osób fizycznych', 'Obsługa i weryfikacja umów B2B', 'Wsparcie w 4 językach: PL / EN / UA / RU'] },
+      { label: 'PŁATNOŚCI', title: 'Szerokie możliwości opłat od klientów', items: ['3 subkonta biznesowe', 'Płatności w PLN, USD, EUR i 50+ walutach', 'Konto z IBAN / SWIFT / opłaty PayPal, Payoneer', 'Możliwość otrzymywania płatności w USDT'] },
+      { label: 'PRAWO, PODATKI & WSPARCIE', title: 'Wsparcie księgowe, HR, administracyjne i legalizacyjne', items: ['Dedykowany opiekun HR', 'Doradztwo prawne i podatkowe', 'Obsługa rozliczeń podatkowych PIT i ZUS', 'Zaświadczenia i Deklaracje podatkowe'] },
+      { label: 'BENEFITY', title: 'Pakiety sportowe i medyczne', items: ['Możliwość ubezpieczenia NFZ', 'Pakiety medyczne Medicover', 'Pakiety sportowe MultiSport', 'Ulga dla Młodych i rozwiązania dla studentów — zgodnie z obowiązującymi przepisami'] },
+    ],
+  },
+  pricing: {
+    heading: 'Cennik',
+    sub: 'Prosta, przejrzysta opłata miesięczna — bez ukrytych prowizji.',
+    popular: 'Najpopularniejszy',
+    standardLabel: 'Pakiet Standardowy',
+    thresholdLabel: 'Próg wypłat wynagrodzenia',
+    tiers: [
+      { threshold: 'Do 10 000 zł miesięcznie', price: '400 zł', period: '/ miesiąc', desc: 'Pakiet standardowy.', highlight: false },
+      { threshold: '10 000 – 30 000 zł miesięcznie', price: '700 zł', period: '/ miesiąc', desc: 'Dla regularnie współpracujących specjalistów.', highlight: true },
+      { threshold: 'Powyżej 30 000 zł miesięcznie', price: '1 050 zł', period: '/ miesiąc', desc: 'Dla zaawansowanych kontraktów B2B i pracujących na szeroką skalę.', highlight: false },
+    ],
+    cta: 'Umów się na konsultację',
+  },
+  comparison: {
+    heading: 'Mniej formalności, więcej zysków',
+    lossLabel: 'Nie musisz się tym zajmować',
+    gainLabel: 'Zyskujesz',
+    losses: [
+      'Wynajmować wirtualnego biura.',
+      'Opłacać oddzielnej usługi księgowej.',
+      'Rejestrować własnej firmy (JDG).',
+      'Samodzielnie rejestrować się w PIT/ZUS ani zajmować się podatkami.',
+    ],
+    gains: [
+      'Współpracujesz oficjalnie z klientami z całego świata.',
+      'Rozliczasz podatki zgodnie z obowiązującymi przepisami.',
+      'Masz udokumentowane dochody — przejrzyście i bez zbędnych komplikacji.',
+      'Otrzymujesz podstawę dokumentacyjną do celów legalizacji pobytu.',
+    ],
+  },
+  faq: {
+    heading: 'Najczęściej zadawane pytania',
+    items: [
+      { q: 'Co muszę zrobić, żeby rozpocząć współpracę z Fundacją?', a: 'Należy zgłosić się do Fundacji poprzez formularz zgłoszeniowy, telefonicznie lub mailowo. Pierwszym etapem jest zapoznanie się z materiałami informacyjnymi i umową współpracy. Po akceptacji warunków następuje podpisanie umowy.' },
+      { q: 'Kto podpisuje umowę B2B z moim klientem?', a: 'Umowę B2B z Twoim klientem podpisuje Fundacja. To Fundacja jest stroną umowy — z własnym NIP-em, REGON-em i adresem.\n\nTy realizujesz usługi określone w umowie jako Wykonawca, a Fundacja zajmuje się obsługą formalną, administracyjną i prawną kontraktu.' },
+      { q: 'Jak szybko mogę rozpocząć współpracę?', a: 'Cały proces — od konsultacji, przez podpisanie umowy, aż po możliwość wystawienia pierwszej faktury — może zająć nawet 1 dzień roboczy.\n\nCzas rozpoczęcia współpracy zależy jednak od Twojej sytuacji, ustaleń z klientem, kompletności dokumentów oraz sprawności komunikacji.\n\nPo podpisaniu umowy i potwierdzeniu wszystkich warunków otrzymasz niezbędne instrukcje i będziesz mógł rozpocząć świadczenie usług oraz wystawianie faktur.' },
+      { q: 'Jak w praktyce wygląda korzystanie z osobowości prawnej Fundacji?', a: 'Na fakturach jako sprzedawca widnieją dane rejestrowe Fundacji. Umowy z kontrahentami są podpisywane przez Fundację po wcześniejszej analizie przez prawników.' },
+      { q: 'Z kim będę się kontaktować? Czy będę mieć swojego opiekuna?', a: 'Zapewniamy wsparcie w kilku obszarach: administracji, HR i kadr, księgowości oraz legalizacji pobytu.\n\nOtrzymasz również dedykowanego specjalistę HR, z którym możesz kontaktować się w preferowanym języku: PL / EN / UA / RU.\n\nJesteśmy dostępni od poniedziałku do piątku, w godzinach 9:00–17:00. Mamy również biuro w Warszawie — po wcześniejszym umówieniu możesz spotkać się z nami osobiście.' },
+      { q: 'Czy zapewniacie dokumenty potrzebne do legalizacji pobytu w Polsce?', a: 'Tak. Na podstawie współpracy z Fundacją możesz ubiegać się o legalizację pobytu w Polsce, jeśli spełniasz wymagane warunki.\n\nKonsultacje dotyczące legalizacji pobytu są zawarte w pakiecie. Przygotowanie dokumentów, składanie wniosków oraz uzyskanie zezwolenia na pracę są natomiast dodatkowo płatnymi usługami legalizacyjnymi.\n\nPrzykładowo, przygotowanie zestawu dokumentów potrzebnych do złożenia wniosku o kartę pobytu (TRC) wraz z załącznikiem nr 1 kosztuje 400 zł.' },
+      { q: 'Na podstawie jakiej umowy otrzymuję wynagrodzenie?', a: 'Wynagrodzenie jest wypłacane na podstawie odpowiedniej umowy cywilnoprawnej, np. umowy zlecenia lub umowy o dzieło.\n\nRodzaj umowy oraz sposób opodatkowania są ustalane na podstawie zakresu świadczonych usług i dokumentów przedstawionych podczas konsultacji. Ulgi dla studentów są stosowane zgodnie z obowiązującymi przepisami, po potwierdzeniu aktualnego statusu studenta.' },
+      { q: 'Na jaki okres podpisywana jest umowa współpracy z Fundacją?', a: 'Umowa współpracy jest zawierana na czas nieokreślony.\n\nOznacza to, że możesz zakończyć współpracę, kiedy podejmiesz taką decyzję. Zgodnie z regulaminem obowiązuje miesięczny okres wypowiedzenia.' },
+      { q: 'Jak i kiedy pobierana jest opłata za usługi?', a: 'Opłata za usługi jest pobierana do 4. dnia każdego miesiąca.\n\nOkresy rozliczeniowe pokrywają się z miesiącami kalendarzowymi — od pierwszego do ostatniego dnia miesiąca. Opłata jest pobierana z Twojego subkonta biznesowego. Jeśli na subkoncie nie ma wystarczających środków, możesz dokonać płatności przelewem zewnętrznym.\n\nW przypadku płatności zewnętrznym przelewem do opłaty należy doliczyć 23% VAT.' },
+      { q: 'Jakie podatki są opłacane podczas współpracy?', a: 'Sposób rozliczenia zależy od rodzaju zawartej umowy oraz indywidualnych warunków współpracy.\n\nStandardowo mogą występować podatek PIT oraz składki ZUS, w zależności od rodzaju umowy i Twojej sytuacji. Szczegóły dotyczące rozliczenia są ustalane podczas konsultacji.' },
+      { q: 'Czy mogę fakturować klientów z zagranicy?', a: 'Tak. Faktury w EUR, USD i innych walutach, konto z IBAN/SWIFT, dwa konta walutowe bez dodatkowych opłat, płatności PayPal i USDT.' },
+      { q: 'Czy inkubator obsługuje Ulgę dla Młodych i studentów?', a: 'Tak. Osoby do 26. roku życia korzystają z ulgi dla młodych, a studenci nie płacą składek ZUS — zgodnie z obowiązującymi przepisami. Uwzględniamy to w rozliczeniu.' },
+      // 3 dodane z obecnego landingu
+      { q: 'Czy to jest legalne?', a: 'Tak. Inkubator przedsiębiorczości to rozwiązanie funkcjonujące w Polsce od lat: Fundacja jest stroną umów i podatnikiem, a Ty świadczysz usługi jako osoba współpracująca z Fundacją. Faktury wystawia Fundacja, rozliczenia podatkowe są po jej stronie. Na życzenie wyjaśnimy podstawę prawną Twojemu klientowi.' },
+      { q: 'Co, jeśli w którymś miesiącu nie będę miał zleceń?', a: 'Nie płacisz podatku od przychodu, którego nie było. Opłata miesięczna wg pakietu jest pobierana z subkonta do 4. dnia miesiąca. Jeśli na subkoncie nie ma wystarczających środków, możesz dokonać płatności przelewem zewnętrznym (z doliczonym 23% VAT). Kwestię opłaty za miesiąc bez faktur omawiamy indywidualnie przed podpisaniem umowy — dowiesz się tego zanim się zdecydujesz.' },
+      { q: 'Czy mogę później przejść na własną działalność?', a: 'Tak, w każdej chwili. Nie ma okresu minimalnego. Wiele osób zaczyna w inkubatorze, sprawdza, czy kontrakt jest stabilny, i dopiero wtedy zakłada firmę. Pomagamy przy przejściu.' },
+    ],
+  },
+  contact: {
+    heading: 'Umów się na konsultację',
+    sub: 'Wypełnij formularz — odpowiadamy w 1 dzień roboczy.',
+    fields: { name: 'Imię', email: 'E-mail', phone: 'Telefon (opcjonalnie)', description: 'Opisz swoją sytuację', descriptionPlaceholder: 'np. jaki kontrakt dostałeś, od kiedy startuje, dla jakiego klienta...' },
+    submit: 'Wyślij',
+    submitNote: 'Odpowiadamy w 1 dzień roboczy. Bez zobowiązań.',
+    consentRodo: 'Wyrażam zgodę na przetwarzanie danych osobowych w celu odpowiedzi na zapytanie. Zapoznałem/am się z',
+    consentMarketing: 'Chcę otrzymywać informacje o usługach Fundacji e-mailem lub telefonicznie. Zgodę mogę wycofać w każdej chwili.',
+    privacyLink: 'Polityką prywatności',
+    success: 'Dziękujemy! Odpowiemy w 1 dzień roboczy.',
+    validation: { nameMin: 'Imię musi mieć co najmniej 2 znaki', emailRequired: 'Podaj adres e-mail', emailInvalid: 'Podaj poprawny adres e-mail', emailDisposable: 'Podaj stały adres e-mail, nie jednorazowy', descMin: 'Opisz swoją sytuację (min. 10 znaków)', descMax: 'Maksymalnie 1000 znaków', consentRequired: 'Zgoda na przetwarzanie danych jest wymagana' },
+  },
+  footer: { rights: '© 2026 Fundacja Firma dla każdego. Wszelkie prawa zastrzeżone.', officeLabel: 'Biuro', workdays: 'Pon – Pt', privacy: 'Polityka prywatności' },
+  heroBadges: [
+    { main: 'Do 50 faktur miesięcznie', sub: 'w cenie programu' },
+    { main: 'Płatności międzynarodowe', sub: 'w 50+ walutach' },
+  ],
+};

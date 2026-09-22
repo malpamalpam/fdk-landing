@@ -1,0 +1,9 @@
+export const NAVY = '#0F172A';
+export const BLUE = '#2563EB';
+export const VIOLET = '#8B5CF6';
+export const BG = '#FFFFFF';
+export const SLATE_1 = '#F1F5F9';
+export const MID = '#64748B';
+export const GRAD = `linear-gradient(135deg, ${BLUE}, ${VIOLET})`;
+export const GRAD_BORDER_DIM = `linear-gradient(135deg, rgba(37,99,235,0.22), rgba(139,92,246,0.22))`;
+export const GRAD_BORDER_HOV = `linear-gradient(135deg, rgba(37,99,235,0.6), rgba(139,92,246,0.6))`;
