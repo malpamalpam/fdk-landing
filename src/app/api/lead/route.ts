@@ -249,7 +249,6 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || '';
 
     const or = (v: string | undefined) => v || null;
-    const orTs = (v: string | undefined) => (v && v.length > 0 ? v : null);
 
     // Build insert row — supports both old i18n landing and new slug landings
     const isNewLanding = !!data.landing_slug;

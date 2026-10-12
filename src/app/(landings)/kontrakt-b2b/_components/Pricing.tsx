@@ -1,6 +1,6 @@
 'use client';
 
-import { NAVY, BLUE, VIOLET, SLATE_1, MID, GRAD } from '../_lib/tokens';
+import { NAVY, BLUE, SLATE_1, MID, GRAD } from '../_lib/tokens';
 import { useLang } from './LangProvider';
 
 function scrollTo(id: string) {

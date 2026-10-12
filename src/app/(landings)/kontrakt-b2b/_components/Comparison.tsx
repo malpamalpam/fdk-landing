@@ -1,7 +1,7 @@
 'use client';
 
 import { XCircle, Check } from 'lucide-react';
-import { NAVY, BG, MID } from '../_lib/tokens';
+import { NAVY, BG } from '../_lib/tokens';
 import { useLang } from './LangProvider';
 
 export default function Comparison() {
