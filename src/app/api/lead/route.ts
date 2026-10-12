@@ -80,6 +80,14 @@ function isRateLimited(ip: string, maxCount = 5, windowMs = 10 * 60 * 1000): boo
   return entry.count > maxCount;
 }
 
+function isValidIp(value: string): boolean {
+  // IPv4
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(value)) return true;
+  // IPv6 (simplified check)
+  if (value.includes(':') && /^[0-9a-fA-F:]+$/.test(value)) return true;
+  return false;
+}
+
 function sha256(value: string): string {
   return createHash('sha256').update(value).digest('hex');
 }
@@ -206,8 +214,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const isNewLp = !!body.landing_slug;
-    // New landings: 3/hour; old landing: 5/10min
-    if (isRateLimited(ip, 5, 60 * 60 * 1000)) {
+    // New landings: 15/hour; old landing: 5/10min
+    if (isNewLp ? isRateLimited(ip, 15, 60 * 60 * 1000) : isRateLimited(ip)) {
       return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
     }
 
@@ -284,7 +292,7 @@ export async function POST(request: NextRequest) {
       referrer: or(data.referrer),
       hook_variant: or(data.segment),
       user_agent: data.user_agent || userAgent,
-      ip: ip && ip !== '0.0.0.0' ? ip : null,
+      ip: ip && ip !== '0.0.0.0' && isValidIp(ip) ? ip : null,
     };
 
     const { error } = await supabase.from('leads').insert(insertRow);
