@@ -286,6 +286,7 @@ export async function POST(request: NextRequest) {
       situation: or(data.situation || data.sytuacja),
       message: extraInfo || null,
       consent: data.consent_privacy ?? data.consent_rodo ?? false,
+      consent_marketing: data.consent_marketing || false,
       locale: or(isSiteLead ? data.site : isNewLanding ? data.landing_slug : data.locale),
       segment: or(data.segment),
       event_id: or(data.event_id),
@@ -296,13 +297,45 @@ export async function POST(request: NextRequest) {
       utm_content: or(data.utm_content),
       utm_term: or(data.utm_term),
       gclid: or(data.gclid),
+      gbraid: or(data.gbraid),
+      wbraid: or(data.wbraid),
       fbclid: or(data.fbclid),
       ttclid: or(data.ttclid),
+      fbp: or(data.fbp),
+      fbc: or(data.fbc),
       landing_url: or(data.landing_url),
       referrer: or(data.referrer),
       hook_variant: or(data.hook_variant || data.segment),
       user_agent: data.user_agent || userAgent,
       ip: ip && ip !== '0.0.0.0' && isValidIp(ip) ? ip : null,
+      // Attribution — flatten first/last touch JSON into columns
+      ...(ft && {
+        first_touch_source: ft.source || null,
+        first_touch_medium: ft.medium || null,
+        first_touch_campaign: ft.campaign || null,
+        first_touch_at: ft.at || null,
+        first_touch_url: ft.url || null,
+      }),
+      ...(lt && {
+        last_touch_source: lt.source || null,
+        last_touch_medium: lt.medium || null,
+        last_touch_campaign: lt.campaign || null,
+        last_touch_at: lt.at || null,
+      }),
+      // Also flatten old-format flat fields if present (backward compat)
+      ...(!ft && data.first_touch_source && {
+        first_touch_source: data.first_touch_source,
+        first_touch_medium: data.first_touch_medium || null,
+        first_touch_campaign: data.first_touch_campaign || null,
+        first_touch_at: data.first_touch_at || null,
+        first_touch_url: data.first_touch_url || null,
+      }),
+      ...(!lt && data.last_touch_source && {
+        last_touch_source: data.last_touch_source,
+        last_touch_medium: data.last_touch_medium || null,
+        last_touch_campaign: data.last_touch_campaign || null,
+        last_touch_at: data.last_touch_at || null,
+      }),
     };
 
     const { error } = await supabase.from('leads').insert(insertRow);

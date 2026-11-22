@@ -19,12 +19,22 @@ export default function SiteThankYouClient() {
   useEffect(() => {
     if (firedRef.current) return;
     const eid = sessionStorage.getItem('fdk_site_event_id');
-    if (eid) {
-      track('lead', { site, segment: site, event_id: eid });
+    if (!eid) return;
+
+    // Guard: skip if this event was already sent (prevents double-fire)
+    const sentKey = `fdk_lead_sent_${eid}`;
+    if (sessionStorage.getItem(sentKey)) {
       sessionStorage.removeItem('fdk_site_event_id');
       sessionStorage.removeItem('fdk_site_id');
       firedRef.current = true;
+      return;
     }
+
+    track('lead', { site, segment: site, event_id: eid });
+    sessionStorage.setItem(sentKey, '1');
+    sessionStorage.removeItem('fdk_site_event_id');
+    sessionStorage.removeItem('fdk_site_id');
+    firedRef.current = true;
   }, [site]);
 
   if (!content || !config) return null;

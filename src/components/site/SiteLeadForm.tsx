@@ -126,8 +126,8 @@ export default function SiteLeadForm({
       if (result.ok) {
         sessionStorage.setItem('fdk_site_event_id', eventId);
         sessionStorage.setItem('fdk_site_id', content.site);
-        pushEvent(EVENTS.formSubmit, { site: content.site, segment: content.site, event_id: eventId });
-        // On custom domains middleware rewrites /dziekujemy → /site/{site}/dziekujemy
+        // Don't fire lead event here — /dziekujemy is the single conversion point
+        // On custom domains next.config rewrites /dziekujemy → /site/{site}/dziekujemy
         // On vercel.app/localhost we need the full /site/{site}/dziekujemy path
         const isCustomDomain = !window.location.hostname.includes('vercel.app') && !window.location.hostname.includes('localhost');
         router.push(isCustomDomain ? '/dziekujemy' : `/site/${content.site}/dziekujemy`);
