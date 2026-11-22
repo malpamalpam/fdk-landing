@@ -71,7 +71,7 @@ export default function SiteCompare({ data }: { data: NonNullable<SiteContent['c
           ))}
         </div>
 
-        <p className="text-muted text-xs text-center mt-6 italic">{data.note}</p>
+        <p className="text-muted text-[14px] md:text-xs text-center mt-6 italic">{data.note}</p>
       </div>
     </section>
   );

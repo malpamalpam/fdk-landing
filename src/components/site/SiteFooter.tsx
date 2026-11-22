@@ -22,7 +22,7 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
                   href="https://firmadlakazdego.pl"
                   target="_blank"
                   rel="noopener"
-                  className="hover:text-white transition-colors"
+                  className="min-h-11 inline-flex items-center hover:text-white transition-colors"
                 >
                   Fundacja Firma Dla Każdego
                 </a>

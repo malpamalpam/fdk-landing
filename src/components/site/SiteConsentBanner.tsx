@@ -95,7 +95,7 @@ export default function SiteConsentBanner({ content }: { content: SiteContent })
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className="text-xs text-muted hover:text-navy underline transition-colors whitespace-nowrap flex-shrink-0 min-h-11"
+            className="text-[14px] md:text-xs text-muted hover:text-navy underline transition-colors whitespace-nowrap flex-shrink-0 min-h-11 inline-flex items-center"
           >
             {cookie.settings}
           </button>

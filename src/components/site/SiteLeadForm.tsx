@@ -187,7 +187,7 @@ export default function SiteLeadForm({
   const isHero = variant === 'hero';
   const inp = `w-full px-3.5 py-2.5 border ${isHero ? 'border-lavender/30 bg-navySoft text-white placeholder-lavender/60' : 'border-gray-200 bg-white text-navy placeholder-muted/50'} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent transition-shadow`;
   const lbl = `block text-sm font-medium ${isHero ? 'text-lavender' : 'text-navy'} mb-1`;
-  const errCls = `text-red-400 text-[11px] mt-0.5`;
+  const errCls = `text-red-400 text-[14px] md:text-xs mt-0.5`;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3" onFocus={handleFormFocus}>
@@ -249,20 +249,20 @@ export default function SiteLeadForm({
 
       {/* Consents */}
       <div className="space-y-2">
-        <label className="flex items-start gap-2 text-sm md:text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-[14px] md:text-[13px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}
             {...register('consent_privacy')}
           />
           <span
-            className={isHero ? 'text-lavender' : 'text-muted'}
+            className={`${isHero ? 'text-lavender' : 'text-muted'} [&_a]:inline-block [&_a]:py-1 [&_a]:min-h-[44px] [&_a]:underline`}
             dangerouslySetInnerHTML={{ __html: content.form.consentPrivacy + ' *' }}
           />
         </label>
         {errors.consent_privacy && <p className={errCls} role="alert">{errors.consent_privacy.message}</p>}
 
-        <label className="flex items-start gap-2 text-sm md:text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-[14px] md:text-[13px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}
@@ -273,7 +273,7 @@ export default function SiteLeadForm({
       </div>
 
       {/* Error */}
-      {serverError && <p className="text-red-400 text-xs" role="alert">{serverError}</p>}
+      {serverError && <p className="text-red-400 text-[14px] md:text-xs" role="alert">{serverError}</p>}
 
       {/* Submit */}
       <button
@@ -298,7 +298,7 @@ export default function SiteLeadForm({
         )}
       </button>
 
-      <p className={`text-xs text-center ${isHero ? 'text-lavender/60' : 'text-muted/60'}`}>
+      <p className={`text-[14px] md:text-xs text-center ${isHero ? 'text-lavender/60' : 'text-muted/60'}`}>
         {content.form.note}
       </p>
     </form>
