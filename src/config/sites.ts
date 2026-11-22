@@ -44,6 +44,6 @@ for (const [id, cfg] of Object.entries(SITES)) {
 }
 
 export function getSiteByHost(host: string): Exclude<SiteId, 'fdk'> | null {
-  const h = host.replace(/:\d+$/, '').toLowerCase();
+  const h = host.replace(/:\d+$/, '').replace(/^www\./, '').toLowerCase();
   return SITE_DOMAINS.get(h) ?? null;
 }

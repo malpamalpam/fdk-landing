@@ -1,11 +1,13 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight } from 'lucide-react';
 import type { SiteContent } from '@/content/site-types';
+import { SITES } from '@/config/sites';
 import { pushEvent, EVENTS } from '@/lib/analytics';
 import { getFirstTouch, getLastTouch, getSessionParam } from '@/lib/attribution';
 import { DISPOSABLE_DOMAINS } from '@/lib/disposable-domains';
@@ -44,8 +46,8 @@ export default function SiteLeadForm({
   content: SiteContent;
   variant?: 'hero' | 'full';
 }) {
+  const router = useRouter();
   const [serverError, setServerError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [formStarted, setFormStarted] = useState(false);
   const timestampRef = useRef(Date.now());
 
@@ -79,6 +81,7 @@ export default function SiteLeadForm({
     const ft = getFirstTouch();
     const lt = getLastTouch();
 
+    const siteConfig = SITES[content.site as keyof typeof SITES];
     const payload = {
       name: data.name,
       email: data.email,
@@ -91,6 +94,7 @@ export default function SiteLeadForm({
       website: data.website,
       site: content.site,
       segment: content.site,
+      locale: siteConfig?.htmlLang || content.site,
       event_id: eventId,
       hook_variant: new URLSearchParams(window.location.search).get('h') || 'a',
       utm_source: getSessionParam('utm_source'),
@@ -122,8 +126,11 @@ export default function SiteLeadForm({
       if (result.ok) {
         sessionStorage.setItem('fdk_site_event_id', eventId);
         sessionStorage.setItem('fdk_site_id', content.site);
-        setSuccess(true);
         pushEvent(EVENTS.formSubmit, { site: content.site, segment: content.site, event_id: eventId });
+        // On custom domains middleware rewrites /dziekujemy → /site/{site}/dziekujemy
+        // On vercel.app/localhost we need the full /site/{site}/dziekujemy path
+        const isCustomDomain = !window.location.hostname.includes('vercel.app') && !window.location.hostname.includes('localhost');
+        router.push(isCustomDomain ? '/dziekujemy' : `/site/${content.site}/dziekujemy`);
       } else if (result.error === 'rate_limited') {
         setServerError(
           content.site === 'tutors'
@@ -151,15 +158,6 @@ export default function SiteLeadForm({
       );
     }
   };
-
-  if (success) {
-    return (
-      <div className={`${variant === 'hero' ? 'text-white' : 'text-navy'} text-center py-8`}>
-        <h3 className="text-xl font-bold mb-3">{content.thanks.title}</h3>
-        <p className={`text-sm ${variant === 'hero' ? 'text-lavender' : 'text-muted'}`}>{content.thanks.text}</p>
-      </div>
-    );
-  }
 
   const isHero = variant === 'hero';
   const inp = `w-full px-3.5 py-2.5 border ${isHero ? 'border-lavender/30 bg-navySoft text-white placeholder-lavender/60' : 'border-gray-200 bg-white text-navy placeholder-muted/50'} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent transition-shadow`;

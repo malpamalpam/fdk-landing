@@ -5,14 +5,19 @@ const SUPPORTED_LOCALES = ["pl", "en", "uk", "ru"] as const;
 const DEFAULT_LOCALE = "pl";
 const COOKIE_NAME = "NEXT_LOCALE";
 
+function cleanHost(raw: string): string {
+  return raw
+    .replace(/:\d+$/, "")       // strip port
+    .replace(/^www\./, "")      // strip www.
+    .toLowerCase();
+}
+
 function getPreferredLocale(request: NextRequest): string {
-  // 1. Check cookie
   const cookieLocale = request.cookies.get(COOKIE_NAME)?.value;
   if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale as any)) {
     return cookieLocale;
   }
 
-  // 2. Check Accept-Language header
   const acceptLang = request.headers.get("accept-language");
   if (acceptLang) {
     const preferred = acceptLang
@@ -30,35 +35,53 @@ function getPreferredLocale(request: NextRequest): string {
     }
   }
 
-  // 3. Default
   return DEFAULT_LOCALE;
+}
+
+function isStaticAsset(pathname: string): boolean {
+  return (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname === "/favicon.ico" ||
+    /\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?|ttf|eot)$/i.test(pathname)
+  );
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip internal paths and static files
-  if (
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/_next") ||
-    pathname === "/favicon.ico" ||
-    /\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?|ttf|eot)$/i.test(pathname)
-  ) {
+  // Skip internal paths and static files — always
+  if (isStaticAsset(pathname)) {
     return NextResponse.next();
   }
 
-  // ── Multi-site: check host for new domains ──
-  const host = request.headers.get("host") || "";
+  // ── Multi-site: check host for custom domains ──
+  const host = cleanHost(request.headers.get("host") || "");
   const siteId = getSiteByHost(host);
 
   if (siteId) {
-    // Production domain → rewrite to /site/[site]/...
-    const rewritePath = pathname === "/" ? `/site/${siteId}` : `/site/${siteId}${pathname}`;
+    // Custom domain detected — only "/" and "/dziekujemy" are valid pages.
+    // Everything else → redirect to "/"
+    if (pathname === "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/site/${siteId}`;
+      const response = NextResponse.rewrite(url);
+      response.headers.set("x-site", siteId);
+      return response;
+    }
+
+    if (pathname === "/dziekujemy") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/site/${siteId}/dziekujemy`;
+      const response = NextResponse.rewrite(url);
+      response.headers.set("x-site", siteId);
+      return response;
+    }
+
+    // Any other path on custom domain → redirect to root
     const url = request.nextUrl.clone();
-    url.pathname = rewritePath;
-    const response = NextResponse.rewrite(url);
-    response.headers.set("x-site", siteId);
-    return response;
+    url.pathname = "/";
+    return NextResponse.redirect(url);
   }
 
   // ── Direct /site/* access on vercel.app/localhost — allow through ──
@@ -76,7 +99,6 @@ export function middleware(request: NextRequest) {
   const pathLocale = segments[1];
 
   if (SUPPORTED_LOCALES.includes(pathLocale as any)) {
-    // Valid locale in path - set cookie and continue
     const response = NextResponse.next();
     response.cookies.set(COOKIE_NAME, pathLocale, {
       path: "/",
@@ -86,7 +108,7 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  // Root path - redirect to preferred locale
+  // Root path — redirect to preferred locale
   if (pathname === "/") {
     const locale = getPreferredLocale(request);
     const url = request.nextUrl.clone();
@@ -99,12 +121,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // No locale prefix - redirect to /pl/[rest]
+  // No locale prefix — redirect to /pl/[rest]
   const url = request.nextUrl.clone();
   url.pathname = `/${DEFAULT_LOCALE}${pathname}`;
   return NextResponse.redirect(url);
 }
 
 export const config = {
-  matcher: ["/", "/(pl|en|uk|ru)/:path*", "/((?!api|_next|favicon\\.ico|.*\\..+$).*)"],
+  matcher: [
+    /*
+     * Explicitly include "/" (root) and all paths except
+     * api, _next, favicon.ico, and static files with extensions.
+     */
+    "/",
+    "/((?!api|_next|favicon\\.ico|.*\\..+$).*)",
+  ],
 };
