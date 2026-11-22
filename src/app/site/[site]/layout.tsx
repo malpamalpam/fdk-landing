@@ -6,7 +6,7 @@ import '@/app/globals.css';
 
 const readexPro = Readex_Pro({
   subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '700'],
+  weight: ['400', '700'],
   variable: '--font-readex-pro',
   display: 'swap',
 });
@@ -32,6 +32,12 @@ export default async function SiteLayout({
   return (
     <html lang={config.htmlLang} className={readexPro.variable}>
       <body className="font-site antialiased text-navy bg-white">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-lime focus:text-navy focus:px-4 focus:py-2 focus:rounded-pill focus:font-bold focus:text-sm"
+        >
+          {content.skipToContent}
+        </a>
         {children}
       </body>
     </html>

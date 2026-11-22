@@ -14,13 +14,16 @@ export default function SiteHeader({ content, phone }: { content: SiteContent; p
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const shortCta = content.site === 'tutors' ? 'Consult' : content.site === 'creative' ? 'Консультация' : 'Konsultacja';
+  const navLabel = content.site === 'tutors' ? 'Main navigation' : content.site === 'creative' ? 'Основная навигация' : 'Nawigacja główna';
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? 'bg-navy shadow-lg' : 'bg-navy/90 backdrop-blur-sm'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <nav aria-label={navLabel} className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Image
           src="/logo-white.png"
           alt="Fundacja Firma Dla Każdego"
@@ -32,20 +35,21 @@ export default function SiteHeader({ content, phone }: { content: SiteContent; p
         <div className="flex items-center gap-4">
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
-            className="hidden sm:flex items-center gap-2 text-lavender hover:text-white text-sm transition-colors"
+            className="flex items-center gap-2 text-lavender hover:text-white text-sm transition-colors min-h-11"
           >
             <Phone className="w-4 h-4" />
-            {phone}
+            <span className="hidden sm:inline">{phone}</span>
           </a>
           <a
             href="#kontakt"
-            className="bg-lime text-navy font-bold text-sm px-5 py-2 rounded-pill hover:bg-limeSoft transition-colors flex items-center gap-1.5"
+            className="bg-lime text-navy font-bold text-sm px-5 py-2 rounded-pill hover:bg-limeSoft transition-colors flex items-center gap-1.5 min-h-11"
           >
-            {content.hero.cta}
+            <span className="sm:hidden">{shortCta}</span>
+            <span className="hidden sm:inline">{content.hero.cta}</span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

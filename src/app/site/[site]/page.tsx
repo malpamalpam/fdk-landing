@@ -14,8 +14,10 @@ import SiteContact from '@/components/site/SiteContact';
 import SiteFooter from '@/components/site/SiteFooter';
 import SiteLeadForm from '@/components/site/SiteLeadForm';
 import SiteConsentBanner from '@/components/site/SiteConsentBanner';
+import SiteStickyCTA from '@/components/site/SiteStickyCTA';
 import SiteAnalytics from '@/components/site/SiteAnalytics';
 import UTMCapture from '@/components/UTMCapture';
+import SiteJsonLd from '@/components/site/SiteJsonLd';
 import SiteHookSelector from './SiteHookSelector';
 
 export function generateStaticParams() {
@@ -50,7 +52,17 @@ export async function generateMetadata({
       description: content.meta.description,
       url: canonical,
       type: 'website',
-      images: [{ url: config.ogImage, width: 1200, height: 630 }],
+      locale: config.ogLocale,
+      siteName: config.ogSiteName,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: content.meta.title,
+      description: content.meta.description,
+    },
+    other: {
+      'geo.region': 'PL',
+      'geo.placename': 'Warszawa',
     },
     robots: isVercel ? { index: false, follow: false } : { index: true, follow: true },
   };
@@ -76,30 +88,35 @@ export default async function SitePage({
 
   return (
     <>
+      <SiteJsonLd content={content} config={config} />
       <SiteHeader content={content} phone={config.phone} />
 
-      <SiteHookSelector content={content} hookIndex={hookIndex} />
+      <main id="main">
+        <SiteHookSelector content={content} hookIndex={hookIndex} />
 
-      <SiteStats stats={content.stats} />
+        <SiteStats stats={content.stats} />
 
-      <SiteForWho data={content.who} />
+        <SiteForWho data={content.who} />
 
-      <SiteHowItWorks data={content.how} />
+        <SiteHowItWorks data={content.how} />
 
-      <SiteBenefits data={content.benefits} />
+        <SiteBenefits data={content.benefits} />
 
-      {content.compare && <SiteCompare data={content.compare} />}
+        {content.compare && <SiteCompare data={content.compare} />}
 
-      <SiteFAQ data={content.faq} />
+        <SiteFAQ data={content.faq} />
 
-      <SiteContact
-        content={content}
-        phone={config.phone}
-        formSlot={<SiteLeadForm content={content} variant="full" />}
-      />
+        <SiteContact
+          content={content}
+          phone={config.phone}
+          contactTitle={content.contact.title}
+          formSlot={<SiteLeadForm content={content} variant="full" />}
+        />
+      </main>
 
       <SiteFooter content={content} phone={config.phone} />
 
+      <SiteStickyCTA label={content.stickyCtaLabel} />
       <SiteConsentBanner content={content} />
       <SiteAnalytics site={site} />
       <UTMCapture segment={site} locale={config.htmlLang} hookVariant={h || 'a'} />

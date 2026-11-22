@@ -196,6 +196,26 @@ export const tutors: SiteContent = {
   thanks: {
     title: 'Thanks — we\'ve got your request.',
     text: 'We\'ll call you within 24 business hours. Want to talk now? +48 794 731 000.',
+    nextSteps: [
+      'Who you work for (schools, platforms, clients)',
+      'Your approximate monthly income',
+      'The currency you get paid in',
+    ],
+  },
+
+  contact: { title: 'Get in touch' },
+  skipToContent: 'Skip to content',
+  stickyCtaLabel: 'Book a call',
+  ogSiteName: 'Business Incubator Poland',
+  ogLocale: 'en_GB',
+  email: {
+    autoresponder: {
+      subject: 'Thanks — we\'ll call you within 24 business hours',
+      greeting: 'Hi {name},',
+      body: 'thank you for contacting the Business Incubator run by Fundacja Firma Dla Każdego. We\'ll call you within 24 business hours at {phone}.\n\nTo make the call useful, have these at hand: who you work for (schools, platforms, clients), your approximate monthly income and the currency you get paid in.',
+      callNow: 'Want to talk now? Call +48 794 731 000 (Mon\u2013Fri, 9 am\u20135 pm CET) \u2014 we speak English, Ukrainian, Russian and Polish.',
+      signoff: 'Best regards,\nFundacja Firma Dla Każdego team\nul. Lwowska 17/4, 00-660 Warsaw\nfirmadlakazdego.pl',
+    },
   },
 
   cookie: {

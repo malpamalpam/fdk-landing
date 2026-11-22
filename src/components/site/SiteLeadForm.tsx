@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -67,6 +67,31 @@ export default function SiteLeadForm({
       message: '',
     },
   });
+
+  // Focus the first errored field after validation failure
+  const errorKeys = Object.keys(errors) as (keyof FormData)[];
+  useEffect(() => {
+    if (errorKeys.length === 0) return;
+    const firstKey = errorKeys[0];
+    const fieldMap: Record<string, string> = {
+      name: `name-${variant}`,
+      phone: `phone-${variant}`,
+      email: `email-${variant}`,
+      situation: `sit-${variant}`,
+      industry: `ind-${variant}`,
+      message: `msg-${variant}`,
+    };
+    const id = fieldMap[firstKey];
+    if (id) {
+      document.getElementById(id)?.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errors.name, errors.phone, errors.email, errors.situation, errors.consent_privacy]);
+
+  const phonePlaceholder =
+    content.site === 'tutors' || content.site === 'creative'
+      ? '+48 or international'
+      : '+48 ...';
 
   const handleFormFocus = () => {
     if (!formStarted) {
@@ -183,12 +208,12 @@ export default function SiteLeadForm({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor={`phone-${variant}`} className={lbl}>{content.form.phoneLabel} *</label>
-          <input id={`phone-${variant}`} type="tel" autoComplete="tel" className={inp} {...register('phone')} />
+          <input id={`phone-${variant}`} type="tel" inputMode="tel" autoComplete="tel" placeholder={phonePlaceholder} className={inp} {...register('phone')} />
           {errors.phone && <p className={errCls} role="alert">{errors.phone.message}</p>}
         </div>
         <div>
           <label htmlFor={`email-${variant}`} className={lbl}>{content.form.emailLabel} *</label>
-          <input id={`email-${variant}`} type="email" autoComplete="email" className={inp} {...register('email')} />
+          <input id={`email-${variant}`} type="email" inputMode="email" autoCapitalize="off" spellCheck={false} autoComplete="email" className={inp} {...register('email')} />
           {errors.email && <p className={errCls} role="alert">{errors.email.message}</p>}
         </div>
       </div>
@@ -224,7 +249,7 @@ export default function SiteLeadForm({
 
       {/* Consents */}
       <div className="space-y-2">
-        <label className="flex items-start gap-2 text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-xs md:text-[11px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}
@@ -237,7 +262,7 @@ export default function SiteLeadForm({
         </label>
         {errors.consent_privacy && <p className={errCls} role="alert">{errors.consent_privacy.message}</p>}
 
-        <label className="flex items-start gap-2 text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-xs md:text-[11px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}
@@ -254,6 +279,7 @@ export default function SiteLeadForm({
       <button
         type="submit"
         disabled={isSubmitting}
+        aria-busy={isSubmitting}
         className="w-full bg-lime hover:bg-limeSoft disabled:opacity-60 text-navy font-bold py-3.5 rounded-pill transition-colors flex items-center justify-center gap-2 text-sm"
       >
         {isSubmitting ? (
@@ -272,7 +298,7 @@ export default function SiteLeadForm({
         )}
       </button>
 
-      <p className={`text-[11px] text-center ${isHero ? 'text-lavender/60' : 'text-muted/60'}`}>
+      <p className={`text-xs text-center ${isHero ? 'text-lavender/60' : 'text-muted/60'}`}>
         {content.form.note}
       </p>
     </form>

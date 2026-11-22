@@ -404,71 +404,161 @@ export async function POST(request: NextRequest) {
 
     // Email notifications via Resend
     const resendKey = process.env.RESEND_API_KEY;
-    const notifyEmail = process.env.LEAD_NOTIFY_EMAIL || 'kontakt@firmadlakazdego.pl';
+    const notifyEmails = (process.env.LEAD_NOTIFY_EMAIL || 'kontakt@firmadlakazdego.pl').split(',').map(e => e.trim());
 
-    if (resendKey) {
+    if (!resendKey) {
+      await supabase.from('leads').update({ email_error: 'no_api_key' }).eq('event_id', data.event_id);
+    } else {
       try {
         const { Resend } = await import('resend');
         const resend = new Resend(resendKey);
 
-        const landingName = data.landing_slug || data.site || data.segment || 'ogolny';
         const firstName = data.firstName || fullName.split(' ')[0] || '';
 
+        // Determine brand for subject line
+        let siteBrand = 'FDK Landing';
+        if (data.site) {
+          try {
+            const { SITES } = await import('@/config/sites');
+            const siteCfg = SITES[data.site as keyof typeof SITES];
+            if (siteCfg) siteBrand = siteCfg.domains[0];
+          } catch { /* fallback to FDK Landing */ }
+        }
+
+        // Build first/last touch summary
+        const ftSummary = ft
+          ? `${ft.source || '—'}/${ft.medium || '—'}/${ft.campaign || '—'}`
+          : data.first_touch_source
+            ? `${data.first_touch_source}/${data.first_touch_medium || '—'}/${data.first_touch_campaign || '—'}`
+            : '—';
+        const ltSummary = lt
+          ? `${lt.source || '—'}/${lt.medium || '—'}/${lt.campaign || '—'}`
+          : data.last_touch_source
+            ? `${data.last_touch_source}/${data.last_touch_medium || '—'}/${data.last_touch_campaign || '—'}`
+            : '—';
+
         // Team notification
-        await resend.emails.send({
-          from: 'FDK Landing <noreply@firmadlakazdego.pl>',
-          to: notifyEmail,
-          subject: `Nowe zgłoszenie z ${landingName} — ${fullName}`,
-          text: [
-            `Imię i nazwisko: ${fullName}`,
-            `Telefon: ${data.phone || '—'}`,
-            `E-mail: ${data.email}`,
-            `Opis: ${data.description || data.message || '—'}`,
-            `Sytuacja: ${data.sytuacja || data.situation || '—'}`,
-            `Branża: ${data.branza || data.industry || '—'}`,
-            `Planowany start: ${data.start_date || '—'}`,
-            `Segment: ${data.segment || 'ogolny'}`,
-            `Site: ${data.site || '—'}`,
-            `Landing: ${data.landing_slug || '—'}`,
-            `Locale: ${data.locale || '—'}`,
-            `Zgoda marketing: ${data.consent_marketing ? 'TAK' : 'NIE'}`,
-            `UTM: ${data.utm_source || '—'} / ${data.utm_medium || '—'} / ${data.utm_campaign || '—'}`,
-            `Event ID: ${data.event_id || '—'}`,
-            `Landing URL: ${data.landing_url || '—'}`,
-            `CAPI: ${capiResponse || 'nie wysłano'}`,
-            ``,
-            `Supabase: Table Editor → leads (filtruj event_id)`,
-          ].join('\n'),
-        });
+        try {
+          await resend.emails.send({
+            from: 'FDK Landing <noreply@firmadlakazdego.pl>',
+            to: notifyEmails,
+            replyTo: data.email,
+            subject: `[${siteBrand}] Nowy lead: ${fullName} — ${data.situation || '—'} / ${data.industry || '—'}`,
+            text: [
+              `Imię i nazwisko: ${fullName}`,
+              `Telefon: ${data.phone || '—'}`,
+              `E-mail: ${data.email}`,
+              `Opis: ${data.description || data.message || '—'}`,
+              `Sytuacja: ${data.sytuacja || data.situation || '—'}`,
+              `Branża: ${data.branza || data.industry || '—'}`,
+              `Planowany start: ${data.start_date || '—'}`,
+              `Segment: ${data.segment || 'ogolny'}`,
+              `Site: ${data.site || '—'}`,
+              `Landing: ${data.landing_slug || '—'}`,
+              `Locale: ${data.locale || '—'}`,
+              `Zgoda marketing: ${data.consent_marketing ? 'TAK' : 'NIE'}`,
+              `UTM: ${data.utm_source || '—'} / ${data.utm_medium || '—'} / ${data.utm_campaign || '—'}`,
+              `Click IDs: gclid=${data.gclid || '—'} fbclid=${data.fbclid || '—'} ttclid=${data.ttclid || '—'} msclkid=${data.msclkid || '—'}`,
+              `First touch: ${ftSummary}`,
+              `Last touch: ${ltSummary}`,
+              `Event ID: ${data.event_id || '—'}`,
+              `Landing URL: ${data.landing_url || '—'}`,
+              `CAPI: ${capiResponse || 'nie wysłano'}`,
+              ``,
+              `Supabase: wyszukaj event_id = ${data.event_id || '—'}`,
+            ].join('\n'),
+          });
 
-        // Autoresponder to lead — language based on site
-        const autoresponderByLang: Record<string, { subject: string; body: string }> = {
-          tutors: {
-            subject: 'Thank you for reaching out — Fundacja Firma Dla Każdego',
-            body: `Hello ${firstName},\n\nThank you for submitting your request. We have received it and will get back to you shortly.\n\nIf you'd like to add anything in the meantime, simply reply to this email.\n\nBest regards,\nFundacja Firma Dla Każdego Team\nhttps://firmadlakazdego.pl\n+48 794 731 000\nkontakt@firmadlakazdego.pl`,
-          },
-          creative: {
-            subject: 'Спасибо за обращение — Fundacja Firma Dla Każdego',
-            body: `Здравствуйте, ${firstName}!\n\nСпасибо за отправку заявки. Мы получили ваше обращение и свяжемся с вами в ближайшее время.\n\nЕсли хотите что-то добавить — просто ответьте на это письмо.\n\nС уважением,\nКоманда Fundacja Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 794 731 000\nkontakt@firmadlakazdego.pl`,
-          },
-        };
+          await supabase
+            .from('leads')
+            .update({ notify_sent_at: new Date().toISOString() })
+            .eq('event_id', data.event_id);
+        } catch (notifyErr) {
+          console.error('Resend notify error:', notifyErr);
+          await supabase
+            .from('leads')
+            .update({ email_error: `notify: ${notifyErr instanceof Error ? notifyErr.message : 'unknown'}` })
+            .eq('event_id', data.event_id);
+        }
 
-        const autoresponder = data.site && autoresponderByLang[data.site]
-          ? autoresponderByLang[data.site]
-          : {
-              subject: 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego',
-              body: `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`,
-            };
+        // Autoresponder to lead
+        try {
+          const rodoFooter: Record<string, string> = {
+            pl: 'Administratorem danych jest Fundacja Firma Dla Każdego, ul. Lwowska 17/4, 00-660 Warszawa. Dane przetwarzane w celu kontaktu. Masz prawo do wycofania zgody w każdej chwili.',
+            en: 'Data controller: Fundacja Firma Dla Każdego, ul. Lwowska 17/4, 00-660 Warsaw. Data processed for contact purposes. You may withdraw consent at any time.',
+            ru: 'Администратор данных: Fundacja Firma Dla Każdego, ul. Lwowska 17/4, 00-660 Warszawa. Данные обрабатываются в целях связи. Вы можете отозвать согласие в любой момент.',
+          };
 
-        await resend.emails.send({
-          from: 'Firma Dla Każdego <kontakt@firmadlakazdego.pl>',
-          replyTo: 'kontakt@firmadlakazdego.pl',
-          to: data.email,
-          subject: autoresponder.subject,
-          text: autoresponder.body,
-        });
+          let autoSubject: string;
+          let autoText: string;
+          let autoHtml: string | undefined;
+          let lang = 'pl';
+
+          if (data.site) {
+            // Site leads — use content dictionaries
+            const { getSiteContent } = await import('@/content/sites');
+            const { SITES } = await import('@/config/sites');
+            const siteContent = getSiteContent(data.site);
+            const siteCfg = SITES[data.site as keyof typeof SITES];
+            if (siteCfg) lang = siteCfg.htmlLang;
+
+            if (siteContent) {
+              const ar = siteContent.email.autoresponder;
+              autoSubject = ar.subject;
+              const greeting = ar.greeting.replace('{name}', firstName);
+              const body = ar.body.replace('{name}', firstName).replace('{phone}', data.phone || '—');
+              const callNow = ar.callNow.replace('{phone}', data.phone || '—');
+              const signoff = ar.signoff;
+
+              autoText = [greeting, '', body, '', callNow, '', signoff].join('\n');
+              const rodo = rodoFooter[lang] || rodoFooter['pl'];
+              autoHtml = `<!DOCTYPE html><html><body style="font-family:sans-serif;font-size:14px;line-height:1.6;color:#333;">` +
+                `<p>${greeting.replace(/\n/g, '<br>')}</p>` +
+                `<p>${body.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` +
+                `<p>${callNow.replace(/\n/g, '<br>')}</p>` +
+                `<p>${signoff.replace(/\n/g, '<br>')}</p>` +
+                `<hr style="margin-top:24px;border:none;border-top:1px solid #ddd;">` +
+                `<p style="font-size:12px;color:#888;">${rodo}</p>` +
+                `</body></html>`;
+            } else {
+              // Site set but no content — use PL default
+              autoSubject = 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego';
+              autoText = `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`;
+            }
+          } else {
+            // Non-site leads — PL default
+            autoSubject = 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego';
+            autoText = `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`;
+          }
+
+          await resend.emails.send({
+            from: 'Firma Dla Każdego <kontakt@firmadlakazdego.pl>',
+            replyTo: 'kontakt@firmadlakazdego.pl',
+            to: data.email,
+            subject: autoSubject,
+            text: autoText,
+            ...(autoHtml && { html: autoHtml }),
+          });
+
+          await supabase
+            .from('leads')
+            .update({ autoresponder_sent_at: new Date().toISOString() })
+            .eq('event_id', data.event_id);
+        } catch (autoErr) {
+          console.error('Resend autoresponder error:', autoErr);
+          const prevError = (await supabase.from('leads').select('email_error').eq('event_id', data.event_id).single()).data?.email_error;
+          const errMsg = `autoresponder: ${autoErr instanceof Error ? autoErr.message : 'unknown'}`;
+          await supabase
+            .from('leads')
+            .update({ email_error: prevError ? `${prevError}; ${errMsg}` : errMsg })
+            .eq('event_id', data.event_id);
+        }
       } catch (emailError) {
-        console.error('Resend error:', emailError);
+        console.error('Resend init error:', emailError);
+        await supabase
+          .from('leads')
+          .update({ email_error: `init: ${emailError instanceof Error ? emailError.message : 'unknown'}` })
+          .eq('event_id', data.event_id);
       }
     }
 

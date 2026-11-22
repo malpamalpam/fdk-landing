@@ -4,7 +4,7 @@ import type { SiteContent } from '@/content/site-types';
 
 export default function SiteFooter({ content, phone }: { content: SiteContent; phone: string }) {
   return (
-    <footer className="bg-navy text-lavender py-12">
+    <footer role="contentinfo" className="bg-navy text-lavender py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div className="space-y-4">
@@ -17,7 +17,16 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
             />
             <p className="text-sm">{content.footer.tagline}</p>
             <div className="text-sm space-y-1">
-              <p>Fundacja Firma Dla Każdego</p>
+              <p>
+                <a
+                  href="https://firmadlakazdego.pl"
+                  target="_blank"
+                  rel="noopener"
+                  className="hover:text-white transition-colors"
+                >
+                  Fundacja Firma Dla Każdego
+                </a>
+              </p>
               <p>ul. Lwowska 17/4, 00-660 Warszawa</p>
               <p>NIP: 5252625624</p>
             </div>
@@ -26,13 +35,13 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm">
               <Phone className="w-4 h-4 text-lime" />
-              <a href={`tel:${phone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+              <a href={`tel:${phone.replace(/\s/g, '')}`} className="min-h-11 inline-flex items-center hover:text-white transition-colors">
                 {phone}
               </a>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Mail className="w-4 h-4 text-lime" />
-              <a href="mailto:kontakt@firmadlakazdego.pl" className="hover:text-white transition-colors">
+              <a href="mailto:kontakt@firmadlakazdego.pl" className="min-h-11 inline-flex items-center hover:text-white transition-colors">
                 kontakt@firmadlakazdego.pl
               </a>
             </div>
@@ -42,16 +51,16 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
             <a
               href="https://firmadlakazdego.pl/polityka-prywatnosci/"
               target="_blank"
-              rel="noopener noreferrer"
-              className="block hover:text-white transition-colors"
+              rel="noopener"
+              className="min-h-11 inline-flex items-center hover:text-white transition-colors"
             >
               Polityka prywatności
             </a>
             <a
               href="https://firmadlakazdego.pl/regulamin/"
               target="_blank"
-              rel="noopener noreferrer"
-              className="block hover:text-white transition-colors"
+              rel="noopener"
+              className="min-h-11 inline-flex items-center hover:text-white transition-colors"
             >
               Regulamin
             </a>

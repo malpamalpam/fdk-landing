@@ -5,17 +5,19 @@ export default function SiteContact({
   content,
   phone,
   formSlot,
+  contactTitle,
 }: {
   content: SiteContent;
   phone: string;
   formSlot: React.ReactNode;
+  contactTitle: string;
 }) {
   return (
-    <section id="kontakt" className="bg-surfaceSite py-16 lg:py-20">
+    <section id="kontakt" aria-labelledby="contact-heading" className="bg-surfaceSite py-16 lg:py-20">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Form */}
         <div className="bg-white rounded-card-site p-6 lg:p-8 shadow-sm">
-          <h2 className="text-navy font-bold text-xl mb-5">{content.hero.formTitle}</h2>
+          <h2 id="contact-heading" className="text-navy font-bold text-xl mb-5">{contactTitle}</h2>
           {formSlot}
         </div>
 

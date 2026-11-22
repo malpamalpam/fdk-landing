@@ -52,6 +52,21 @@ export type SiteContent = {
   thanks: {
     title: string;
     text: string;
+    nextSteps: string[];
+  };
+  contact: { title: string };
+  skipToContent: string;
+  stickyCtaLabel: string;
+  ogSiteName: string;
+  ogLocale: string;
+  email: {
+    autoresponder: {
+      subject: string;
+      greeting: string;
+      body: string;
+      callNow: string;
+      signoff: string;
+    };
   };
   cookie: {
     text: string;

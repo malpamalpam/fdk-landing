@@ -17,6 +17,10 @@ export default function SiteThankYouClient() {
   const firedRef = useRef(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (firedRef.current) return;
     const eid = sessionStorage.getItem('fdk_site_event_id');
     if (!eid) return;
@@ -57,6 +61,27 @@ export default function SiteThankYouClient() {
           </div>
           <h1 className="text-navy font-bold text-2xl mb-3">{content.thanks.title}</h1>
           <p className="text-muted text-base mb-8">{content.thanks.text}</p>
+
+          {content.thanks.nextSteps.length > 0 && (
+            <div className="mt-6 text-left bg-white rounded-card-site p-5 max-w-sm mx-auto mb-8">
+              <p className="text-navy font-bold text-sm mb-3">
+                {content.site === 'tutors'
+                  ? 'What to have ready for the call:'
+                  : content.site === 'creative'
+                    ? 'Что подготовить к звонку:'
+                    : 'Co przygotować na rozmowę:'}
+              </p>
+              <ul className="space-y-2">
+                {content.thanks.nextSteps.map((step) => (
+                  <li key={step} className="flex items-start gap-2 text-muted text-sm">
+                    <span className="text-lime mt-0.5">•</span>
+                    {step}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <Link
             href="/"
             className="inline-flex items-center gap-2 bg-lime text-navy font-bold px-7 py-3 rounded-pill hover:bg-limeSoft transition-colors"
@@ -66,6 +91,17 @@ export default function SiteThankYouClient() {
           </Link>
         </div>
       </main>
+
+      <footer className="py-6 text-center">
+        <a
+          href="https://firmadlakazdego.pl"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted text-xs hover:text-navy transition-colors"
+        >
+          firmadlakazdego.pl
+        </a>
+      </footer>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { Onest } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 const onest = Onest({
-  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-onest',

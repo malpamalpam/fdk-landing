@@ -6,6 +6,9 @@ export interface SiteConfig {
   htmlLang: string;
   phone: string;
   ogImage: string;
+  ogLocale: string;
+  ogSiteName: string;
+  brandName: string;
   envPrefix: string;
 }
 
@@ -16,6 +19,9 @@ export const SITES: Record<Exclude<SiteId, 'fdk'>, SiteConfig> = {
     htmlLang: 'pl',
     phone: '+48 575 594 500',
     ogImage: '/og-general.png',
+    ogLocale: 'pl_PL',
+    ogSiteName: 'Inkubatory.com.pl',
+    brandName: 'Inkubator Przedsiębiorczości',
     envPrefix: 'GENERAL',
   },
   tutors: {
@@ -24,6 +30,9 @@ export const SITES: Record<Exclude<SiteId, 'fdk'>, SiteConfig> = {
     htmlLang: 'en',
     phone: '+48 794 731 000',
     ogImage: '/og-tutors.png',
+    ogLocale: 'en_GB',
+    ogSiteName: 'Business Incubator Poland',
+    brandName: 'Business Incubator Poland',
     envPrefix: 'TUTORS',
   },
   creative: {
@@ -32,6 +41,9 @@ export const SITES: Record<Exclude<SiteId, 'fdk'>, SiteConfig> = {
     htmlLang: 'ru',
     phone: '+48 794 731 000',
     ogImage: '/og-creative.png',
+    ogLocale: 'ru_RU',
+    ogSiteName: 'Бизнес-инкубатор',
+    brandName: 'Бизнес-инкубатор Polska',
     envPrefix: 'CREATIVE',
   },
 };

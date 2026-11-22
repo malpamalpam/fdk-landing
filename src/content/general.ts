@@ -196,6 +196,26 @@ export const general: SiteContent = {
   thanks: {
     title: 'Dziękujemy, zgłoszenie dotarło.',
     text: 'Oddzwonimy w ciągu 24 godzin roboczych. Chcesz od razu? Zadzwoń: +48 575 594 500.',
+    nextSteps: [
+      'Dla kogo pracujesz lub będziesz pracować (firma, platforma, klienci)',
+      'Orientacyjny miesięczny przychód',
+      'Waluta rozliczeń',
+    ],
+  },
+
+  contact: { title: 'Skontaktuj się' },
+  skipToContent: 'Przejdź do treści',
+  stickyCtaLabel: 'Zostaw kontakt',
+  ogSiteName: 'Inkubatory.com.pl',
+  ogLocale: 'pl_PL',
+  email: {
+    autoresponder: {
+      subject: 'Dziękujemy za zgłoszenie — oddzwonimy w ciągu 24 h',
+      greeting: 'Dzień dobry {name},',
+      body: 'dziękujemy za kontakt z inkubatorem Fundacji Firma Dla Każdego. Skontaktujemy się z Tobą w ciągu 24 godzin roboczych pod numerem {phone}.\n\nŻeby rozmowa była konkretna, warto mieć pod ręką: dla kogo pracujesz lub będziesz pracować (firma, platforma, klienci), orientacyjny miesięczny przychód oraz walutę rozliczeń.',
+      callNow: 'Chcesz porozmawiać od razu? Zadzwoń: +48 575 594 500 (pon.–pt. 9–17).',
+      signoff: 'Pozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nul. Lwowska 17/4, 00-660 Warszawa\nfirmadlakazdego.pl',
+    },
   },
 
   cookie: {
