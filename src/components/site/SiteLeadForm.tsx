@@ -249,7 +249,7 @@ export default function SiteLeadForm({
 
       {/* Consents */}
       <div className="space-y-2">
-        <label className="flex items-start gap-2 text-xs md:text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-sm md:text-[11px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}
@@ -262,7 +262,7 @@ export default function SiteLeadForm({
         </label>
         {errors.consent_privacy && <p className={errCls} role="alert">{errors.consent_privacy.message}</p>}
 
-        <label className="flex items-start gap-2 text-xs md:text-[11px] leading-snug cursor-pointer">
+        <label className="flex items-start gap-2 text-sm md:text-[11px] leading-snug cursor-pointer">
           <input
             type="checkbox"
             className={`mt-0.5 w-3.5 h-3.5 rounded flex-shrink-0 ${isHero ? 'border-lavender/30 text-lime focus:ring-lime' : 'border-gray-300 text-lime focus:ring-lime'}`}

@@ -64,6 +64,11 @@ export async function generateMetadata({
       'geo.region': 'PL',
       'geo.placename': 'Warszawa',
     },
+    icons: {
+      icon: '/icon.png',
+      apple: '/apple-icon.png',
+    },
+    manifest: '/manifest.webmanifest',
     robots: isVercel ? { index: false, follow: false } : { index: true, follow: true },
   };
 }

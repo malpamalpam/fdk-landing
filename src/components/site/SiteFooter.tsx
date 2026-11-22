@@ -67,7 +67,7 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-lavender/20 text-xs text-lavender/60 text-center">
+        <div className="mt-8 pt-6 border-t border-lavender/20 text-sm text-lavender/60 text-center">
           &copy; {new Date().getFullYear()} Fundacja Firma Dla Każdego. All rights reserved.
         </div>
       </div>
