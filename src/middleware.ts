@@ -6,7 +6,7 @@ const COOKIE_NAME = "NEXT_LOCALE";
 
 function getPreferredLocale(request: NextRequest): string {
   const cookieLocale = request.cookies.get(COOKIE_NAME)?.value;
-  if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale as any)) {
+  if (cookieLocale && (SUPPORTED_LOCALES as readonly string[]).includes(cookieLocale)) {
     return cookieLocale;
   }
 
@@ -21,7 +21,7 @@ function getPreferredLocale(request: NextRequest): string {
       .sort((a, b) => b.q - a.q);
 
     for (const { lang } of preferred) {
-      if (SUPPORTED_LOCALES.includes(lang as any)) {
+      if ((SUPPORTED_LOCALES as readonly string[]).includes(lang)) {
         return lang;
       }
     }
@@ -52,7 +52,7 @@ export function middleware(request: NextRequest) {
 
   // Locale prefix present — set cookie, continue
   const pathLocale = pathname.split("/")[1];
-  if (SUPPORTED_LOCALES.includes(pathLocale as any)) {
+  if ((SUPPORTED_LOCALES as readonly string[]).includes(pathLocale)) {
     const res = NextResponse.next();
     res.cookies.set(COOKIE_NAME, pathLocale, {
       path: "/",
