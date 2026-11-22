@@ -46,8 +46,43 @@ Strona dostępna pod `http://localhost:3000` (przekieruje na `/pl`).
 
 1. Utwórz tabelę `leads` — uruchom SQL z `supabase/schema.sql`
 2. Dodaj kolumny pomiarowe — uruchom SQL z `supabase/migrations/002_measurement.sql`
+3. Dodaj kolumnę `site` — uruchom SQL z `supabase/003_sites.sql`
 
 Leady: Table Editor → `leads`. Raport: widok `leads_report`. Konwersje per kampania: widok `leads_by_campaign`.
+
+## Multi-site (nowe domeny)
+
+Trzy dodatkowe landingi na osobnych domenach, współdzielące formularz, API, bazę i tracking:
+
+| Site ID    | Domena              | Język | Opis                           |
+|------------|---------------------|-------|--------------------------------|
+| `general`  | inkubatory.com.pl   | PL    | Ogólny landing Fundacji        |
+| `tutors`   | businessincubator.pl| EN    | Lektorzy i tłumacze            |
+| `creative` | biznesinkubator.pl  | RU    | IT i kreatywni freelancerzy    |
+
+### Testowanie lokalnie
+
+Nowe strony są dostępne bezpośrednio pod:
+- `http://localhost:3000/site/general`
+- `http://localhost:3000/site/tutors`
+- `http://localhost:3000/site/creative`
+
+Na produkcji (po dodaniu domen w Vercel) ścieżka `/site/...` nie pojawia się w URL — middleware robi rewrite po hoście.
+
+### Dodanie domen w Vercel
+
+1. Settings → Domains → Add Domain
+2. Dodaj `inkubatory.com.pl`, `businessincubator.pl`, `biznesinkubator.pl`
+3. U rejestratora ustaw rekord A: `76.76.21.21` lub CNAME: `cname.vercel-dns.com`
+4. Opcjonalnie: dodaj per-site piksele w Environment Variables (np. `NEXT_PUBLIC_GTM_ID_GENERAL`)
+
+### Migracja bazy danych
+
+Uruchom w Supabase SQL Editor:
+```sql
+alter table public.leads add column if not exists site text;
+create index if not exists leads_site_idx on public.leads(site);
+```
 
 ## Segmenty
 

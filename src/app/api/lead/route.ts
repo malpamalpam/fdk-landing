@@ -30,6 +30,7 @@ const schema = z.object({
   consent_marketing: z.boolean().optional(),
   consent_state: z.any().optional(),
   website: z.string().max(0).optional(),
+  site: z.string().optional(),
   segment: z.string().optional(),
   locale: z.string().optional(),
   hook_variant: z.string().optional(),
@@ -213,8 +214,8 @@ export async function POST(request: NextRequest) {
       '0.0.0.0';
 
     const body = await request.json();
-    const isNewLp = !!body.landing_slug;
-    // New landings: 15/hour; old landing: 5/10min
+    const isNewLp = !!body.landing_slug || !!body.site;
+    // New landings / site leads: 15/hour; old landing: 5/10min
     if (isNewLp ? isRateLimited(ip, 15, 60 * 60 * 1000) : isRateLimited(ip)) {
       return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
     }
@@ -262,6 +263,7 @@ export async function POST(request: NextRequest) {
 
     // Use only columns from the original schema.sql to avoid PostgREST cache issues.
     // Extra data goes into the 'message' field as structured text.
+    const isSiteLead = !!data.site;
     const extraInfo = isNewLanding
       ? [
           data.description || '',
@@ -269,7 +271,12 @@ export async function POST(request: NextRequest) {
           ft ? `[ft: ${ft.source}/${ft.medium}/${ft.campaign}]` : '',
           lt ? `[lt: ${lt.source}/${lt.medium}/${lt.campaign}]` : '',
         ].filter(Boolean).join('\n')
-      : data.message || '';
+      : isSiteLead
+        ? [
+            data.situation ? `Sytuacja: ${data.situation}` : '',
+            data.message || '',
+          ].filter(Boolean).join(' | ')
+        : data.message || '';
 
     const insertRow: Record<string, unknown> = {
       name: fullName,
@@ -279,6 +286,7 @@ export async function POST(request: NextRequest) {
       message: extraInfo || null,
       consent: data.consent_privacy ?? data.consent_rodo ?? false,
       locale: or(isNewLanding ? data.landing_slug : data.locale),
+      ...(data.site && { site: data.site }),
       utm_source: or(data.utm_source),
       utm_medium: or(data.utm_medium),
       utm_campaign: or(data.utm_campaign),
@@ -367,7 +375,7 @@ export async function POST(request: NextRequest) {
         const { Resend } = await import('resend');
         const resend = new Resend(resendKey);
 
-        const landingName = data.landing_slug || data.segment || 'ogolny';
+        const landingName = data.landing_slug || data.site || data.segment || 'ogolny';
         const firstName = data.firstName || fullName.split(' ')[0] || '';
 
         // Team notification
@@ -384,6 +392,7 @@ export async function POST(request: NextRequest) {
             `Branża: ${data.branza || data.industry || '—'}`,
             `Planowany start: ${data.start_date || '—'}`,
             `Segment: ${data.segment || 'ogolny'}`,
+            `Site: ${data.site || '—'}`,
             `Landing: ${data.landing_slug || '—'}`,
             `Locale: ${data.locale || '—'}`,
             `Zgoda marketing: ${data.consent_marketing ? 'TAK' : 'NIE'}`,
@@ -396,13 +405,31 @@ export async function POST(request: NextRequest) {
           ].join('\n'),
         });
 
-        // Autoresponder to lead
+        // Autoresponder to lead — language based on site
+        const autoresponderByLang: Record<string, { subject: string; body: string }> = {
+          tutors: {
+            subject: 'Thank you for reaching out — Fundacja Firma Dla Każdego',
+            body: `Hello ${firstName},\n\nThank you for submitting your request. We have received it and will get back to you shortly.\n\nIf you'd like to add anything in the meantime, simply reply to this email.\n\nBest regards,\nFundacja Firma Dla Każdego Team\nhttps://firmadlakazdego.pl\n+48 794 731 000\nkontakt@firmadlakazdego.pl`,
+          },
+          creative: {
+            subject: 'Спасибо за обращение — Fundacja Firma Dla Każdego',
+            body: `Здравствуйте, ${firstName}!\n\nСпасибо за отправку заявки. Мы получили ваше обращение и свяжемся с вами в ближайшее время.\n\nЕсли хотите что-то добавить — просто ответьте на это письмо.\n\nС уважением,\nКоманда Fundacja Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 794 731 000\nkontakt@firmadlakazdego.pl`,
+          },
+        };
+
+        const autoresponder = data.site && autoresponderByLang[data.site]
+          ? autoresponderByLang[data.site]
+          : {
+              subject: 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego',
+              body: `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`,
+            };
+
         await resend.emails.send({
           from: 'Firma Dla Każdego <kontakt@firmadlakazdego.pl>',
           replyTo: 'kontakt@firmadlakazdego.pl',
           to: data.email,
-          subject: 'Dziękujemy za kontakt — Fundacja Firma Dla Każdego',
-          text: `Dzień dobry ${firstName},\n\ndziękujemy za wysłanie formularza. Otrzymaliśmy Twoje zgłoszenie i niezwłocznie się z Tobą skontaktujemy.\n\nJeśli w międzyczasie chcesz coś dodać, po prostu odpowiedz na tę wiadomość.\n\nPozdrawiamy,\nZespół Fundacji Firma Dla Każdego\nhttps://firmadlakazdego.pl\n+48 575 594 500\nkontakt@firmadlakazdego.pl`,
+          subject: autoresponder.subject,
+          text: autoresponder.body,
         });
       } catch (emailError) {
         console.error('Resend error:', emailError);

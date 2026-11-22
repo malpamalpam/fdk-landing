@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSiteByHost } from "@/config/sites";
 
 const SUPPORTED_LOCALES = ["pl", "en", "uk", "ru"] as const;
 const DEFAULT_LOCALE = "pl";
@@ -45,6 +46,30 @@ export function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
+
+  // ── Multi-site: check host for new domains ──
+  const host = request.headers.get("host") || "";
+  const siteId = getSiteByHost(host);
+
+  if (siteId) {
+    // Production domain → rewrite to /site/[site]/...
+    const rewritePath = pathname === "/" ? `/site/${siteId}` : `/site/${siteId}${pathname}`;
+    const url = request.nextUrl.clone();
+    url.pathname = rewritePath;
+    const response = NextResponse.rewrite(url);
+    response.headers.set("x-site", siteId);
+    return response;
+  }
+
+  // ── Direct /site/* access on vercel.app/localhost — allow through ──
+  if (pathname.startsWith("/site/")) {
+    const response = NextResponse.next();
+    const siteSeg = pathname.split("/")[2];
+    if (siteSeg) response.headers.set("x-site", siteSeg);
+    return response;
+  }
+
+  // ── Existing FDK logic below — unchanged ──
 
   // Check if the path starts with a supported locale
   const segments = pathname.split("/");
