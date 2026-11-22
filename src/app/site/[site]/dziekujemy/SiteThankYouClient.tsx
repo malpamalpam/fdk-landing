@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CheckCircle, ArrowRight, Phone } from 'lucide-react';
 import { getSiteContent } from '@/content/sites';
 import { SITES } from '@/config/sites';
@@ -46,13 +47,13 @@ export default function SiteThankYouClient() {
           </div>
           <h1 className="text-navy font-bold text-2xl mb-3">{content.thanks.title}</h1>
           <p className="text-muted text-base mb-8">{content.thanks.text}</p>
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 bg-lime text-navy font-bold px-7 py-3 rounded-pill hover:bg-limeSoft transition-colors"
           >
             {content.site === 'tutors' ? 'Back to home' : content.site === 'creative' ? 'На главную' : 'Wróć na stronę'}
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </main>
     </div>
