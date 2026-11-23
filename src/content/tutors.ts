@@ -29,7 +29,7 @@ export const tutors: SiteContent = {
 
   stats: [
     { value: 'since 2015', label: 'helping freelancers in Poland' },
-    { value: '493', label: 'active members' },
+    { value: '10,000+', label: 'clients served' },
     { value: '4.7/5', label: 'Google rating' },
   ],
 

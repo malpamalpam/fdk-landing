@@ -29,7 +29,7 @@ export const creative: SiteContent = {
 
   stats: [
     { value: 'с 2015', label: 'года на рынке' },
-    { value: '493', label: 'активных участников' },
+    { value: '10 000+', label: 'обслуженных клиентов' },
     { value: '4.7/5', label: 'оценка в Google' },
   ],
 

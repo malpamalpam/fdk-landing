@@ -25,7 +25,7 @@ export const general: SiteContent = {
 
   stats: [
     { value: 'od 2015', label: 'lat doświadczenia' },
-    { value: '493', label: 'aktywnych klientów' },
+    { value: '10 000+', label: 'obsłużonych klientów' },
     { value: '4.7/5', label: 'ocena w Google' },
   ],
 
