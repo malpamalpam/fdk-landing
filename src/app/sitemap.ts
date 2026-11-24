@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 import { getSiteByHost, SITES } from "@/config/sites";
+import { getPosts } from "@/lib/blog";
 
 const LANDINGS = [
   { path: "/kontrakt-b2b", priority: 1.0 },
@@ -13,17 +14,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const host = headersList.get("host") || "";
   const siteId = getSiteByHost(host);
 
-  // On new site domains, return single-page sitemap
+  // On new site domains, return sitemap with blog posts
   if (siteId) {
     const config = SITES[siteId];
     const baseUrl = `https://${config.domains[0]}`;
+    const blogPosts = getPosts(siteId);
     return [
-      {
-        url: baseUrl,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 1.0,
-      },
+      { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 1.0 },
+      { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+      ...blogPosts.map((post) => ({
+        url: `${baseUrl}/blog/${post.slug}`,
+        lastModified: new Date(post.updated ?? post.date),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
     ];
   }
 

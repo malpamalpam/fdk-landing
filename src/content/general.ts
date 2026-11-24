@@ -230,4 +230,21 @@ export const general: SiteContent = {
     privacyPolicy: 'Polityka prywatności',
     terms: 'Regulamin',
   },
+
+  blog: {
+    navLabel: 'Blog',
+    title: 'Blog o inkubatorze przedsiębiorczości',
+    lead: 'Konkretne odpowiedzi na pytania freelancerów, korepetytorów i firm: jak rozliczać się legalnie bez własnej działalności, ile to kosztuje i na co uważać.',
+    readMore: 'Czytaj dalej',
+    backToList: '← Wszystkie wpisy',
+    publishedOn: 'Opublikowano',
+    readingTime: '{n} min czytania',
+    authorBio: 'Grzegorz Stępień — Fundacja Firma Dla Każdego. Od lat pomaga freelancerom i cudzoziemcom legalnie rozliczać przychody bez zakładania firmy; na co dzień odpowiada na pytania o umowy, podatki i legalizację pobytu.',
+    relatedTitle: 'Powiązane wpisy',
+    ctaTitle: 'Chcesz rozliczać się bez własnej firmy?',
+    ctaText: 'Zostaw kontakt — odpowiemy w ciągu 1 dnia roboczego i policzymy, ile zostanie Ci na rękę.',
+    ctaButton: 'Zapytaj o współpracę',
+    breadcrumbHome: 'Strona główna',
+    breadcrumbBlog: 'Blog',
+  },
 };

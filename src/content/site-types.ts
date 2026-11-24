@@ -79,4 +79,20 @@ export type SiteContent = {
     privacyPolicy: string;
     terms: string;
   };
+  blog: {
+    navLabel: string;
+    title: string;
+    lead: string;
+    readMore: string;
+    backToList: string;
+    publishedOn: string;
+    readingTime: string; // contains {n} placeholder
+    authorBio: string;
+    relatedTitle: string;
+    ctaTitle: string;
+    ctaText: string;
+    ctaButton: string;
+    breadcrumbHome: string;
+    breadcrumbBlog: string;
+  };
 };

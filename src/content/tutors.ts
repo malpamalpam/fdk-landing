@@ -230,4 +230,21 @@ export const tutors: SiteContent = {
     privacyPolicy: 'Privacy Policy',
     terms: 'Terms',
   },
+
+  blog: {
+    navLabel: 'Blog',
+    title: 'Blog for teachers and translators in Poland',
+    lead: 'Plain-language answers about getting paid legally in Poland without registering a company: contracts, taxes, invoices to schools and foreign clients, and residence paperwork.',
+    readMore: 'Read more',
+    backToList: '← All posts',
+    publishedOn: 'Published',
+    readingTime: '{n} min read',
+    authorBio: 'Grzegorz Stępień — Firma Dla Każdego Foundation. Helps freelancers and foreigners in Poland earn legally without setting up a company; answers daily questions about contracts, taxes and residence permits.',
+    relatedTitle: 'Related posts',
+    ctaTitle: 'Want to get paid in Poland without opening a company?',
+    ctaText: 'Leave your details — we reply within one business day and show you exactly what you\'d take home.',
+    ctaButton: 'Ask about joining',
+    breadcrumbHome: 'Home',
+    breadcrumbBlog: 'Blog',
+  },
 };

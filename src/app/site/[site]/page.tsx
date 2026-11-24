@@ -18,6 +18,7 @@ import SiteStickyCTA from '@/components/site/SiteStickyCTA';
 import SiteAnalytics from '@/components/site/SiteAnalytics';
 import UTMCapture from '@/components/UTMCapture';
 import SiteJsonLd from '@/components/site/SiteJsonLd';
+import LatestPosts from '@/components/site/blog/LatestPosts';
 import SiteHookSelector from './SiteHookSelector';
 
 export function generateStaticParams() {
@@ -117,6 +118,15 @@ export default async function SitePage({
           phone={config.phone}
           contactTitle={content.contact.title}
           formSlot={<SiteLeadForm content={content} variant="full" />}
+        />
+
+        <LatestPosts
+          site={site}
+          blogTitle={content.blog.title}
+          readMore={content.blog.readMore}
+          readingTimeLabel={content.blog.readingTime}
+          publishedLabel={content.blog.publishedOn}
+          navLabel={content.blog.navLabel}
         />
       </main>
 

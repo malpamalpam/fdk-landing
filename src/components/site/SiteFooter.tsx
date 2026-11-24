@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Phone, Mail } from 'lucide-react';
 import type { SiteContent } from '@/content/site-types';
 
@@ -48,6 +49,12 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
           </div>
 
           <div className="text-sm space-y-2">
+            <Link
+              href="/blog"
+              className="min-h-11 inline-flex items-center hover:text-white transition-colors"
+            >
+              {content.blog.navLabel}
+            </Link>
             <a
               href="https://firmadlakazdego.pl/polityka-prywatnosci/"
               target="_blank"

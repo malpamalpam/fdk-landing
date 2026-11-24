@@ -30,6 +30,16 @@ const nextConfig: NextConfig = {
           has: [{ type: "host" as const, value: h }],
           destination: `/site/${site}/dziekujemy`,
         },
+        {
+          source: "/blog",
+          has: [{ type: "host" as const, value: h }],
+          destination: `/site/${site}/blog`,
+        },
+        {
+          source: "/blog/:slug",
+          has: [{ type: "host" as const, value: h }],
+          destination: `/site/${site}/blog/:slug`,
+        },
       ]);
     });
 
