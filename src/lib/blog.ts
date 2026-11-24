@@ -36,15 +36,21 @@ export function getPosts(site: string): Post[] {
 
   return files
     .map((file) => {
-      const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
-      const { data, content } = matter(raw);
-      const fm = data as PostFrontmatter;
-      return {
-        ...fm,
-        content,
-        readingTime: fm.readingTime ?? calculateReadingTime(content),
-      };
+      try {
+        const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
+        const { data, content } = matter(raw);
+        const fm = data as PostFrontmatter;
+        return {
+          ...fm,
+          content,
+          readingTime: fm.readingTime ?? calculateReadingTime(content),
+        };
+      } catch (err) {
+        console.error(`[blog] Error parsing ${site}/${file}:`, err);
+        return null;
+      }
     })
+    .filter((p): p is Post => p !== null)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 

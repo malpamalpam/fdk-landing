@@ -30,14 +30,16 @@ export async function generateMetadata({
 
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const isVercel = host.includes('vercel.app') || host.includes('localhost');
+  const isTargetDomain = host === config.domains[0] || host === `www.${config.domains[0]}`;
+  const robots = isTargetDomain ? { index: true, follow: true } : { index: false, follow: false };
+  const canonical = isTargetDomain ? `https://${config.domains[0]}/blog/${slug}` : undefined;
   const url = `https://${config.domains[0]}/blog/${slug}`;
 
   return {
     metadataBase: new URL(`https://${config.domains[0]}`),
     title: `${post.title} | ${config.ogSiteName}`,
     description: post.description,
-    alternates: { canonical: isVercel ? undefined : url },
+    alternates: { canonical },
     openGraph: {
       title: post.title,
       description: post.description,
@@ -45,12 +47,13 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: post.date,
       ...(post.updated && { modifiedTime: post.updated }),
-      authors: ['Grzegorz Stepien'],
+      authors: ['Grzegorz Stępień'],
       locale: config.ogLocale,
       siteName: config.ogSiteName,
+      images: [{ url: `/site/${site}/opengraph-image`, width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', title: post.title, description: post.description },
-    robots: isVercel ? { index: false, follow: false } : { index: true, follow: true },
+    robots,
   };
 }
 
@@ -80,10 +83,10 @@ export default async function BlogPostPage({
       description: post.description,
       datePublished: post.date,
       ...(post.updated && { dateModified: post.updated }),
-      author: { '@type': 'Person', name: 'Grzegorz Stepien' },
+      author: { '@type': 'Person', name: 'Grzegorz Stępień' },
       publisher: {
         '@type': 'Organization',
-        name: 'Fundacja Firma Dla Kazdego',
+        name: 'Fundacja Firma Dla Każdego',
         url: `https://${config.domains[0]}`,
       },
       mainEntityOfPage: `https://${config.domains[0]}/blog/${slug}`,
@@ -143,7 +146,7 @@ export default async function BlogPostPage({
           {/* Header */}
           <h1 className="text-navy font-bold text-2xl sm:text-3xl lg:text-4xl leading-tight mb-4">{post.title}</h1>
           <div className="flex flex-wrap items-center gap-3 text-muted text-sm mb-8">
-            <span>Grzegorz Stepien</span>
+            <span>Grzegorz Stępień</span>
             <span>&middot;</span>
             <time dateTime={post.date}>{dateStr}</time>
             <span>&middot;</span>

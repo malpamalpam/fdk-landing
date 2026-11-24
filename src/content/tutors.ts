@@ -246,5 +246,6 @@ export const tutors: SiteContent = {
     ctaButton: 'Ask about joining',
     breadcrumbHome: 'Home',
     breadcrumbBlog: 'Blog',
+    empty: 'First posts coming soon.',
   },
 };

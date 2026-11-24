@@ -246,5 +246,6 @@ export const general: SiteContent = {
     ctaButton: 'Zapytaj o współpracę',
     breadcrumbHome: 'Strona główna',
     breadcrumbBlog: 'Blog',
+    empty: 'Wkrótce pierwsze wpisy.',
   },
 };

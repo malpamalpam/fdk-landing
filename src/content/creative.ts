@@ -248,5 +248,6 @@ export const creative: SiteContent = {
     ctaButton: 'Узнать условия',
     breadcrumbHome: 'Главная',
     breadcrumbBlog: 'Блог',
+    empty: 'Скоро первые статьи.',
   },
 };

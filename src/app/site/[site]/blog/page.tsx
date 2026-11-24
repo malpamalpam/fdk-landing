@@ -26,13 +26,15 @@ export async function generateMetadata({
 
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const isVercel = host.includes('vercel.app') || host.includes('localhost');
+  const isTargetDomain = host === config.domains[0] || host === `www.${config.domains[0]}`;
+  const robots = isTargetDomain ? { index: true, follow: true } : { index: false, follow: false };
+  const canonical = isTargetDomain ? `https://${config.domains[0]}/blog` : undefined;
 
   return {
     metadataBase: new URL(`https://${config.domains[0]}`),
     title: `${content.blog.title} | ${config.ogSiteName}`,
     description: content.blog.lead,
-    alternates: { canonical: isVercel ? undefined : `https://${config.domains[0]}/blog` },
+    alternates: { canonical },
     openGraph: {
       title: content.blog.title,
       description: content.blog.lead,
@@ -40,9 +42,10 @@ export async function generateMetadata({
       type: 'website',
       locale: config.ogLocale,
       siteName: config.ogSiteName,
+      images: [{ url: `/site/${site}/opengraph-image`, width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', title: content.blog.title, description: content.blog.lead },
-    robots: isVercel ? { index: false, follow: false } : { index: true, follow: true },
+    robots,
   };
 }
 
@@ -91,7 +94,7 @@ export default async function BlogListPage({
           <p className="text-muted text-lg leading-relaxed mb-10 max-w-2xl">{content.blog.lead}</p>
 
           {posts.length === 0 ? (
-            <p className="text-muted">No posts yet.</p>
+            <p className="text-muted text-lg">{content.blog.empty}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {posts.map((post) => (

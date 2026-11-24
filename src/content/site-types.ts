@@ -94,5 +94,6 @@ export type SiteContent = {
     ctaButton: string;
     breadcrumbHome: string;
     breadcrumbBlog: string;
+    empty: string;
   };
 };
