@@ -7,6 +7,10 @@ const SITE_HOSTS: Record<string, string> = {
 };
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/site/\\[site\\]/blog/\\[slug\\]": ["./src/content/blog/**/*.mdx"],
+    "/site/\\[site\\]/blog": ["./src/content/blog/**/*.mdx"],
+  },
   images: {
     remotePatterns: [
       {
