@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Phone, ArrowRight } from 'lucide-react';
 import type { SiteContent } from '@/content/site-types';
 
@@ -34,9 +33,6 @@ export default function SiteHeader({ content, phone }: { content: SiteContent; p
         />
 
         <div className="flex items-center gap-4">
-          <Link href="/blog" className="text-lavender hover:text-white text-sm transition-colors min-h-11 inline-flex items-center hidden sm:inline-flex">
-            {content.blog.navLabel}
-          </Link>
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
             className="flex items-center gap-2 text-lavender hover:text-white text-sm transition-colors min-h-11"
