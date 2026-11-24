@@ -229,5 +229,7 @@ export const creative: SiteContent = {
 
   footer: {
     tagline: 'Инкубатор предпринимательства Fundacja Firma Dla Każdego, Варшава.',
+    privacyPolicy: 'Политика конфиденциальности',
+    terms: 'Регламент',
   },
 };

@@ -227,5 +227,7 @@ export const tutors: SiteContent = {
 
   footer: {
     tagline: 'Business Incubator by Fundacja Firma Dla Każdego, Warsaw.',
+    privacyPolicy: 'Privacy Policy',
+    terms: 'Terms',
   },
 };

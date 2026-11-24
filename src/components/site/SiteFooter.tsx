@@ -54,7 +54,7 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
               rel="noopener"
               className="min-h-11 inline-flex items-center hover:text-white transition-colors"
             >
-              Polityka prywatności
+              {content.footer.privacyPolicy}
             </a>
             <a
               href="https://firmadlakazdego.pl/regulamin/"
@@ -62,7 +62,7 @@ export default function SiteFooter({ content, phone }: { content: SiteContent; p
               rel="noopener"
               className="min-h-11 inline-flex items-center hover:text-white transition-colors"
             >
-              Regulamin
+              {content.footer.terms}
             </a>
           </div>
         </div>

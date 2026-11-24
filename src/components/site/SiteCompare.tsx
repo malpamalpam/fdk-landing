@@ -2,9 +2,9 @@ import type { SiteContent } from '@/content/site-types';
 
 export default function SiteCompare({ data }: { data: NonNullable<SiteContent['compare']> }) {
   return (
-    <section className="bg-surfaceSite py-16 lg:py-20">
+    <section aria-labelledby="compare-heading" className="bg-surfaceSite py-16 lg:py-20">
       <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-navy font-bold text-2xl lg:text-3xl text-center mb-10">{data.title}</h2>
+        <h2 id="compare-heading" className="text-navy font-bold text-2xl lg:text-3xl text-center mb-10">{data.title}</h2>
 
         {/* Desktop table */}
         <div className="hidden md:block overflow-x-auto">

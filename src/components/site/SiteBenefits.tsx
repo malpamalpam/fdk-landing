@@ -3,9 +3,9 @@ import SiteIcon from './SiteIcon';
 
 export default function SiteBenefits({ data }: { data: SiteContent['benefits'] }) {
   return (
-    <section className="bg-navy py-16 lg:py-20">
+    <section aria-labelledby="benefits-heading" className="bg-navy py-16 lg:py-20">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-white font-bold text-2xl lg:text-3xl text-center mb-10">{data.title}</h2>
+        <h2 id="benefits-heading" className="text-white font-bold text-2xl lg:text-3xl text-center mb-10">{data.title}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.items.map((item) => (
             <div

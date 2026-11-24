@@ -76,5 +76,7 @@ export type SiteContent = {
   };
   footer: {
     tagline: string;
+    privacyPolicy: string;
+    terms: string;
   };
 };

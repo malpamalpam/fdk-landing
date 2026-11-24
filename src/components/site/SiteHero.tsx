@@ -15,7 +15,7 @@ export default function SiteHero({
   const h1 = content.hero.hooks[hookIndex] ?? content.hero.hooks[0];
 
   return (
-    <section data-hero className="bg-surfaceSite pt-24 pb-16 lg:pt-28 lg:pb-20">
+    <section data-hero aria-labelledby="hero-heading" className="bg-surfaceSite pt-24 pb-16 lg:pt-28 lg:pb-20">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
         {/* Left: text */}
         <div className="flex flex-col gap-6">
@@ -23,7 +23,7 @@ export default function SiteHero({
             {content.hero.badge}
           </span>
 
-          <h1 className="text-navy font-bold text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight">
+          <h1 id="hero-heading" className="text-navy font-bold text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight">
             {h1}
           </h1>
 

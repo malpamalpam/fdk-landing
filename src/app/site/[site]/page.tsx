@@ -42,6 +42,7 @@ export async function generateMetadata({
   const canonical = isVercel ? undefined : `https://${config.domains[0]}`;
 
   return {
+    metadataBase: new URL(`https://${config.domains[0]}`),
     title: content.meta.title,
     description: content.meta.description,
     ...(canonical && {

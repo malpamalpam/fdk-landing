@@ -227,5 +227,7 @@ export const general: SiteContent = {
 
   footer: {
     tagline: 'Inkubator przedsiębiorczości Fundacji Firma Dla Każdego.',
+    privacyPolicy: 'Polityka prywatności',
+    terms: 'Regulamin',
   },
 };
