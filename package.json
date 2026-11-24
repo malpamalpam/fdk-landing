@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-blog-index.ts",
+    "prebuild": "node scripts/build-blog-index.mjs",
+    "predev": "node scripts/build-blog-index.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

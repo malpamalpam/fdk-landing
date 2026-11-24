@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { Post } from '@/lib/blog';
+import type { PostMeta } from '@/lib/blog';
 
 export default function BlogPostCard({
   post,
@@ -7,7 +7,7 @@ export default function BlogPostCard({
   readingTimeLabel,
   publishedLabel,
 }: {
-  post: Post;
+  post: PostMeta;
   readMore: string;
   readingTimeLabel: string;
   publishedLabel: string;

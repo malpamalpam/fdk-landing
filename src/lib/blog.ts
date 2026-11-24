@@ -1,6 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import blogIndex from '@/content/blog/index.json';
+
+export interface PostMeta {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  updated?: string;
+  tags: string[];
+  readingTime: number;
+}
 
 export interface PostFrontmatter {
   title: string;
@@ -21,56 +32,56 @@ export interface Post extends PostFrontmatter {
   readingTime: number;
 }
 
-const BLOG_DIR = path.join(process.cwd(), 'src/content/blog');
+const typedIndex = blogIndex as Record<string, PostMeta[]>;
 
-function calculateReadingTime(content: string): number {
-  const words = content.trim().split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
+/**
+ * Returns post metadata from the pre-built index.json.
+ * No fs calls — safe for runtime (serverless, sitemap).
+ */
+export function getPosts(site: string): PostMeta[] {
+  return typedIndex[site] ?? [];
 }
 
-export function getPosts(site: string): Post[] {
-  const dir = path.join(BLOG_DIR, site);
-  if (!fs.existsSync(dir)) return [];
-
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx'));
-
-  return files
-    .map((file) => {
-      try {
-        const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
-        const { data, content } = matter(raw);
-        const fm = data as PostFrontmatter;
-        return {
-          ...fm,
-          content,
-          readingTime: fm.readingTime ?? calculateReadingTime(content),
-        };
-      } catch (err) {
-        console.error(`[blog] Error parsing ${site}/${file}:`, err);
-        return null;
-      }
-    })
-    .filter((p): p is Post => p !== null)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
+/**
+ * Reads a single post's full content from MDX via fs.
+ * Only called during build (generateStaticParams / static rendering).
+ */
 export function getPost(site: string, slug: string): Post | null {
-  const posts = getPosts(site);
-  return posts.find((p) => p.slug === slug) ?? null;
+  const BLOG_DIR = path.join(process.cwd(), 'src/content/blog');
+  const dir = path.join(BLOG_DIR, site);
+  const filePath = path.join(dir, `${slug}.mdx`);
+
+  if (!fs.existsSync(filePath)) {
+    console.error(`[blog] File not found: ${filePath}`);
+    return null;
+  }
+
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  const { data, content } = matter(raw);
+  const fm = data as PostFrontmatter;
+
+  const words = content.trim().split(/\s+/).length;
+  const readingTime = fm.readingTime ?? Math.max(1, Math.ceil(words / 200));
+
+  return { ...fm, content, readingTime };
 }
 
-export function getRelated(site: string, slug: string, max = 3): Post[] {
+/**
+ * Returns related posts (metadata only) for a given slug.
+ * Uses index.json for listing + reads frontmatter of target post for `related` field.
+ */
+export function getRelated(site: string, slug: string, max = 3): PostMeta[] {
   const post = getPost(site, slug);
   if (!post) return [];
+
   const allPosts = getPosts(site).filter((p) => p.slug !== slug);
 
-  // First try explicit related slugs
   if (post.related?.length) {
     const related = post.related
       .map((s) => allPosts.find((p) => p.slug === s))
-      .filter(Boolean) as Post[];
+      .filter(Boolean) as PostMeta[];
     if (related.length >= max) return related.slice(0, max);
-    // Fill rest with tag matches
+
     const remaining = allPosts.filter((p) => !post.related!.includes(p.slug));
     const tagMatches = remaining
       .map((p) => ({ post: p, score: p.tags.filter((t) => post.tags.includes(t)).length }))
@@ -80,7 +91,6 @@ export function getRelated(site: string, slug: string, max = 3): Post[] {
     return [...related, ...tagMatches].slice(0, max);
   }
 
-  // Fallback: tag overlap
   return allPosts
     .map((p) => ({ post: p, score: p.tags.filter((t) => post.tags.includes(t)).length }))
     .filter((m) => m.score > 0)

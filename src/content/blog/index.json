@@ -1,0 +1,216 @@
+{
+  "general": [
+    {
+      "slug": "inkubator-przedsiebiorczosci-dla-korepetytora",
+      "title": "Inkubator przedsiębiorczości dla korepetytora – jak legalnie rozliczać korepetycje bez własnej firmy",
+      "description": "Udzielasz korepetycji i nie chcesz zakładać działalności? Sprawdź, jak rozliczyć korepetycje przez inkubator przedsiębiorczości: umowa, podatek, faktura dla rodzica lub szkoły, ZUS studenta.",
+      "date": "2026-11-24",
+      "tags": [
+        "korepetycje",
+        "umowa zlecenie",
+        "student",
+        "podatki"
+      ],
+      "readingTime": 5
+    },
+    {
+      "slug": "umowa-o-dzielo-czy-zlecenie-w-inkubatorze-przedsiebiorczosci",
+      "title": "Umowa o dzieło czy umowa zlecenia w inkubatorze przedsiębiorczości – jak wybrać, żeby nie przepłacić",
+      "description": "W inkubatorze przedsiębiorczości rozliczasz się umową o dzieło lub zlecenia. Różnica to nawet kilkaset złotych miesięcznie. Zobacz, która umowa pasuje do Twojej pracy i jak liczyć 50% kosztów.",
+      "date": "2026-11-21",
+      "tags": [
+        "umowa o dzieło",
+        "umowa zlecenie",
+        "podatki",
+        "freelancer"
+      ],
+      "readingTime": 5
+    },
+    {
+      "slug": "faktura-dla-klienta-z-zagranicy-bez-firmy",
+      "title": "Faktura dla klienta z zagranicy bez firmy – jak rozliczyć zlecenie z zagraniczną firmą przez inkubator",
+      "description": "Dostałeś zlecenie z zagranicy i nie masz firmy? Dowiedz się, jak wystawić fakturę zagranicznej firmie przez inkubator przedsiębiorczości – VAT, waluta, reverse charge, przelew SWIFT.",
+      "date": "2026-11-18",
+      "tags": [
+        "faktura zagraniczna",
+        "freelancer",
+        "VAT",
+        "reverse charge"
+      ],
+      "readingTime": 6
+    },
+    {
+      "slug": "ile-kosztuje-inkubator-przedsiebiorczosci",
+      "title": "Ile kosztuje inkubator przedsiębiorczości – prowizja, opłaty i ukryte koszty w 2026 roku",
+      "description": "Sprawdź, ile naprawdę kosztuje inkubator przedsiębiorczości w 2026 roku. Porównanie prowizji, opłat miesięcznych, kosztów faktur i ukrytych opłat – z konkretnymi kwotami.",
+      "date": "2026-11-14",
+      "tags": [
+        "koszty",
+        "prowizja",
+        "inkubator",
+        "porównanie"
+      ],
+      "readingTime": 5
+    },
+    {
+      "slug": "inkubator-przedsiebiorczosci-dla-firmy-podwykonawcy",
+      "title": "Inkubator przedsiębiorczości dla firmy i podwykonawcy – jak zlecać pracę osobom bez działalności",
+      "description": "Chcesz zatrudnić freelancera lub podwykonawcę, który nie ma firmy? Sprawdź, jak współpracować przez inkubator przedsiębiorczości – faktura, umowa, odpowiedzialność, VAT.",
+      "date": "2026-11-10",
+      "tags": [
+        "firma",
+        "podwykonawca",
+        "B2B",
+        "faktura"
+      ],
+      "readingTime": 6
+    },
+    {
+      "slug": "rozliczenie-miesiaca-w-inkubatorze-krok-po-kroku",
+      "title": "Rozliczenie miesiąca w inkubatorze przedsiębiorczości – krok po kroku",
+      "description": "Jak wygląda rozliczenie miesiąca w inkubatorze przedsiębiorczości? Od zgłoszenia przychodu, przez wystawienie faktury i umowy, po wypłatę na konto – pełna instrukcja z terminami.",
+      "date": "2026-11-07",
+      "tags": [
+        "rozliczenie",
+        "instrukcja",
+        "inkubator",
+        "faktura"
+      ],
+      "readingTime": 7
+    }
+  ],
+  "tutors": [
+    {
+      "slug": "invoice-language-school-poland-without-company",
+      "title": "How to invoice a Polish language school as a freelance teacher without opening a company",
+      "description": "Polish language schools and platforms often require an invoice. Here's how a freelance English teacher in Poland can issue one legally without registering a business – through a business incubator.",
+      "date": "2026-11-24",
+      "tags": [
+        "teachers",
+        "invoice",
+        "language school",
+        "getting started"
+      ],
+      "readingTime": 4
+    },
+    {
+      "slug": "online-english-teacher-taxes-poland",
+      "title": "Taxes for online English teachers in Poland (2026): contracts, 50% costs and the incubator option",
+      "description": "Teaching online from Poland? Learn which taxes apply to freelance English teachers in 2026, when you pay ZUS, how the 50% author's costs work, and how a business incubator keeps it simple.",
+      "date": "2026-11-20",
+      "tags": [
+        "teachers",
+        "taxes",
+        "ZUS",
+        "umowa o dzieło"
+      ],
+      "readingTime": 5
+    },
+    {
+      "slug": "freelance-translator-poland-paid-by-foreign-clients",
+      "title": "Freelance translator in Poland: how to get paid by foreign clients without a registered business",
+      "description": "Translators and interpreters in Poland can invoice agencies and direct clients in EUR, USD or GBP through a business incubator – no company registration, no VAT headaches, no ZUS if on a specific-work contract.",
+      "date": "2026-11-16",
+      "tags": [
+        "translators",
+        "foreign clients",
+        "VAT",
+        "invoice"
+      ],
+      "readingTime": 7
+    },
+    {
+      "slug": "business-incubator-vs-sole-proprietorship-poland-foreigners",
+      "title": "Business incubator vs sole proprietorship (JDG) in Poland: which is better for foreigners?",
+      "description": "Should you register a JDG or use a business incubator? A side-by-side comparison for foreigners working in Poland: costs, ZUS, taxes, paperwork, residence permits and when to switch.",
+      "date": "2026-11-12",
+      "tags": [
+        "JDG",
+        "comparison",
+        "foreigners",
+        "ZUS"
+      ],
+      "readingTime": 8
+    },
+    {
+      "slug": "business-incubator-poland-residence-permit",
+      "title": "Using a business incubator for your Polish residence permit (karta pobytu): what immigration offices accept",
+      "description": "Can you use income from a business incubator to apply for a temporary residence permit in Poland? Yes – here's what documents you need, what voivodeship offices look for, and common mistakes to avoid.",
+      "date": "2026-11-08",
+      "tags": [
+        "residence permit",
+        "karta pobytu",
+        "foreigners",
+        "documents"
+      ],
+      "readingTime": 8
+    }
+  ],
+  "creative": [
+    {
+      "slug": "it-frilanser-polsha-upwork-bez-jdg",
+      "title": "IT-фрилансер в Польше: как работать на Upwork, Fiverr и Toptal без JDG",
+      "description": "Программист или дизайнер в Польше получает заказы с Upwork, Fiverr или Toptal. Как легально выставлять счета, платить налоги и не регистрировать фирму — через инкубатор предпринимательства.",
+      "date": "2026-11-24",
+      "tags": [
+        "IT",
+        "Upwork",
+        "фриланс",
+        "платформы"
+      ],
+      "readingTime": 5
+    },
+    {
+      "slug": "umowa-o-dzielo-programmist-dizajner-50-procentov",
+      "title": "Umowa o dzieło для программиста и дизайнера: как работают 50% авторских расходов",
+      "description": "Передаёте код, макеты или дизайн клиенту? Umowa o dzieło с 50% авторскими расходами снижает налог до 6%. Объясняем, когда это законно, как оформить и какие документы нужны.",
+      "date": "2026-11-20",
+      "tags": [
+        "umowa o dzieło",
+        "авторские права",
+        "налоги",
+        "IT"
+      ],
+      "readingTime": 6
+    },
+    {
+      "slug": "inkubator-ili-jdg-polsha-it",
+      "title": "Инкубатор или JDG в Польше для IT: сравнение расходов, налогов и обязанностей",
+      "description": "Что выгоднее для разработчика или дизайнера в Польше — инкубатор предпринимательства или собственная фирма (JDG)? Считаем на конкретных суммах и сравниваем обязанности.",
+      "date": "2026-11-16",
+      "tags": [
+        "JDG",
+        "сравнение",
+        "IT",
+        "налоги"
+      ],
+      "readingTime": 6
+    },
+    {
+      "slug": "oplata-iz-za-granicy-polsha-paypal-payoneer-wise-usdt",
+      "title": "Оплата из-за границы в Польше: PayPal, Payoneer, Wise и USDT — как оформить через инкубатор",
+      "description": "Получаете оплату от зарубежных клиентов через PayPal, Payoneer, Wise или даже в USDT? Разбираем, как инкубатор принимает такие платежи, конвертирует валюту и оформляет документы.",
+      "date": "2026-11-12",
+      "tags": [
+        "валюта",
+        "PayPal",
+        "Payoneer",
+        "платежи"
+      ],
+      "readingTime": 6
+    },
+    {
+      "slug": "inkubator-i-karta-pobytu",
+      "title": "Инкубатор предпринимательства и карта побыту: как подтвердить доход для ужонда",
+      "description": "Подаёте на карту побыту и работаете через инкубатор? Объясняем, какие документы нужны воеводскому ужонду, как подтвердить доход и что делать, если ужонд задаёт вопросы.",
+      "date": "2026-11-08",
+      "tags": [
+        "карта побыту",
+        "легализация",
+        "документы",
+        "иностранцы"
+      ],
+      "readingTime": 6
+    }
+  ]
+}
